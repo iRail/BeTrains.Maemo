@@ -17,7 +17,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainWidget::MainWidget(AsyncAPI* iAPI, QWidget* parent) : QWidget(parent), mAPI(iAPI)
+MainWidget::MainWidget(CachedAPI* iAPI, QWidget* parent) : QWidget(parent), mAPI(iAPI)
 {
     init_ui();
     init_children();

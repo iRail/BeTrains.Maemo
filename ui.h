@@ -8,7 +8,7 @@
 
 // Includes
 #include <QObject>
-#include "asyncapi.h"
+#include "cachedapi.h"
 #include "api/storage/memorystorage.h"
 #include "ui/mainwidget.h"
 
@@ -23,12 +23,9 @@ namespace iRail
         ~UI();
     public slots:
         void run();
-        void warning(const QString& iMessage);
-        void error(const QString& iMessage);
-        void fatal(const QString& iMessage);
     private:
         MemoryStorage mStorage;
-        AsyncAPI mAPI;
+        CachedAPI mAPI;
         MainWidget *mMain;
     };
 }

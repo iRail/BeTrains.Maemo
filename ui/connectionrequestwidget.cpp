@@ -8,6 +8,7 @@
 #include "connectionresultwidget.h"
 #include <QtMaemo5/QMaemo5InformationBox>
 #include <QButtonGroup>
+#include <QProgressDialog>
 
 // Namespaces
 using namespace iRail;
@@ -17,7 +18,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionRequestWidget::ConnectionRequestWidget(AsyncAPI *iAPI, QWidget *iParent) : QWidget(iParent), mAPI(iAPI)
+ConnectionRequestWidget::ConnectionRequestWidget(CachedAPI *iAPI, QWidget *iParent) : QWidget(iParent), mAPI(iAPI)
 {
     // Initialisation
     init_ui();
@@ -95,53 +96,32 @@ void ConnectionRequestWidget::clear()
     mUITypeDeparture->setChecked(true);
 }
 
-void ConnectionRequestWidget::stations_fetch()
-{
-    // Configure progress dialog
-    // TODO: maybe put this in the StationChooser widget?
-    mUIProgressIndicator = new ProgressIndicator(QString(tr("Fetching list of stations")), this);
-    mUIProgressIndicator->next(QString(tr("Performing network query...")));
-    connect(mAPI, SIGNAL(progress(int)), mUIProgressIndicator, SLOT(setSubProgress(int)));
-
-    mAPI->stations_request();
-    connect(mAPI, SIGNAL(stations_reply(QList<StationPointer>)), this, SLOT(stations_pick(QList<StationPointer>)));
-}
-
 void ConnectionRequestWidget::stations_pick_from()
 {
     mTarget = mUIFromLine;
-    try
-    {
-        stations_pick(mAPI->stations_cache());
-    }
-    catch (StorageException&)
-    {
-        stations_fetch();
-    }
+    stations_pick();
 }
 
 void ConnectionRequestWidget::stations_pick_to()
 {
     mTarget = mUIToLine;
-    try
-    {
-        stations_pick(mAPI->stations_cache());
-    }
-    catch (StorageException&)
-    {
-        stations_fetch();
-    }
+    stations_pick();
 }
 
-void ConnectionRequestWidget::stations_pick(QList<StationPointer> iStations)
+void ConnectionRequestWidget::stations_pick()
 {
-    // Close progress dialog
-    if (mUIProgressIndicator)
-    {
-        mUIProgressIndicator->done();
-        delete mUIProgressIndicator;
-        mUIProgressIndicator = 0;
-    }
+    // Progress dialog
+    QProgressDialog tProgressIndicator(this);
+    tProgressIndicator.setWindowTitle(tr("Fetching list of stations"));
+    tProgressIndicator.setModal(true);
+    connect(mAPI, SIGNAL(action(QString)), &tProgressIndicator, SLOT(setLabelText(QString)));
+    connect(mAPI, SIGNAL(progress(int)), &tProgressIndicator, SLOT(setValue(int)));
+    tProgressIndicator.show();
+    //TODO: setRange?
+
+    // Fetch the stations
+    QList<StationPointer> iStations = mAPI->stations();
+    tProgressIndicator.hide();
 
     StationChooser tChooser(&iStations, this);
     int tReturn = tChooser.exec();

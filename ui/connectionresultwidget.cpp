@@ -14,7 +14,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionResultWidget::ConnectionResultWidget(AsyncAPI *iAPI, ConnectionRequestPointer iConnectionRequest, QWidget *iParent) : QWidget(iParent), mAPI(iAPI), mConnectionRequest(iConnectionRequest)
+ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, ConnectionRequestPointer iConnectionRequest, QWidget *iParent) : QWidget(iParent), mAPI(iAPI), mConnectionRequest(iConnectionRequest)
 {
     // Initialisation
     init_ui();

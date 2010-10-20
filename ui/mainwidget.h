@@ -8,7 +8,7 @@
 
 // Includes
 #include <QWidget>
-#include "asyncapi.h"
+#include "cachedapi.h"
 #include "api/connectionrequest.h"
 #include "connectionrequestwidget.h"
 #include <QListView>
@@ -23,7 +23,7 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit MainWidget(AsyncAPI* iAPI, QWidget *parent = 0);
+        explicit MainWidget(CachedAPI* iAPI, QWidget *parent = 0);
 
     public slots:
         void show_connectionquerywidget();
@@ -32,7 +32,7 @@ namespace iRail
 
     private:
         // Member data
-        AsyncAPI* mAPI;
+        CachedAPI* mAPI;
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
 
         // UI members

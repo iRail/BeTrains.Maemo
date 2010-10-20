@@ -9,7 +9,7 @@
 // Includes
 #include <QWidget>
 #include "api/connectionrequest.h"
-#include "asyncapi.h"
+#include "cachedapi.h"
 
 namespace iRail
 {
@@ -17,11 +17,11 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit ConnectionResultWidget(AsyncAPI* iAPI, ConnectionRequestPointer iConnectionRequest, QWidget *iParent);
+        explicit ConnectionResultWidget(CachedAPI* iAPI, ConnectionRequestPointer iConnectionRequest, QWidget *iParent);
 
     private:
         // Member data
-        AsyncAPI* mAPI;
+        CachedAPI* mAPI;
         ConnectionRequestPointer mConnectionRequest;
 
         // Initialization

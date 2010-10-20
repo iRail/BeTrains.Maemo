@@ -21,7 +21,7 @@
 #include <QtMaemo5/QMaemo5TimePickSelector>
 #include <QtMaemo5/QMaemo5ValueButton>
 #include <QProgressDialog>
-#include "asyncapi.h"
+#include "cachedapi.h"
 #include "api/station.h"
 #include "api/connectionrequest.h"
 #include "dialogs/progressindicator.h"
@@ -32,7 +32,7 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit ConnectionRequestWidget(AsyncAPI* iAPI, QWidget *iParent);
+        explicit ConnectionRequestWidget(CachedAPI* iAPI, QWidget *iParent);
         void load(ConnectionRequestPointer iConnectionRequest);
 
     public slots:
@@ -40,17 +40,16 @@ namespace iRail
         void clear();
         void clear_datetime();
         void search();
-        void stations_fetch();
         void stations_pick_to();
         void stations_pick_from();
-        void stations_pick(QList<StationPointer> iStations);
+        void stations_pick();
 
     signals:
         void search(ConnectionRequestPointer iConnectionRequest);
 
     private:
         // Member data
-        AsyncAPI* mAPI;
+        CachedAPI* mAPI;
 
         // Initialization
         void init_ui();
@@ -62,9 +61,6 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
-
-        // Dialogs
-        ProgressIndicator *mUIProgressIndicator;
 
         // Temporary data
         QLineEdit *mTarget;
