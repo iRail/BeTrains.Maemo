@@ -10,6 +10,9 @@
 #include <QWidget>
 #include "api/connectionrequest.h"
 #include "cachedapi.h"
+#include <QListView>
+#include <QStandardItem>
+#include "global.h"
 
 namespace iRail
 {
@@ -23,10 +26,18 @@ namespace iRail
         // Member data
         CachedAPI* mAPI;
         ConnectionRequestPointer mConnectionRequest;
+        QList<ConnectionPointer> mConnections;
 
         // Initialization
         void init_ui();
         void init_children();
+
+        // UI members
+        QListView *mView;
+        QStandardItemModel *mModel;
+
+        // Auxiliary
+        void populateModel();
     };
 }
 
