@@ -9,6 +9,7 @@
 #include "ui.h"
 #include "api/exception.h"
 #include <QTextStream>
+#include <QDir>
 
 // Namespaces
 using namespace iRail;
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
     QApplication tApplication(argc, argv);
 
     // Translate the user interface
+    Q_INIT_RESOURCE(translations);
     QTranslator tTranslator;
     tTranslator.load(QLocale::system().name(), ":/translations");
     tApplication.installTranslator(&tTranslator);

@@ -5,7 +5,6 @@
 
 TARGET=BETrains
 
-DEFINES += BETRAINS_UI_MAEMO BETRAINS_UI_ID=Maemo BETRAINS_UI_NAME=\\\"Maemo\\\" BETRAINS_UI_RES=maemo
 include(../libirail/libirail.pri)
 
 QT       += gui maemo5
@@ -30,8 +29,7 @@ HEADERS += \
 TRANSLATIONS += \
     translations/nl_BE.ts
 
-
-
+# This conditional needed to trick Qt Creator
 unix:!symbian {
     isEmpty(PREFIX) {
         PREFIX = /usr

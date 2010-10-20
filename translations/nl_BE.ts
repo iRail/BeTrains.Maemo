@@ -2,123 +2,123 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="nl_BE">
 <context>
-    <name>iRail::MaemoUI::ConnectionRequestWidget</name>
+    <name>iRail::ConnectionRequestWidget</name>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="62"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="61"/>
         <source>Please fill in both locations.</source>
         <translation>Gelieve beide locaties in te vullen.</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="103"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="102"/>
         <source>Fetching list of stations</source>
         <translation>Ophalen stationslijst</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="104"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="103"/>
         <source>Performing network query...</source>
         <translation>Netwerkaanvraag verwerken...</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="163"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="162"/>
         <source>New query</source>
         <translation>Nieuwe opzoeking</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="174"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="173"/>
         <source>Origin</source>
         <translation>Vertrekplaats</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="183"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="182"/>
         <source>Destination</source>
         <translation>Bestemming</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="197"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="196"/>
         <source>Departure</source>
         <translation>Vertrek</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="198"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="197"/>
         <source>Arrival</source>
         <translation>Aankomst</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="209"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="208"/>
         <source>Specify time and date</source>
-        <translation type="unfinished"></translation>
+        <translation>Specifiëer tijd en datum</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="247"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="246"/>
         <source>Clear</source>
         <translation>Wissen</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="248"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="247"/>
         <source>Set to now</source>
         <translation>Gebruik huidige tijd</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/connectionrequestwidget.cpp" line="249"/>
+        <location filename="../ui/connectionrequestwidget.cpp" line="248"/>
         <source>Search</source>
         <translation>Zoeken</translation>
     </message>
 </context>
 <context>
-    <name>iRail::MaemoUI::ConnectionResultWidget</name>
+    <name>iRail::ConnectionResultWidget</name>
     <message>
-        <location filename="../ui/maemo/connectionresultwidget.cpp" line="35"/>
+        <location filename="../ui/connectionresultwidget.cpp" line="34"/>
         <source>Connections - %1 to %2</source>
         <translation>Verbindingen - %1 naar %2</translation>
     </message>
 </context>
 <context>
-    <name>iRail::MaemoUI::MainWidget</name>
+    <name>iRail::MainWidget</name>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="43"/>
+        <location filename="../ui/mainwidget.cpp" line="42"/>
         <source>New query</source>
         <translation>Nieuwe opzoeking</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="44"/>
+        <location filename="../ui/mainwidget.cpp" line="43"/>
         <source>Chat</source>
         <translation>Chatten</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="119"/>
+        <location filename="../ui/mainwidget.cpp" line="118"/>
         <source>%1 to %2 (%3 at %4, %5)</source>
         <translation>%1 naar %2 (%3 om %4, %5)</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="122"/>
+        <location filename="../ui/mainwidget.cpp" line="121"/>
         <source>depart</source>
         <translation>vertrek</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="122"/>
+        <location filename="../ui/mainwidget.cpp" line="121"/>
         <source>arrival</source>
         <translation>aankomst</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="129"/>
+        <location filename="../ui/mainwidget.cpp" line="128"/>
         <source>%1 to %2</source>
         <translation>%1 naar %2</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/mainwidget.cpp" line="142"/>
+        <location filename="../ui/mainwidget.cpp" line="141"/>
         <source>History is empty.</source>
         <translation>Geschiedenis is leeg.</translation>
     </message>
 </context>
 <context>
-    <name>iRail::MaemoUI::StationChooser</name>
+    <name>iRail::StationChooser</name>
     <message>
-        <location filename="../ui/maemo/dialogs/stationchooser.cpp" line="23"/>
+        <location filename="../ui/dialogs/stationchooser.cpp" line="22"/>
         <source>Pick a station</source>
         <translation>Kies een station</translation>
     </message>
     <message>
-        <location filename="../ui/maemo/dialogs/stationchooser.cpp" line="45"/>
+        <location filename="../ui/dialogs/stationchooser.cpp" line="44"/>
         <source>Select</source>
         <translation>Voltooid</translation>
     </message>
