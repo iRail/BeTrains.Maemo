@@ -33,10 +33,25 @@ TRANSLATIONS += \
 
 
 unix:!symbian {
-    maemo5 {
-        target.path = /opt/usr/bin
-    } else {
-        target.path = /usr/local/bin
+    isEmpty(PREFIX) {
+        PREFIX = /usr
     }
-    INSTALLS += target
+
+    # VARIABLES
+    BINDIR = $$PREFIX/bin
+    DATADIR =$$PREFIX/share
+    DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
+
+    INSTALLS += target desktop icon48 icon64
+
+    target.path = $$BINDIR
+
+    desktop.path = $$DATADIR/applications/hildon
+    desktop.files += qtc_packaging/$${TARGET}.desktop
+
+    icon48.path = $$DATADIR/icons/hicolor/48x48/apps
+    icon48.files += ../../data/icons/hicolor/48x48/$${TARGET}.png
+
+    icon64.path = $$DATADIR/icons/hicolor/64x64/apps
+    icon64.files += ../../data/icons/hicolor/64x64/$${TARGET}.png
 }

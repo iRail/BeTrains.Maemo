@@ -9,7 +9,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-
+APPNAME := betrains
 
 
 
@@ -48,8 +48,8 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	# Add here commands to install the package into debian/maemo.
-	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/maemo install
+	# Add here commands to install the package into debian/$(APPNAME).
+	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/$(APPNAME) install
 
 
 # Build architecture-independent files here.
