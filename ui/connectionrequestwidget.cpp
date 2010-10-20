@@ -32,6 +32,7 @@ void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
     mUIFromLine->setText(iConnectionRequest->getOrigin());
     if (iConnectionRequest->hasDateTime())
     {
+        mUIUseTime->setChecked(true);
         ConnectionRequest::DateTime tDateTime = iConnectionRequest->getDateTime();
         if (tDateTime.type == ConnectionRequest::Departure)
             mUITypeDeparture->setChecked(true);
@@ -40,6 +41,8 @@ void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
         mUITimePicker->setCurrentTime(tDateTime.datetime.time());
         mUIDatePicker->setCurrentDate(tDateTime.datetime.date());
     }
+    else
+        mUIUseTime->setChecked(false);
 }
 
 
