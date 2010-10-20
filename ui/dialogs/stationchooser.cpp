@@ -22,21 +22,20 @@ StationChooser::StationChooser(QList<StationPointer>* iStations, QWidget* parent
     setWindowTitle(QString(tr("Pick a station")));
 
     // Populate the list model
-    tModel = new QStandardItemModel(0, 1);
-    getStationsModel(tModel);
+    mModel = new QStandardItemModel(0, 1);
+    getStationsModel(mModel);
 
     // Create the listview
-    QListView *tView = new QListView();
-    tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    tView->setModel(tModel);
-    tView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tView->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(tView, SIGNAL(clicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
+    mView = new QListView();
+    mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mView->setModel(mModel);
+    mView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    mView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     // Initial selection
     // TODO: initial selection by construction
-    QModelIndex tInitial = tModel->index(0, 0);
-    tView->setCurrentIndex(tInitial);
+    QModelIndex tInitial = mModel->index(0, 0);
+    mView->setCurrentIndex(tInitial);
     mStation = tInitial.data(StationRole).value<StationPointer>();
 
     // Create the button
@@ -49,13 +48,13 @@ StationChooser::StationChooser(QList<StationPointer>* iStations, QWidget* parent
     // Create the layout
     QHBoxLayout *mUILayout = new QHBoxLayout(this);
     mUILayout->setAlignment(Qt::AlignBottom);
-    mUILayout->addWidget(tView);
+    mUILayout->addWidget(mView);
     mUILayout->addLayout(mUIButtonContainer);
 }
 
 StationChooser::~StationChooser()
 {
-    delete tModel;
+    delete mModel;
 }
 
 
@@ -65,19 +64,8 @@ StationChooser::~StationChooser()
 
 StationPointer StationChooser::getSelection()
 {
-    return mStation;
+    return mView->currentIndex().data(StationRole).value<StationPointer>();
 }
-
-
-//
-// Public slots
-//
-
-void StationChooser::clicked(const QModelIndex &index)
-{
-    mStation = index.data(StationRole).value<StationPointer>();
-}
-
 
 //
 // Auxiliary

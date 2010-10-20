@@ -26,16 +26,13 @@ namespace iRail
         StationPointer getSelection();
         ~StationChooser();
 
-    public slots:
-        void clicked(const QModelIndex &index);
-
     private:
         QList<StationPointer>* mStations;
         StationPointer mStation;
 
         // UI member
-        QListView *tView;
-        QStandardItemModel *tModel;
+        QListView *mView;
+        QStandardItemModel *mModel;
 
         // Auxiliary
         void getStationsModel(QStandardItemModel *iModel);
