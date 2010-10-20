@@ -3,6 +3,8 @@
 # Base configuration
 #
 
+TARGET=BETrains
+
 DEFINES += BETRAINS_UI_MAEMO BETRAINS_UI_ID=Maemo BETRAINS_UI_NAME=\\\"Maemo\\\" BETRAINS_UI_RES=maemo
 include(../libirail/libirail.pri)
 
