@@ -35,14 +35,17 @@ namespace iRail
         explicit ConnectionRequestWidget(CachedAPI* iAPI, QWidget *iParent);
         void load(ConnectionRequestPointer iConnectionRequest);
 
-    public slots:
+        // UI Events
+    private slots:
         void use_datetime(bool iUseDatetime);
         void clear();
         void clear_datetime();
         void search();
         void stations_pick_to();
         void stations_pick_from();
-        void stations_pick();
+        void stations_load();
+        void show_station(const QList<StationPointer>& iStations);
+        void show_progressdialog();
 
     signals:
         void search(ConnectionRequestPointer iConnectionRequest);
@@ -61,6 +64,8 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
+        QProgressDialog* mUIProgressDialog;
+        QString* mUIProgressMessage;
 
         // Temporary data
         QLineEdit *mTarget;

@@ -47,7 +47,7 @@ void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
 
 
 //
-// Public slots
+// UI Events
 //
 
 void ConnectionRequestWidget::use_datetime(bool iUseDatetime)
@@ -102,29 +102,32 @@ void ConnectionRequestWidget::clear()
 void ConnectionRequestWidget::stations_pick_from()
 {
     mTarget = mUIFromLine;
-    stations_pick();
+    stations_load();
 }
 
 void ConnectionRequestWidget::stations_pick_to()
 {
     mTarget = mUIToLine;
-    stations_pick();
+    stations_load();
 }
 
-void ConnectionRequestWidget::stations_pick()
+void ConnectionRequestWidget::stations_load()
 {
     // Progress dialog
-    QProgressDialog tProgressIndicator(this);
-    tProgressIndicator.setWindowTitle(tr("Fetching list of stations"));
-    tProgressIndicator.setModal(true);
-    connect(mAPI, SIGNAL(action(QString)), &tProgressIndicator, SLOT(setLabelText(QString)));
-    connect(mAPI, SIGNAL(progress(int)), &tProgressIndicator, SLOT(setValue(int)));
-    tProgressIndicator.show();
-    //TODO: setRange?
+    mUIProgressDialog = 0;
+    mUIProgressMessage = new QString(tr("Fetching list of stations"));
+    connect(mAPI, SIGNAL(progress_start()), this, SLOT(show_progressdialog()));
 
     // Fetch the stations
-    QList<StationPointer> iStations = mAPI->stations();
-    tProgressIndicator.hide();
+    mAPI->requestStations();
+    connect(mAPI, SIGNAL(replyStations(QList<StationPointer>)), this, SLOT(show_station(QList<StationPointer>)));
+}
+
+void ConnectionRequestWidget::show_station(const QList<StationPointer>& iStations)
+{
+    if (mUIProgressDialog != 0)
+        delete mUIProgressDialog;
+    delete mUIProgressMessage;
 
     StationChooser tChooser(&iStations, this);
     int tReturn = tChooser.exec();
@@ -134,6 +137,20 @@ void ConnectionRequestWidget::stations_pick()
         mTarget->setText(tStation->getName());
     }
 }
+
+void ConnectionRequestWidget::show_progressdialog()
+{
+    mUIProgressDialog = new QProgressDialog(this);
+    mUIProgressDialog->setWindowTitle(*mUIProgressMessage);
+    mUIProgressDialog->setModal(true);
+    mUIProgressDialog->setMinimum(0);
+    mUIProgressDialog->setMaximum(100);
+    mUIProgressDialog->show();
+
+    connect(mAPI, SIGNAL(action(QString)), mUIProgressDialog, SLOT(setLabelText(QString)));
+    connect(mAPI, SIGNAL(progress(int)), mUIProgressDialog, SLOT(setValue(int)));
+}
+
 
 //
 // Initialization

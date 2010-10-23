@@ -15,7 +15,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-StationChooser::StationChooser(QList<StationPointer>* iStations, QWidget* parent) : QDialog(parent), mStations(iStations)
+StationChooser::StationChooser(const QList<StationPointer>* iStations, QWidget* parent) : QDialog(parent), mStations(iStations)
 {
     // Dialog configuration
     resize(parent->size());

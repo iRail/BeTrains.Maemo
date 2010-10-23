@@ -22,12 +22,12 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit StationChooser(QList<StationPointer>* iStations, QWidget *parent);
+        explicit StationChooser(const QList<StationPointer>* iStations, QWidget *parent);
         StationPointer getSelection();
         ~StationChooser();
 
     private:
-        QList<StationPointer>* mStations;
+        const QList<StationPointer>* mStations;
         StationPointer mStation;
 
         // UI member
