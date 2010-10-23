@@ -25,6 +25,11 @@ ConnectionRequestWidget::ConnectionRequestWidget(CachedAPI *iAPI, QWidget *iPare
     init_children();
 }
 
+ConnectionRequestWidget::~ConnectionRequestWidget()
+{
+    delete mChildProgressDialog;
+}
+
 
 void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
 {
@@ -114,9 +119,8 @@ void ConnectionRequestWidget::stations_pick_to()
 void ConnectionRequestWidget::stations_load()
 {
     // Progress dialog
-    mUIProgressDialog = 0;
-    mUIProgressMessage = new QString(tr("Fetching list of stations"));
-    connect(mAPI, SIGNAL(progress_start()), this, SLOT(show_progressdialog()));
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
 
     // Fetch the stations
     mAPI->requestStations();
@@ -125,9 +129,7 @@ void ConnectionRequestWidget::stations_load()
 
 void ConnectionRequestWidget::show_station(const QList<StationPointer>& iStations)
 {
-    if (mUIProgressDialog != 0)
-        delete mUIProgressDialog;
-    delete mUIProgressMessage;
+    mChildProgressDialog->setEnabled(false);
 
     StationChooser tChooser(&iStations, this);
     int tReturn = tChooser.exec();
@@ -136,19 +138,6 @@ void ConnectionRequestWidget::show_station(const QList<StationPointer>& iStation
         StationPointer tStation = tChooser.getSelection();
         mTarget->setText(tStation->getName());
     }
-}
-
-void ConnectionRequestWidget::show_progressdialog()
-{
-    mUIProgressDialog = new QProgressDialog(this);
-    mUIProgressDialog->setWindowTitle(*mUIProgressMessage);
-    mUIProgressDialog->setModal(true);
-    mUIProgressDialog->setMinimum(0);
-    mUIProgressDialog->setMaximum(100);
-    mUIProgressDialog->show();
-
-    connect(mAPI, SIGNAL(action(QString)), mUIProgressDialog, SLOT(setLabelText(QString)));
-    connect(mAPI, SIGNAL(progress(int)), mUIProgressDialog, SLOT(setValue(int)));
 }
 
 
@@ -260,6 +249,10 @@ void ConnectionRequestWidget::init_ui()
 
 void ConnectionRequestWidget::init_children()
 {
-
+    // Construct and connect the progress dialog (we can persistently connect
+    // as the dialog'll only be used for API progress)
+    mChildProgressDialog = new OptionalProgressDialog(this);
+    connect(mAPI, SIGNAL(progress_start()), mChildProgressDialog, SLOT(show()));
+    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 
