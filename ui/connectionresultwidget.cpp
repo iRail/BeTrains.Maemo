@@ -60,8 +60,8 @@ void ConnectionResultWidget::init_ui()
 {
     // Window settings
     this->setWindowTitle(QString(tr("Connections - %1 to %2")
-                                 .arg(mConnectionRequest->getOrigin())
-                                 .arg(mConnectionRequest->getDestination()))
+                                 .arg(mConnectionRequest->origin())
+                                 .arg(mConnectionRequest->destination()))
                          );
 
     // Main layout

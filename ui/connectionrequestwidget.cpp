@@ -33,18 +33,18 @@ ConnectionRequestWidget::~ConnectionRequestWidget()
 
 void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
 {
-    mUIToLine->setText(iConnectionRequest->getDestination());
-    mUIFromLine->setText(iConnectionRequest->getOrigin());
-    if (iConnectionRequest->hasDateTime())
+    mUIToLine->setText(iConnectionRequest->destination());
+    mUIFromLine->setText(iConnectionRequest->origin());
+    if (iConnectionRequest->timed())
     {
         mUIUseTime->setChecked(true);
-        ConnectionRequest::DateTime tDateTime = iConnectionRequest->getDateTime();
-        if (tDateTime.type == ConnectionRequest::Departure)
+        const ConnectionRequest::Time *tTime = iConnectionRequest->time();
+        if (tTime->type == ConnectionRequest::Departure)
             mUITypeDeparture->setChecked(true);
         else
             mUITypeArrival->setChecked(true);
-        mUITimePicker->setCurrentTime(tDateTime.datetime.time());
-        mUIDatePicker->setCurrentDate(tDateTime.datetime.date());
+        mUITimePicker->setCurrentTime(tTime->datetime.time());
+        mUIDatePicker->setCurrentDate(tTime->datetime.date());
     }
     else
         mUIUseTime->setChecked(false);
@@ -75,11 +75,11 @@ void ConnectionRequestWidget::search()
 
         if (mUIUseTime->isChecked())
         {
-            ConnectionRequest::DateTime tDateTime;
-            tDateTime.type = mUITypeDeparture->isChecked() ? ConnectionRequest::Departure : ConnectionRequest::Arrival;
-            tDateTime.datetime.setTime(mUITimePicker->currentTime());
-            tDateTime.datetime.setDate(mUIDatePicker->currentDate());
-            tConnectionRequest->setDateTime(tDateTime);
+            ConnectionRequest::Time tTime;
+            tTime.type = mUITypeDeparture->isChecked() ? ConnectionRequest::Departure : ConnectionRequest::Arrival;
+            tTime.datetime.setTime(mUITimePicker->currentTime());
+            tTime.datetime.setDate(mUIDatePicker->currentDate());
+            tConnectionRequest->setTime(tTime);
         }
 
         emit search(tConnectionRequest);
@@ -136,7 +136,7 @@ void ConnectionRequestWidget::show_station(const QList<StationPointer>& iStation
     if (tReturn == QDialog::Accepted)
     {
         StationPointer tStation = tChooser.getSelection();
-        mTarget->setText(tStation->getName());
+        mTarget->setText(tStation->name());
     }
 }
 

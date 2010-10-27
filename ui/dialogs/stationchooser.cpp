@@ -76,7 +76,7 @@ void StationChooser::getStationsModel(QStandardItemModel *iModel)
     for (int i = 0; i < mStations->size(); i++)
     {
         StationPointer tStation = mStations->at(i);
-        QStandardItem *tItem = new QStandardItem(tStation->getName());
+        QStandardItem *tItem = new QStandardItem(tStation->name());
         tItem->setData(QVariant::fromValue(tStation), StationRole);
         tItem->setTextAlignment(Qt::AlignCenter);
         tItem->setEditable(false);

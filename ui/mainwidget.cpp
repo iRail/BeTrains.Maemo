@@ -112,22 +112,22 @@ void MainWidget::populateModel()
         {
             ConnectionRequestPointer tConnectionRequest = mConnectionRequestHistory.at(i);
             QStandardItem *tItem;
-            if (tConnectionRequest->hasDateTime())
+            if (tConnectionRequest->timed())
             {
-                ConnectionRequest::DateTime tDateTime = tConnectionRequest->getDateTime();
+                const ConnectionRequest::Time *tTime = tConnectionRequest->time();
                 tItem = new QStandardItem(tr("%1 to %2 (%3 at %4, %5)")
-                                          .arg(tConnectionRequest->getOrigin())
-                                          .arg(tConnectionRequest->getDestination())
-                                          .arg(tDateTime.type == ConnectionRequest::Departure ? tr("depart") : tr("arrival"))
-                                          .arg(tDateTime.datetime.date().toString(Qt::LocaleDate))
-                                          .arg(tDateTime.datetime.time().toString(Qt::LocaleDate))
+                                          .arg(tConnectionRequest->origin())
+                                          .arg(tConnectionRequest->destination())
+                                          .arg(tTime->type == ConnectionRequest::Departure ? tr("depart") : tr("arrival"))
+                                          .arg(tTime->datetime.date().toString(Qt::LocaleDate))
+                                          .arg(tTime->datetime.time().toString(Qt::LocaleDate))
                                           );
             }
             else
             {
                 tItem = new QStandardItem(tr("%1 to %2")
-                                          .arg(tConnectionRequest->getOrigin())
-                                          .arg(tConnectionRequest->getDestination())
+                                          .arg(tConnectionRequest->origin())
+                                          .arg(tConnectionRequest->destination())
                                           );
             }
 
