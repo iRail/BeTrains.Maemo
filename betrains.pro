@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     ui/connectionrequestwidget.cpp \
     ui/connectionresultwidget.cpp \
     ui/dialogs/stationchooser.cpp \
-    ui/dialogs/optionalprogressdialog.cpp
+    ui/dialogs/optionalprogressdialog.cpp \
+    ui/auxiliary/apidelegate.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -25,7 +26,8 @@ HEADERS += \
     ui/connectionrequestwidget.h \
     ui/connectionresultwidget.h \
     ui/dialogs/stationchooser.h \
-    ui/dialogs/optionalprogressdialog.h
+    ui/dialogs/optionalprogressdialog.h \
+    ui/auxiliary/apidelegate.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

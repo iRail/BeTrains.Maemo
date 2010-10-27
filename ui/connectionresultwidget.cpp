@@ -6,6 +6,7 @@
 #include "connectionresultwidget.h"
 #include <QVBoxLayout>
 #include <QProgressDialog>
+#include "auxiliary/apidelegate.h"
 
 // Namespaces
 using namespace iRail;
@@ -77,6 +78,7 @@ void ConnectionResultWidget::init_ui()
     tView->setModel(mModel);
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::SingleSelection);
+    tView->setItemDelegate(new APIDelegate());
     //connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_details(QModelIndex)));
     mUILayout->addWidget(tView);
 }
@@ -124,7 +126,7 @@ void ConnectionResultWidget::populateModel()
                                           );
             }
 
-            tItem->setData(QVariant::fromValue(tConnection), ConnectionsRole);
+            tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
             tItem->setEditable(false);
             mModel->appendRow(tItem);
         }
