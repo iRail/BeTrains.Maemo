@@ -6,7 +6,7 @@
 #include "connectionresultwidget.h"
 #include <QVBoxLayout>
 #include <QProgressDialog>
-#include "auxiliary/apidelegate.h"
+#include "auxiliary/delegates/connectiondelegate.h"
 
 // Namespaces
 using namespace iRail;
@@ -78,7 +78,7 @@ void ConnectionResultWidget::init_ui()
     tView->setModel(mModel);
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::SingleSelection);
-    tView->setItemDelegate(new APIDelegate());
+    tView->setItemDelegate(new ConnectionDelegate());
     //connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_details(QModelIndex)));
     mUILayout->addWidget(tView);
 }
@@ -104,28 +104,7 @@ void ConnectionResultWidget::populateModel()
         for (int i = 0; i < mConnections->size(); i++)
         {
             ConnectionPointer tConnection = mConnections->at(i);
-            QStandardItem *tItem;
-
-            if (tConnection->transfers().size() == 0)
-            {
-                    tItem = new QStandardItem(tr("%1 (%2) to %3 (%4)")
-                                              .arg(tConnection->transfer().departure.station)
-                                              .arg(tConnection->transfer().departure.datetime.time().toString(Qt::LocaleDate))
-                                              .arg(tConnection->transfer().arrival.station)
-                                              .arg(tConnection->transfer().arrival.datetime.time().toString(Qt::LocaleDate))
-                                              );
-            }
-            else
-            {
-                tItem = new QStandardItem(tr("%1 (%2) to %3 (%4), via %5 others")
-                                          .arg(tConnection->transfer().departure.station)
-                                          .arg(tConnection->transfer().departure.datetime.time().toString(Qt::LocaleDate))
-                                          .arg(tConnection->transfer().arrival.station)
-                                          .arg(tConnection->transfer().arrival.datetime.time().toString(Qt::LocaleDate))
-                                          .arg(tConnection->transfers().size())
-                                          );
-            }
-
+            QStandardItem *tItem = new QStandardItem();
             tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
             tItem->setEditable(false);
             mModel->appendRow(tItem);
