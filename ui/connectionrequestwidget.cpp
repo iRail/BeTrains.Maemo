@@ -138,6 +138,7 @@ void ConnectionRequestWidget::show_station(const QList<StationPointer>& iStation
         StationPointer tStation = tChooser.getSelection();
         mTarget->setText(tStation->name());
     }
+    disconnect(mAPI, SIGNAL(replyStations(QList<StationPointer>)), this, SLOT(show_station(QList<StationPointer>)));
 }
 
 
