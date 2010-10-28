@@ -119,8 +119,8 @@ void MainWidget::populateModel()
                                           .arg(tConnectionRequest->origin())
                                           .arg(tConnectionRequest->destination())
                                           .arg(tTime->type == ConnectionRequest::Departure ? tr("depart") : tr("arrival"))
-                                          .arg(tTime->datetime.date().toString(Qt::LocaleDate))
-                                          .arg(tTime->datetime.time().toString(Qt::LocaleDate))
+                                          .arg(tTime->datetime.date().toString(Qt::DefaultLocaleShortDate))
+                                          .arg(tTime->datetime.time().toString(Qt::DefaultLocaleShortDate))
                                           );
             }
             else
