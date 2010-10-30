@@ -7,6 +7,8 @@
 #include <QVBoxLayout>
 #include <QProgressDialog>
 #include "auxiliary/delegates/connectiondelegate.h"
+#include <QtMaemo5/QMaemo5InformationBox>
+#include <QStringBuilder>
 
 // Namespaces
 using namespace iRail;
@@ -29,7 +31,7 @@ ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, ConnectionReques
     // Fetch the stations
     // requestStations fails here?
     mAPI->requestConnections(iConnectionRequest);
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>)), this, SLOT(show_connections(QList<ConnectionPointer>)));
+    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
 }
 
 ConnectionResultWidget::~ConnectionResultWidget()
@@ -42,13 +44,22 @@ ConnectionResultWidget::~ConnectionResultWidget()
 // UI Events
 //
 
-void ConnectionResultWidget::show_connections(const QList<ConnectionPointer>& iConnections)
+void ConnectionResultWidget::show_connections(QList<ConnectionPointer>* iConnections)
 {
     mChildProgressDialog->setEnabled(false);
 
-    mConnections = &iConnections;
-
-    populateModel();
+    if (iConnections != 0)
+    {
+        populateModel(iConnections);
+        delete iConnections;
+    }
+    else
+    {
+        if (mAPI->hasError())
+            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
+        else
+            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
+    }
 }
 
 
@@ -96,14 +107,14 @@ void ConnectionResultWidget::init_children()
 // Auxiliary
 //
 
-void ConnectionResultWidget::populateModel()
+void ConnectionResultWidget::populateModel(QList<ConnectionPointer>* iConnections)
 {
     mModel->clear();
-    if (mConnections->size() > 0)
+    if (iConnections->size() > 0)
     {
-        for (int i = 0; i < mConnections->size(); i++)
+        for (int i = 0; i < iConnections->size(); i++)
         {
-            ConnectionPointer tConnection = mConnections->at(i);
+            ConnectionPointer tConnection = iConnections->at(i);
             QStandardItem *tItem = new QStandardItem();
             tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
             tItem->setEditable(false);

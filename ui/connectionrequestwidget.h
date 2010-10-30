@@ -44,7 +44,7 @@ namespace iRail
         void stations_pick_to();
         void stations_pick_from();
         void stations_load();
-        void show_station(const QList<StationPointer>& iStations);
+        void show_station(QList<StationPointer>* iStations);
 
     signals:
         void search(ConnectionRequestPointer iConnectionRequest);

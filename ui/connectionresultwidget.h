@@ -26,13 +26,12 @@ namespace iRail
 
         // UI slots
     private slots:
-        void show_connections(const QList<ConnectionPointer>& iConnections);
+        void show_connections(QList<ConnectionPointer>* iConnections);
 
     private:
         // Member data
         CachedAPI* mAPI;
         ConnectionRequestPointer mConnectionRequest;
-        const QList<ConnectionPointer>* mConnections;    // TODO: who takes ownership, etc
 
         // Initialization
     private:
@@ -48,7 +47,7 @@ namespace iRail
         OptionalProgressDialog* mChildProgressDialog;
 
         // Auxiliary
-        void populateModel();
+        void populateModel(QList<ConnectionPointer>* iConnections);
     };
 }
 

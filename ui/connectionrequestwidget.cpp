@@ -124,21 +124,22 @@ void ConnectionRequestWidget::stations_load()
 
     // Fetch the stations
     mAPI->requestStations();
-    connect(mAPI, SIGNAL(replyStations(QList<StationPointer>)), this, SLOT(show_station(QList<StationPointer>)));
+    connect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(show_station(QList<StationPointer>*)));
 }
 
-void ConnectionRequestWidget::show_station(const QList<StationPointer>& iStations)
+void ConnectionRequestWidget::show_station(QList<StationPointer>* iStations)
 {
     mChildProgressDialog->setEnabled(false);
 
-    StationChooser tChooser(&iStations, this);
+    StationChooser tChooser(iStations, this);
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
         StationPointer tStation = tChooser.getSelection();
         mTarget->setText(tStation->name());
     }
-    disconnect(mAPI, SIGNAL(replyStations(QList<StationPointer>)), this, SLOT(show_station(QList<StationPointer>)));
+    disconnect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(show_station(QList<StationPointer>*)));
+    delete iStations;
 }
 
 
