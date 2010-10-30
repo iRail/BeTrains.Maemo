@@ -27,7 +27,6 @@ ConnectionRequestWidget::ConnectionRequestWidget(CachedAPI *iAPI, QWidget *iPare
 
 ConnectionRequestWidget::~ConnectionRequestWidget()
 {
-    delete mChildProgressDialog;
 }
 
 
@@ -118,28 +117,13 @@ void ConnectionRequestWidget::stations_pick_to()
 
 void ConnectionRequestWidget::stations_load()
 {
-    // Progress dialog
-    mChildProgressDialog->setEnabled(true);
-    mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
-
-    // Fetch the stations
-    mAPI->requestStations();
-    connect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(show_station(QList<StationPointer>*)));
-}
-
-void ConnectionRequestWidget::show_station(QList<StationPointer>* iStations)
-{
-    mChildProgressDialog->setEnabled(false);
-
-    StationChooser tChooser(iStations, this);
+    StationChooser tChooser(mAPI, this);
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
         StationPointer tStation = tChooser.getSelection();
         mTarget->setText(tStation->name());
     }
-    disconnect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(show_station(QList<StationPointer>*)));
-    delete iStations;
 }
 
 
@@ -251,10 +235,5 @@ void ConnectionRequestWidget::init_ui()
 
 void ConnectionRequestWidget::init_children()
 {
-    // Construct and connect the progress dialog (we can persistently connect
-    // as the dialog'll only be used for API progress)
-    mChildProgressDialog = new OptionalProgressDialog(this);
-    connect(mAPI, SIGNAL(progress_start()), mChildProgressDialog, SLOT(show()));
-    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 

@@ -30,8 +30,8 @@ ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, ConnectionReques
 
     // Fetch the stations
     // requestStations fails here?
-    mAPI->requestConnections(iConnectionRequest);
     connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
+    mAPI->requestConnections(iConnectionRequest);
 }
 
 ConnectionResultWidget::~ConnectionResultWidget()

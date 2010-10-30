@@ -15,6 +15,8 @@
 #include <QPushButton>
 #include "api/station.h"
 #include "ui/global.h"
+#include "optionalprogressdialog.h"
+#include "cachedapi.h"
 
 namespace iRail
 {
@@ -22,20 +24,33 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit StationChooser(const QList<StationPointer>* iStations, QWidget *parent);
+        explicit StationChooser(CachedAPI* iAPI, QWidget *iParent);
         StationPointer getSelection();
         ~StationChooser();
 
+        // Slots
+    public slots:
+        void gotStations(QList<StationPointer>* iStations);
+
     private:
+        CachedAPI* mAPI;
         const QList<StationPointer>* mStations;
         StationPointer mStation;
 
-        // UI member
+        // Initialization
+        void init_ui();
+        void init_children();
+
+        // UI members
+        QWidget* mParent;
         QListView *mView;
         QStandardItemModel *mModel;
 
+        // UI children
+        OptionalProgressDialog* mChildProgressDialog;
+
         // Auxiliary
-        void getStationsModel(QStandardItemModel *iModel);
+        void populateModel(const QList<StationPointer>* iStations);
     };
 }
 

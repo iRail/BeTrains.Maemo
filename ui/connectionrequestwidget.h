@@ -23,7 +23,6 @@
 #include "cachedapi.h"
 #include "api/station.h"
 #include "api/connectionrequest.h"
-#include "dialogs/optionalprogressdialog.h"
 
 namespace iRail
 {
@@ -44,7 +43,6 @@ namespace iRail
         void stations_pick_to();
         void stations_pick_from();
         void stations_load();
-        void show_station(QList<StationPointer>* iStations);
 
     signals:
         void search(ConnectionRequestPointer iConnectionRequest);
@@ -63,9 +61,6 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
-
-        // UI children
-        OptionalProgressDialog* mChildProgressDialog;
 
         // Temporary data
         QLineEdit *mTarget;

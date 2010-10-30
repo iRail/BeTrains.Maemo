@@ -6,6 +6,8 @@
 #include "stationchooser.h"
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QtMaemo5/QMaemo5InformationBox>
+#include <QStringBuilder>
 
 // Namespaces
 using namespace iRail;
@@ -15,15 +17,41 @@ using namespace iRail;
 // Construction and destruction
 //
 
-StationChooser::StationChooser(const QList<StationPointer>* iStations, QWidget* parent) : QDialog(parent), mStations(iStations)
+StationChooser::StationChooser(CachedAPI* iAPI, QWidget* iParent) : QDialog(iParent), mAPI(iAPI), mParent(iParent)
+{
+    // Initialisation
+    init_ui();
+    init_children();
+
+    // Progress dialog
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
+
+    // Fetch the stations
+    connect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(gotStations(QList<StationPointer>*)));
+    mAPI->requestStations();
+}
+
+StationChooser::~StationChooser()
+{
+    delete mModel;
+    delete mChildProgressDialog;
+}
+
+
+
+//
+// Initialization
+//
+
+void StationChooser::init_ui()
 {
     // Dialog configuration
-    resize(parent->size());
+    resize(mParent->size());
     setWindowTitle(QString(tr("Pick a station")));
 
     // Populate the list model
     mModel = new QStandardItemModel(0, 1);
-    getStationsModel(mModel);
 
     // Create the listview
     mView = new QListView();
@@ -31,12 +59,6 @@ StationChooser::StationChooser(const QList<StationPointer>* iStations, QWidget* 
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    // Initial selection
-    // TODO: initial selection by construction
-    QModelIndex tInitial = mModel->index(0, 0);
-    mView->setCurrentIndex(tInitial);
-    mStation = tInitial.data(StationRole).value<StationPointer>();
 
     // Create the button
     QVBoxLayout *mUIButtonContainer = new QVBoxLayout();
@@ -52,9 +74,45 @@ StationChooser::StationChooser(const QList<StationPointer>* iStations, QWidget* 
     mUILayout->addLayout(mUIButtonContainer);
 }
 
-StationChooser::~StationChooser()
+void StationChooser::init_children()
 {
-    delete mModel;
+    // Construct and connect the progress dialog (we can persistently connect
+    // as the dialog'll only be used for API progress)
+    mChildProgressDialog = new OptionalProgressDialog(this);
+    connect(mAPI, SIGNAL(progress_start()), mChildProgressDialog, SLOT(show()));
+    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
+}
+
+
+//
+// Slots
+//
+
+void StationChooser::gotStations(QList<StationPointer>* iStations)
+{
+    mChildProgressDialog->setEnabled(false);
+    disconnect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(gotStations(QList<StationPointer>*)));
+
+    if (iStations != 0)
+    {
+        // Populate the model
+        populateModel(iStations);
+        delete iStations;
+
+        // Initial selection
+        QModelIndex tInitial = mModel->index(0, 0);
+        mView->setCurrentIndex(tInitial);
+        mStation = tInitial.data(StationRole).value<StationPointer>();
+    }
+    else
+    {
+        if (mAPI->hasError())
+            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
+        else
+            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
+
+        reject();
+    }
 }
 
 
@@ -71,15 +129,16 @@ StationPointer StationChooser::getSelection()
 // Auxiliary
 //
 
-void StationChooser::getStationsModel(QStandardItemModel *iModel)
+void StationChooser::populateModel(const QList<StationPointer>* iStations)
 {
-    for (int i = 0; i < mStations->size(); i++)
+    for (int i = 0; i < iStations->size(); i++)
     {
-        StationPointer tStation = mStations->at(i);
+        StationPointer tStation = iStations->at(i);
+        // TODO: delegate
         QStandardItem *tItem = new QStandardItem(tStation->name());
         tItem->setData(QVariant::fromValue(tStation), StationRole);
         tItem->setTextAlignment(Qt::AlignCenter);
         tItem->setEditable(false);
-        iModel->appendRow(tItem);
+        mModel->appendRow(tItem);
     }
 }
