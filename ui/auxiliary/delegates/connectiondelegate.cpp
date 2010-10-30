@@ -14,10 +14,14 @@ using namespace iRail;
 
 void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, const QModelIndex &iIndex) const
 {
-    Q_ASSERT(qVariantCanConvert<ConnectionPointer>(iIndex.data(ConnectionRole)));
-    ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
-
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
+
+    if (! qVariantCanConvert<ConnectionPointer>(iIndex.data(ConnectionRole)))
+    {
+        // Warn
+        return;
+    }
+    ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
 
     QRect rect = iOption.rect;
     rect.adjust(20, 8, -20, -8);

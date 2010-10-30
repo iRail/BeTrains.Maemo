@@ -5,6 +5,7 @@
 // Includes
 #include "mainwidget.h"
 #include "connectionrequestwidget.h"
+#include "auxiliary/delegates/connectionrequestdelegate.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -56,7 +57,8 @@ void MainWidget::init_ui()
     tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tView->setModel(mModel);
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tView->setSelectionMode(QAbstractItemView::SingleSelection);
+    tView->setSelectionMode(QAbstractItemView::SingleSelection);    
+    tView->setItemDelegate(new ConnectionRequestDelegate());
     connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
     layout->addWidget(tView);
 }
@@ -93,7 +95,7 @@ void MainWidget::load_history(QModelIndex iIndex)
     if (mConnectionRequestHistory.size() == 0)
         return;
 
-    ConnectionRequestPointer tConnectionRequest = iIndex.data(HistoryRole).value<ConnectionRequestPointer>();
+    ConnectionRequestPointer tConnectionRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
     mConnectionRequestWidget->load(tConnectionRequest);
     mConnectionRequestWidget->show();
 }
@@ -111,27 +113,9 @@ void MainWidget::populateModel()
         for (int i = 0; i < mConnectionRequestHistory.size(); i++)
         {
             ConnectionRequestPointer tConnectionRequest = mConnectionRequestHistory.at(i);
-            QStandardItem *tItem;
-            if (tConnectionRequest->timed())
-            {
-                const ConnectionRequest::Time *tTime = tConnectionRequest->time();
-                tItem = new QStandardItem(tr("%1 to %2 (%3 at %4, %5)")
-                                          .arg(tConnectionRequest->origin())
-                                          .arg(tConnectionRequest->destination())
-                                          .arg(tTime->type == ConnectionRequest::Departure ? tr("depart") : tr("arrival"))
-                                          .arg(tTime->datetime.date().toString(Qt::DefaultLocaleShortDate))
-                                          .arg(tTime->datetime.time().toString(Qt::DefaultLocaleShortDate))
-                                          );
-            }
-            else
-            {
-                tItem = new QStandardItem(tr("%1 to %2")
-                                          .arg(tConnectionRequest->origin())
-                                          .arg(tConnectionRequest->destination())
-                                          );
-            }
+            QStandardItem *tItem = new QStandardItem;
 
-            tItem->setData(QVariant::fromValue(tConnectionRequest), HistoryRole);
+            tItem->setData(QVariant::fromValue(tConnectionRequest), ConnectionRequestRole);
             tItem->setEditable(false);
             mModel->appendRow(tItem);
         }
