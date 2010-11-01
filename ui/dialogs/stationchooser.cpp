@@ -79,7 +79,7 @@ void StationChooser::init_children()
     // Construct and connect the progress dialog (we can persistently connect
     // as the dialog'll only be used for API progress)
     mChildProgressDialog = new OptionalProgressDialog(this);
-    connect(mAPI, SIGNAL(progress_start()), mChildProgressDialog, SLOT(show()));
+    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
     connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 
