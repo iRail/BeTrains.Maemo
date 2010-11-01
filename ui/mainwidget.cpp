@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QFont>
 
 // Namespaces
 using namespace iRail;
@@ -49,18 +50,29 @@ void MainWidget::init_ui()
 
     // Populate the history list model
     mModel = new QStandardItemModel(0, 1);
+
+    // Create the history listview
+    mView = new QListView();
+    mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mView->setModel(mModel);
+    mView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    mView->setSelectionMode(QAbstractItemView::SingleSelection);
+    mView->setItemDelegate(new ConnectionRequestDelegate());
+    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
+    layout->addWidget(mView);
+
+    // Create the history listview dummy
+    mViewDummy = new QLabel(tr("No history"));
+    mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mViewDummy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    mViewDummy->setEnabled(false);
+    QFont font;
+    font.setPointSize(24);
+    mViewDummy->setFont(font);
+    layout->addWidget(mViewDummy);
     // TODO: load history from file
     populateModel();
 
-    // Create the history listview
-    QListView *tView = new QListView();
-    tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    tView->setModel(mModel);
-    tView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tView->setSelectionMode(QAbstractItemView::SingleSelection);    
-    tView->setItemDelegate(new ConnectionRequestDelegate());
-    connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
-    layout->addWidget(tView);
 }
 
 void MainWidget::init_children()
@@ -119,6 +131,9 @@ void MainWidget::populateModel()
             tItem->setEditable(false);
             mModel->appendRow(tItem);
         }
+
+        mViewDummy->setVisible(false);
+        mView->setVisible(true);
     }
     else
     {
@@ -126,5 +141,8 @@ void MainWidget::populateModel()
         tDummy->setEditable(false);
         tDummy->setSelectable(false);
         mModel->appendRow(tDummy);
+
+        mViewDummy->setVisible(true);
+        mView->setVisible(false);
     }
 }

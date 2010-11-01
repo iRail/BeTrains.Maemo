@@ -16,6 +16,7 @@
 #include <QList>
 #include "ui/global.h"
 #include <QModelIndex>
+#include <QLabel>
 
 namespace iRail
 {
@@ -36,6 +37,7 @@ namespace iRail
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
 
         // UI members
+        QLabel *mViewDummy;
         QListView *mView;
         QStandardItemModel *mModel;
 
