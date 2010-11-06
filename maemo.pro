@@ -3,7 +3,7 @@
 # Base configuration
 #
 
-TARGET=BETrains
+TARGET=BeTrains
 
 include(../libirail/libirail.pri)
 
