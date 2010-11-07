@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=BeTrains
+Icon=BeTrains
+Exec=/usr/bin/BeTrains

@@ -32,7 +32,7 @@ MainWidget::MainWidget(CachedAPI* iAPI, QWidget* parent) : QWidget(parent), mAPI
 void MainWidget::init_ui()
 {
     // Window settings
-    this->setWindowTitle(QString("BETrains"));
+    this->setWindowTitle(QString("BeTrains"));
     this->setAttribute(Qt::WA_Maemo5StackedWindow);
 
     // Main layout
