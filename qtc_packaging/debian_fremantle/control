@@ -12,11 +12,11 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libqt4-core (>=4.6),
  libqt4-network (>=4.6), libqt4-xml (>=4.6), libqt4-gui (>=4.6),
  libqt4-maemo5 (>=4.6)
 Description: Planning application for Belgian train voyagers.
- BETrains is a handy mobile application for the belgian train users. It lets you
+ BeTrains is a handy mobile application for the belgian train users. It lets you
  plan your trips very quickly and makes it possible for you to share messages
  with other users for a happy travel.
 XSBC-Bugtracker: http://project.irail.be/cgi-bin/trac.fcgi/newticket
-XSBC-Maemo-Display-Name: BETrains
+XSBC-Maemo-Display-Name: BeTrains
 XB-Maemo-Icon-26:
  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAKT2lDQ1BQaG90
  b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJC
