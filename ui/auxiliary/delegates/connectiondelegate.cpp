@@ -49,8 +49,8 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tTransfers);
 
     // Hours
-    QString tHours = tConnection->transfer().departure.datetime.time().toString(Qt::DefaultLocaleShortDate)
-            % " - " % tConnection->transfer().arrival.datetime.time().toString(Qt::DefaultLocaleShortDate);
+    QString tHours = tConnection->transfer().departure.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate)
+            % " - " % tConnection->transfer().arrival.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
     iPainter->setPen(iOption.palette.mid().color());
     font.setPointSizeF(font.pointSizeF() * 0.70);
     iPainter->setFont(font);
