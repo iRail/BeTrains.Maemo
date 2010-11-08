@@ -231,6 +231,17 @@ void ConnectionRequestWidget::init_ui()
     tActionButtons->addWidget(tButtonSearch);
     mUILayout->addStretch();
     mUILayout->addLayout(tActionButtons);
+
+
+    // OTHER //
+
+    // Tab order
+    setTabOrder(mUIFromLine, mUIToLine);
+
+    // Submit by return
+    connect(mUIFromLine, SIGNAL(returnPressed()), this, SLOT(search()));
+    connect(mUIToLine, SIGNAL(returnPressed()), this, SLOT(search()));
+
 }
 
 void ConnectionRequestWidget::init_children()
