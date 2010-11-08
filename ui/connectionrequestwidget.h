@@ -23,6 +23,7 @@
 #include "cachedapi.h"
 #include "api/station.h"
 #include "api/connectionrequest.h"
+#include "connectionresultwidget.h"
 
 namespace iRail
 {
@@ -61,6 +62,9 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
+
+        // UI children
+        ConnectionResultWidget* mChildConnectionResult;
 
         // Temporary data
         QLineEdit *mTarget;

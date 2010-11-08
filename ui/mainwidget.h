@@ -46,7 +46,7 @@ namespace iRail
         void init_children();
 
         // Child widgets
-        ConnectionRequestWidget* mConnectionRequestWidget;
+        ConnectionRequestWidget* mChildConnectionRequest;
 
         // Auxiliary
         void populateModel();

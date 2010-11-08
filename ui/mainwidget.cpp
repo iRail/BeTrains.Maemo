@@ -77,11 +77,11 @@ void MainWidget::init_ui()
 
 void MainWidget::init_children()
 {
-    // Query widgets
-    mConnectionRequestWidget = new ConnectionRequestWidget(mAPI, this);
-    mConnectionRequestWidget->setWindowFlags(this->windowFlags() | Qt::Window);
-    mConnectionRequestWidget->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mConnectionRequestWidget, SIGNAL(search(ConnectionRequestPointer)), this, SLOT(add_history(ConnectionRequestPointer)));
+    // Query widget
+    mChildConnectionRequest = new ConnectionRequestWidget(mAPI, this);
+    mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
+    connect(mChildConnectionRequest, SIGNAL(search(ConnectionRequestPointer)), this, SLOT(add_history(ConnectionRequestPointer)));
 }
 
 
@@ -92,7 +92,7 @@ void MainWidget::init_children()
 
 void MainWidget::show_connectionquerywidget()
 {
-    mConnectionRequestWidget->show();
+    mChildConnectionRequest->show();
 }
 
 void MainWidget::add_history(ConnectionRequestPointer iConnectionRequest)
@@ -108,8 +108,8 @@ void MainWidget::load_history(QModelIndex iIndex)
         return;
 
     ConnectionRequestPointer tConnectionRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
-    mConnectionRequestWidget->load(tConnectionRequest);
-    mConnectionRequestWidget->show();
+    mChildConnectionRequest->load(tConnectionRequest);
+    mChildConnectionRequest->show();
 }
 
 

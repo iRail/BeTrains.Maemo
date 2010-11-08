@@ -85,10 +85,8 @@ void ConnectionRequestWidget::search()
 
 
         // Query widgets
-        ConnectionResultWidget *tWidget = new ConnectionResultWidget(mAPI, tConnectionRequest, this);
-        tWidget->setWindowFlags(this->windowFlags() | Qt::Window);
-        tWidget->setAttribute(Qt::WA_Maemo5StackedWindow);
-        tWidget->show();
+        mChildConnectionResult->show();
+        mChildConnectionResult->setRequest(tConnectionRequest);
     }
 }
 
@@ -248,6 +246,10 @@ void ConnectionRequestWidget::init_ui()
 }
 
 void ConnectionRequestWidget::init_children()
-{
+{    
+    // Result widget
+    mChildConnectionResult = new ConnectionResultWidget(mAPI, this);
+    mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 

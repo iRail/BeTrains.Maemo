@@ -18,25 +18,36 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, ConnectionRequestPointer iConnectionRequest, QWidget *iParent) : QWidget(iParent), mAPI(iAPI), mConnectionRequest(iConnectionRequest)
+ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, QWidget *iParent) : QWidget(iParent), mAPI(iAPI)
 {
     // Initialisation
     init_ui();
     init_children();
-
-    // Progress dialog    
-    mChildProgressDialog->setEnabled(true);
-    mChildProgressDialog->setWindowTitle(tr("Fetching list of connections"));
-
-    // Fetch the stations
-    // requestStations fails here?
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
-    mAPI->requestConnections(iConnectionRequest);
 }
 
 ConnectionResultWidget::~ConnectionResultWidget()
 {
     delete mChildProgressDialog;
+}
+
+
+//
+// Public slots
+//
+
+void ConnectionResultWidget::setRequest(ConnectionRequestPointer iConnectionRequest)
+{
+    // Progress dialog
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching list of connections"));
+
+    // Alter the UI
+    update_ui(iConnectionRequest);
+
+    // Fetch the stations
+    // requestStations fails here?
+    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
+    mAPI->requestConnections(iConnectionRequest);
 }
 
 
@@ -71,12 +82,6 @@ void ConnectionResultWidget::show_connections(QList<ConnectionPointer>* iConnect
 
 void ConnectionResultWidget::init_ui()
 {
-    // Window settings
-    this->setWindowTitle(QString(tr("Connections - %1 to %2")
-                                 .arg(mConnectionRequest->origin())
-                                 .arg(mConnectionRequest->destination()))
-                         );
-
     // Main layout
     QVBoxLayout *mUILayout = new QVBoxLayout(this);
     mUILayout->setAlignment(Qt::AlignTop);
@@ -93,6 +98,18 @@ void ConnectionResultWidget::init_ui()
     tView->setItemDelegate(new ConnectionDelegate());
     //connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_details(QModelIndex)));
     mUILayout->addWidget(tView);
+}
+
+void ConnectionResultWidget::update_ui(ConnectionRequestPointer iConnectionRequest)
+{
+    // Window settings
+    this->setWindowTitle(QString(tr("Connections - %1 to %2")
+                                 .arg(iConnectionRequest->origin())
+                                 .arg(iConnectionRequest->destination()))
+                         );
+
+    mModel->clear();
+
 }
 
 void ConnectionResultWidget::init_children()

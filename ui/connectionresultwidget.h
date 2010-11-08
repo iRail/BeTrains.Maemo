@@ -14,7 +14,6 @@
 #include <QStandardItem>
 #include "global.h"
 #include "dialogs/optionalprogressdialog.h"
-#include "connectionresultwidget.h"
 
 namespace iRail
 {
@@ -22,8 +21,12 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit ConnectionResultWidget(CachedAPI* iAPI, ConnectionRequestPointer iConnectionRequest, QWidget *iParent);
+        explicit ConnectionResultWidget(CachedAPI* iAPI, QWidget *iParent);
         ~ConnectionResultWidget();
+
+        // Public slots
+    public slots:
+        void setRequest(ConnectionRequestPointer iConnectionRequest);
 
         // UI slots
     private slots:
@@ -32,11 +35,11 @@ namespace iRail
     private:
         // Member data
         CachedAPI* mAPI;
-        ConnectionRequestPointer mConnectionRequest;
 
         // Initialization
     private:
         void init_ui();
+        void update_ui(ConnectionRequestPointer iConnectionRequest);
         void init_children();
 
         // UI members
