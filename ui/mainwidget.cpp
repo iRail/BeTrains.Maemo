@@ -101,6 +101,11 @@ void MainWidget::add_history(ConnectionRequestPointer iConnectionRequest)
     populateModel();
 }
 
+
+//
+// UI events
+//
+
 void MainWidget::load_history(QModelIndex iIndex)
 {
     // Bug in Qt? Non-selectable QStandardItem can be doubleClicked...

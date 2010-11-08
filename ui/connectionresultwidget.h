@@ -14,6 +14,8 @@
 #include <QStandardItem>
 #include "global.h"
 #include "dialogs/optionalprogressdialog.h"
+#include "connectiondetailwidget.h"
+#include <QModelIndex>
 
 namespace iRail
 {
@@ -28,9 +30,10 @@ namespace iRail
     public slots:
         void setRequest(ConnectionRequestPointer iConnectionRequest);
 
-        // UI slots
+        // UI events
     private slots:
         void show_connections(QList<ConnectionPointer>* iConnections);
+        void load_details(QModelIndex iIndex);
 
     private:
         // Member data
@@ -49,6 +52,7 @@ namespace iRail
 
         // UI children
         OptionalProgressDialog* mChildProgressDialog;
+        ConnectionDetailWidget* mChildConnectionDetail;
 
         // Auxiliary
         void populateModel(QList<ConnectionPointer>* iConnections);

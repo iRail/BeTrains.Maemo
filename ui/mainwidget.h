@@ -26,9 +26,13 @@ namespace iRail
     public:
         explicit MainWidget(CachedAPI* iAPI, QWidget *parent = 0);
 
+        // Public slots
     public slots:
         void show_connectionquerywidget();
         void add_history(ConnectionRequestPointer iConnectionRequest);
+
+        // UI events
+    private slots:
         void load_history(QModelIndex iIndex);
 
     private:

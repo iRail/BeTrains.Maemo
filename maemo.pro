@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     ui/dialogs/stationchooser.cpp \
     ui/dialogs/optionalprogressdialog.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
-    ui/auxiliary/delegates/connectionrequestdelegate.cpp
+    ui/auxiliary/delegates/connectionrequestdelegate.cpp \
+    ui/connectiondetailwidget.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -29,7 +30,8 @@ HEADERS += \
     ui/dialogs/stationchooser.h \
     ui/dialogs/optionalprogressdialog.h \
     ui/auxiliary/delegates/connectiondelegate.h \
-    ui/auxiliary/delegates/connectionrequestdelegate.h
+    ui/auxiliary/delegates/connectionrequestdelegate.h \
+    ui/connectiondetailwidget.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 
