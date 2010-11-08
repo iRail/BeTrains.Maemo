@@ -83,9 +83,13 @@ void ConnectionRequestWidget::search()
 
         emit search(tConnectionRequest);
 
+
+        // Query widgets
         ConnectionResultWidget *tWidget = new ConnectionResultWidget(mAPI, tConnectionRequest, this);
-        tWidget->setWindowFlags(Qt::Window);
+        tWidget->setWindowFlags(this->windowFlags() | Qt::Window);
+        tWidget->setAttribute(Qt::WA_Maemo5StackedWindow);
         tWidget->show();
+        delete tWidget;
     }
 }
 

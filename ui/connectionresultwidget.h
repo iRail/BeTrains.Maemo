@@ -14,6 +14,7 @@
 #include <QStandardItem>
 #include "global.h"
 #include "dialogs/optionalprogressdialog.h"
+#include "connectionresultwidget.h"
 
 namespace iRail
 {
