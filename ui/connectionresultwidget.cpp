@@ -47,6 +47,7 @@ ConnectionResultWidget::~ConnectionResultWidget()
 void ConnectionResultWidget::show_connections(QList<ConnectionPointer>* iConnections)
 {
     mChildProgressDialog->setEnabled(false);
+    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
 
     if (iConnections != 0)
     {

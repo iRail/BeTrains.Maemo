@@ -89,7 +89,6 @@ void ConnectionRequestWidget::search()
         tWidget->setWindowFlags(this->windowFlags() | Qt::Window);
         tWidget->setAttribute(Qt::WA_Maemo5StackedWindow);
         tWidget->show();
-        delete tWidget;
     }
 }
 
