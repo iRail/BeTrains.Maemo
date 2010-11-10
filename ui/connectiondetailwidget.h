@@ -34,9 +34,11 @@ namespace iRail
         void init_ui();
         void update_ui(ConnectionPointer iConnection);
         void init_children();
+        void init_transfer(const Connection::Transfer& iTransfer);
 
         // UI members
     private:
+        QVBoxLayout* mUIDetailLayout;
         QVBoxLayout* mUILayout;
     };
 }
