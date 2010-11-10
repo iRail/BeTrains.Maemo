@@ -71,12 +71,11 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
                          );
 
     // Remove all items
-    while (mUIDetailLayout->count())
-    {
-        QLayoutItem* tOldItem = mUIDetailLayout->itemAt(0);
-        mUIDetailLayout->removeItem(tOldItem);
-        tOldItem->widget()->hide(); // BUG: Qt keeps on drawing deleted items
-        delete tOldItem;
+    QLayoutItem* tItem;
+    while (tItem = mUIDetailLayout->takeAt(0)) {
+        if (tItem->widget())
+            tItem->widget()->hide();
+        delete tItem;
     }
 
     // Add new items
