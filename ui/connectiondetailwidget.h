@@ -7,14 +7,14 @@
 #define CONNECTIONDETAILWIDGET_H
 
 // Includes
-#include <QWidget>
 #include "cachedapi.h"
-#include <QVBoxLayout>
 #include "global.h"
+#include <QVBoxLayout>
+#include <QScrollArea>
 
 namespace iRail
 {
-    class ConnectionDetailWidget : public QWidget
+    class ConnectionDetailWidget : public QScrollArea
     {
     Q_OBJECT
     public:
@@ -38,7 +38,6 @@ namespace iRail
 
         // UI members
     private:
-        QVBoxLayout* mUIDetailLayout;
         QVBoxLayout* mUILayout;
     };
 }

@@ -8,7 +8,7 @@
 #include <QStringBuilder>
 #include <QStandardItemModel>
 #include <QListView>
-#include <QScrollArea>
+#include "auxiliary/delegates/connectionpoidelegate.h"
 
 // Namespaces
 using namespace iRail;
@@ -18,7 +18,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionDetailWidget::ConnectionDetailWidget(CachedAPI *iAPI, QWidget *iParent) : QWidget(iParent), mAPI(iAPI)
+ConnectionDetailWidget::ConnectionDetailWidget(CachedAPI *iAPI, QWidget *iParent) : QScrollArea(iParent), mAPI(iAPI)
 {
     // Initialisation
     init_ui();
@@ -48,18 +48,14 @@ void ConnectionDetailWidget::setConnection(ConnectionPointer iConnection)
 
 void ConnectionDetailWidget::init_ui()
 {
-    // Detail layout (and parent dummy widget)
+    // Parent widget
     QWidget *tWidget = new QWidget();
-    mUIDetailLayout = new QVBoxLayout(tWidget);
-
-    // Scroll area
-    QScrollArea* tScrollArea = new QScrollArea(this);
-    tScrollArea->setWidgetResizable(true);
-    tScrollArea->setWidget(tWidget);
+    setWidget(tWidget);
+    setWidgetResizable(true);
 
     // Main layout
     mUILayout = new QVBoxLayout(this);
-    mUILayout->addWidget(tScrollArea);
+    tWidget->setLayout(mUILayout);
 }
 
 void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
@@ -72,7 +68,8 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
 
     // Remove all items
     QLayoutItem* tItem;
-    while (tItem = mUIDetailLayout->takeAt(0)) {
+    while (tItem = mUILayout->takeAt(0))
+    {
         if (tItem->widget())
             tItem->widget()->hide();
         delete tItem;
@@ -85,7 +82,7 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
     }
 
     // Add a spacer (setAlignment(Qt::AlignTop) doesn't seem to work)
-    mUIDetailLayout->addStretch();
+    mUILayout->addStretch();
 }
 
 void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
@@ -93,7 +90,7 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     // Title label
     QLabel* tPOILabel = new QLabel(iLine.departure.station % tr(" to ") % iLine.arrival.station);
     tPOILabel->setAlignment(Qt::AlignCenter);
-    mUIDetailLayout->addWidget(tPOILabel);
+    mUILayout->addWidget(tPOILabel);
 
     // Populate the stops list model
     QStandardItemModel* tModel = new QStandardItemModel(0, 1);
@@ -102,20 +99,22 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     QListView *tView = new QListView();
     tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tView->setModel(tModel);
+    tView->setItemDelegate(new ConnectionPOIDelegate());
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::NoSelection);
     tView->setFixedHeight(tView->sizeHint().height());  // TODO: disable drag completely
     tView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    mUIDetailLayout->addWidget(tView);
+    mUILayout->addWidget(tView);
 
-    // Add some bogus data
-    for (int i = 0; i < 3; i++)
-    {
-        QStandardItem *tItem = new QStandardItem("Stop " % QString::number(i));
-        //tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
-        tItem->setEditable(false);
-        tModel->appendRow(tItem);
-    }
+    // Add the endpoints (TODO: the stops between also, needs line lookup)
+    QStandardItem *tItem = new QStandardItem();
+    tItem->setEditable(false);
+    tItem->setData(QVariant::fromValue(iLine.departure), ConnectionPOIRole);
+    tModel->appendRow(tItem);
+    tItem = new QStandardItem();
+    tItem->setEditable(false);
+    tItem->setData(QVariant::fromValue(iLine.arrival), ConnectionPOIRole);
+    tModel->appendRow(tItem);
 }
 
 void ConnectionDetailWidget::init_children()
