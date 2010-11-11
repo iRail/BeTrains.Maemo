@@ -88,7 +88,11 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
 void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
 {
     // Title label
+    QFont tFont;
+    tFont.setPointSize(18);
+    tFont.setBold(true);
     QLabel* tPOILabel = new QLabel(iLine.departure.station % tr(" to ") % iLine.arrival.station);
+    tPOILabel->setFont(tFont);
     tPOILabel->setAlignment(Qt::AlignCenter);
     mUILayout->addWidget(tPOILabel);
 
@@ -112,18 +116,14 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     tItem->setData(QVariant::fromValue(iLine.arrival), ConnectionPOIRole);
     tModel->appendRow(tItem);
 
-    tItem = new QStandardItem();
-    tItem->setData(QVariant::fromValue(iLine.arrival), ConnectionPOIRole);
-    tModel->appendRow(tItem);
-    tItem = new QStandardItem();
-    tItem->setData(QVariant::fromValue(iLine.arrival), ConnectionPOIRole);
-    tModel->appendRow(tItem);
-
     // TODO: configure the QListView to be expanding within the QScrollArea
     // SizePolicy doesn't work
     // Setting the fixed height works for 2 items, but not more, as it _always_
     // seem to return 192, and doesn't update after adding items/updating the model
     tView->setFixedHeight(70*tModel->rowCount());   // HACK
+
+    // Add some space
+    mUILayout->addSpacing(36);
 }
 
 void ConnectionDetailWidget::init_children()
