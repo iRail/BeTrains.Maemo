@@ -19,7 +19,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainWidget::MainWidget(CachedAPI* iAPI, QWidget* parent) : QWidget(parent), mAPI(iAPI)
+MainWidget::MainWidget(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), mAPI(iAPI)
 {
     init_ui();
     init_children();
@@ -35,9 +35,15 @@ void MainWidget::init_ui()
     this->setWindowTitle(QString("BeTrains"));
     this->setAttribute(Qt::WA_Maemo5StackedWindow);
 
+    // Parent widget
+    QWidget *tWidget = new QWidget();
+    setWidget(tWidget);
+    setWidgetResizable(true);
+
     // Main layout
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment(Qt::AlignTop);
+    //layout->setAlignment(Qt::AlignTop);
+    tWidget->setLayout(layout);
 
     // Top buttons
     QHBoxLayout *blayout = new QHBoxLayout;
@@ -58,13 +64,15 @@ void MainWidget::init_ui()
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionRequestDelegate());
+    mView->setResizeMode(QListView::Adjust);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
-    layout->addWidget(mView);
+    layout->addWidget(mView);    
+    // TODO: configure the QListView to be expanding within the QScrollArea
 
     // Create the history listview dummy
     mViewDummy = new QLabel(tr("No history"));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mViewDummy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     mViewDummy->setEnabled(false);
     QFont font;
     font.setPointSize(24);
@@ -133,12 +141,12 @@ void MainWidget::populateModel()
             QStandardItem *tItem = new QStandardItem;
 
             tItem->setData(QVariant::fromValue(tConnectionRequest), ConnectionRequestRole);
-            tItem->setEditable(false);
             mModel->appendRow(tItem);
         }
 
         mViewDummy->setVisible(false);
         mView->setVisible(true);
+        mView->setModel(mModel);
     }
     else
     {

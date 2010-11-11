@@ -7,20 +7,20 @@
 #define MAINWIDGET_H
 
 // Includes
-#include <QWidget>
+#include "ui/global.h"
 #include "cachedapi.h"
 #include "api/connectionrequest.h"
 #include "connectionrequestwidget.h"
+#include <QScrollArea>
 #include <QListView>
 #include <QStandardItem>
 #include <QList>
-#include "ui/global.h"
 #include <QModelIndex>
 #include <QLabel>
 
 namespace iRail
 {
-    class MainWidget : public QWidget
+    class MainWidget : public QScrollArea
     {
     Q_OBJECT
     public:

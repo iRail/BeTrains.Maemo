@@ -100,19 +100,21 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tView->setModel(tModel);
     tView->setItemDelegate(new ConnectionPOIDelegate());
-    tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::NoSelection);
-    tView->setFixedHeight(tView->sizeHint().height());  // TODO: disable drag completely
-    tView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     mUILayout->addWidget(tView);
+
+    // TODO: configure the QListView to be expanding within the QScrollArea
+    // SizePolicy doesn't work
+    // Setting the fixed height works for 2 items, but not more, as it _always_
+    // seem to return 192, and doesn't update after adding items/updating the model
+    tView->setFixedHeight(tView->sizeHint().height());
 
     // Add the endpoints (TODO: the stops between also, needs line lookup)
     QStandardItem *tItem = new QStandardItem();
-    tItem->setEditable(false);
     tItem->setData(QVariant::fromValue(iLine.departure), ConnectionPOIRole);
     tModel->appendRow(tItem);
     tItem = new QStandardItem();
-    tItem->setEditable(false);
     tItem->setData(QVariant::fromValue(iLine.arrival), ConnectionPOIRole);
     tModel->appendRow(tItem);
 }

@@ -7,7 +7,7 @@
 #define GLOBAL_H
 
 // Includes
-#include <QList>
+#include <QWidget>
 
 namespace iRail
 {

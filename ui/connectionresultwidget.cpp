@@ -147,7 +147,6 @@ void ConnectionResultWidget::populateModel(QList<ConnectionPointer>* iConnection
             ConnectionPointer tConnection = iConnections->at(i);
             QStandardItem *tItem = new QStandardItem();
             tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
-            tItem->setEditable(false);
             mModel->appendRow(tItem);
         }
     }
