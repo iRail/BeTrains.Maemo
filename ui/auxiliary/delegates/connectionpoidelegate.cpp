@@ -48,3 +48,4 @@ void ConnectionPOIDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem
 
     iPainter->restore();
 }
+

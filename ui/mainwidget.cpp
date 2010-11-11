@@ -42,7 +42,7 @@ void MainWidget::init_ui()
 
     // Main layout
     QVBoxLayout *layout = new QVBoxLayout(this);
-    //layout->setAlignment(Qt::AlignTop);
+    layout->setAlignment(Qt::AlignTop);
     tWidget->setLayout(layout);
 
     // Top buttons
@@ -147,6 +147,7 @@ void MainWidget::populateModel()
         mViewDummy->setVisible(false);
         mView->setVisible(true);
         mView->setModel(mModel);
+        mView->setFixedHeight(70*mModel->rowCount());   // HACK
     }
     else
     {
