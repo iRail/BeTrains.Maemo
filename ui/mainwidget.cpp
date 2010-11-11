@@ -48,7 +48,9 @@ void MainWidget::init_ui()
     // Top buttons
     QHBoxLayout *blayout = new QHBoxLayout;
     QPushButton *button1 = new QPushButton(tr("New query"));
+    button1->setIcon(QIcon(":ui/assets/icons/train.png"));
     QPushButton *button2 = new QPushButton(tr("Chat"));
+    button2->setIcon(QIcon::fromTheme("general_chat_button"));
     blayout->addWidget(button1);
     blayout->addWidget(button2);
     connect(button1, SIGNAL(clicked()), this, SLOT(show_connectionquerywidget()));

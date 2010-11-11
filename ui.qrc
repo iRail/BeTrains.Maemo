@@ -1,5 +1,5 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <!-- None yet -->
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>ui/assets/icons/train.png</file>
+    </qresource>
 </RCC>
