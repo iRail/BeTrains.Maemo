@@ -34,7 +34,7 @@ namespace iRail
         void init_ui();
         void update_ui(ConnectionPointer iConnection);
         void init_children();
-        void init_transfer(const Connection::Transfer& iTransfer);
+        void init_line(const Connection::Line& iLine);
 
         // UI members
     private:

@@ -66,8 +66,8 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
 {
     // Window settings
     this->setWindowTitle(QString(tr("Detail - %1 to %2")
-                                 .arg(iConnection->transfer().departure.station)
-                                 .arg(iConnection->transfer().arrival.station))
+                                 .arg(iConnection->departure().station)
+                                 .arg(iConnection->arrival().station))
                          );
 
     // Remove all items
@@ -79,25 +79,19 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
     }
 
     // Add new items
-    if (iConnection->transfers().size() > 0)
+    foreach (Connection::Line tLine, iConnection->lines())
     {
-        Connection::Transfer tConnectionTransfer;
-        foreach (tConnectionTransfer, iConnection->transfers())
-        {
-            init_transfer(tConnectionTransfer);
-        }
+        init_line(tLine);
     }
-    else
-        init_transfer(iConnection->transfer());
 
     // Add a spacer (setAlignment(Qt::AlignTop) doesn't seem to work)
     mUIDetailLayout->addStretch();
 }
 
-void ConnectionDetailWidget::init_transfer(const Connection::Transfer& iTransfer)
+void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
 {
     // Title label
-    QLabel* tPOILabel = new QLabel(iTransfer.departure.station % tr(" to ") % iTransfer.arrival.station);
+    QLabel* tPOILabel = new QLabel(iLine.departure.station % tr(" to ") % iLine.arrival.station);
     tPOILabel->setAlignment(Qt::AlignCenter);
     mUIDetailLayout->addWidget(tPOILabel);
 

@@ -30,27 +30,27 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->save();
 
     // Header
-    QString tHeader = tConnection->transfer().departure.station % tr(" to ") % tConnection->transfer().arrival.station;
+    QString tHeader = tConnection->departure().station % tr(" to ") % tConnection->arrival().station;
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tHeader);
 
     // Transfer count
     QString tTransfers;
-    switch (tConnection->transfers().size())
+    switch (tConnection->lines().size())
     {
-    case 0:
+    case 1:
         tTransfers = tr("Direct");
         break;
-    case 1:
-        tTransfers = QString::number(tConnection->transfers().size()) % " " % tr("transfer");
+    case 2:
+        tTransfers = QString::number(1) % " " % tr("transfer");
         break;
     default:
-        tTransfers = QString::number(tConnection->transfers().size()) % " " % tr("transfers");
+        tTransfers = QString::number(tConnection->lines().size() - 1) % " " % tr("transfers");
     }
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tTransfers);
 
     // Hours
-    QString tHours = tConnection->transfer().departure.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate)
-            % " - " % tConnection->transfer().arrival.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
+    QString tHours = tConnection->departure().datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate)
+            % " - " % tConnection->arrival().datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
     iPainter->setPen(iOption.palette.mid().color());
     font.setPointSizeF(font.pointSizeF() * 0.70);
     iPainter->setFont(font);
