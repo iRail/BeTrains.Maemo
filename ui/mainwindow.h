@@ -33,20 +33,24 @@ namespace iRail
 
         // Public slots
     public slots:
-        void load_request(QMap<QString, StationPointer>* iStations);
-        void show_request();
-        void process_request(ConnectionRequestPointer iConnectionRequest);
-        void show_result(QList<ConnectionPointer>* iConnections);
-        void show_detail(ConnectionPointer iConnection);
+        void load_requestwidget(QMap<QString, StationPointer>* iStations);
+        void show_requestwidget();
+        void process_requestwidget(ConnectionRequestPointer iConnectionRequest);
+        void show_resultwidget(QList<ConnectionPointer>* iConnections);
+        void show_detailwidget(ConnectionPointer iConnection);
 
         // UI events
     private slots:
+        void do_search();
         void load_history(QModelIndex iIndex);
 
     private:
         // Member data
         CachedAPI* mAPI;
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
+
+        // Temporary data
+        ConnectionRequestPointer tInitialRequest;
 
         // UI members
         QLabel *mViewDummy;

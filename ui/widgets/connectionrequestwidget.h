@@ -35,11 +35,14 @@ namespace iRail
         void load(ConnectionRequestPointer iConnectionRequest);
         void configure(QMap<QString, StationPointer>* iStations);
 
+        // Public slots
+    public slots:
+        void clear();
+
         // UI Events
     private slots:
         void use_datetime(bool iUseDatetime);
         void search();
-        void clear();
         void clear_datetime();
         void stations_pick_to();
         void stations_pick_from();
