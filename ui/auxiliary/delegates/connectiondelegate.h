@@ -13,6 +13,7 @@
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QStyledItemDelegate>
+#include "api/station.h"
 
 namespace iRail
 {
@@ -21,9 +22,16 @@ namespace iRail
         Q_OBJECT
 
     public:
-        ConnectionDelegate(QWidget *parent = 0) : QStyledItemDelegate(parent) {}
+        ConnectionDelegate(const QMap<QString, StationPointer>& iStations, QWidget *parent = 0) : QStyledItemDelegate(parent), mStations(iStations)
+        {
+
+        }
 
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    private:
+        // Member data
+        const QMap<QString, StationPointer>& mStations;
     };
 }
 

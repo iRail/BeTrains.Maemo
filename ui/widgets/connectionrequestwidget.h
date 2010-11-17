@@ -48,12 +48,20 @@ namespace iRail
         void stations_pick_from();
         void stations_load();
 
+        // Other
+    public:
+        // TODO: this isn't nice...
+        QMap<QString, StationPointer> const& stations()
+        {
+            return mStations;
+        }
+
     signals:
         void finished(ConnectionRequestPointer iConnectionRequest);
 
     private:
         // Member data
-        QMap<QString, StationPointer> mStations;
+        const QMap<QString, StationPointer> mStations;
 
         // Initialization
         void init_ui();

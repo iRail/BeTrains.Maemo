@@ -8,8 +8,9 @@
 
 // Includes
 #include <QWidget>
+#include "api/station.h"
+#include "api/connection.h"
 #include "api/connectionrequest.h"
-#include "cachedapi.h"
 #include <QListView>
 #include <QStandardItem>
 #include "ui/global.h"
@@ -21,7 +22,7 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit ConnectionResultWidget(CachedAPI* iAPI, QWidget *iParent);
+        explicit ConnectionResultWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
         void load(const QList<ConnectionPointer>& iConnections);
 
         // UI events
@@ -33,7 +34,7 @@ namespace iRail
 
     private:
         // Member data
-        CachedAPI* mAPI;
+        QMap<QString, StationPointer> mStations;
 
         // Initialization
     private:

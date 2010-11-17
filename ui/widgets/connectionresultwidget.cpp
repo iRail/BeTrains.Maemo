@@ -17,7 +17,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, QWidget *iParent) : QWidget(iParent), mAPI(iAPI)
+ConnectionResultWidget::ConnectionResultWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QWidget(iParent), mStations(iStations)
 {
     // Initialisation
     init_ui();
@@ -69,7 +69,7 @@ void ConnectionResultWidget::init_ui()
     tView->setModel(mModel);
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::SingleSelection);
-    tView->setItemDelegate(new ConnectionDelegate());
+    tView->setItemDelegate(new ConnectionDelegate(mStations));
     connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
     mUILayout->addWidget(tView);
 }

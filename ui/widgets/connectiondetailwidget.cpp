@@ -18,7 +18,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionDetailWidget::ConnectionDetailWidget(CachedAPI *iAPI, QWidget *iParent) : QScrollArea(iParent), mAPI(iAPI)
+ConnectionDetailWidget::ConnectionDetailWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QScrollArea(iParent), mStations(iStations)
 {
     // Initialisation
     init_ui();
@@ -91,7 +91,7 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     QFont tFont;
     tFont.setPointSize(18);
     tFont.setBold(true);
-    QLabel* tPOILabel = new QLabel(iLine.departure.station % tr(" to ") % iLine.arrival.station);
+    QLabel* tPOILabel = new QLabel(mStations[iLine.departure.station]->name() % tr(" to ") % mStations[iLine.arrival.station]->name());
     tPOILabel->setFont(tFont);
     tPOILabel->setAlignment(Qt::AlignCenter);
     mUILayout->addWidget(tPOILabel);
@@ -103,7 +103,7 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     QListView *tView = new QListView();
     tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tView->setModel(tModel);
-    tView->setItemDelegate(new ConnectionPOIDelegate());
+    tView->setItemDelegate(new ConnectionPOIDelegate(mStations));
     tView->setSelectionMode(QAbstractItemView::NoSelection);
     tView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     mUILayout->addWidget(tView);

@@ -7,8 +7,9 @@
 #define CONNECTIONDETAILWIDGET_H
 
 // Includes
-#include "cachedapi.h"
 #include "ui/global.h"
+#include "api/station.h"
+#include "api/connection.h"
 #include <QVBoxLayout>
 #include <QScrollArea>
 
@@ -18,7 +19,7 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit ConnectionDetailWidget(CachedAPI* iAPI, QWidget *iParent);
+        explicit ConnectionDetailWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
         ~ConnectionDetailWidget();
 
         // Public slots
@@ -27,7 +28,7 @@ namespace iRail
 
     private:
         // Member data
-        CachedAPI* mAPI;
+        const QMap<QString, StationPointer> mStations;
 
         // Initialization
     private:
