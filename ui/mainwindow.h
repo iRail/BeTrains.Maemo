@@ -38,7 +38,9 @@ namespace iRail
         void process_requestwidget(ConnectionRequestPointer iConnectionRequest);
         void load_resultwidget();
         void show_resultwidget(QList<ConnectionPointer>* iConnections);
+        void process_resultwidget(ConnectionPointer iConnection);
         void load_detailwidget();
+        void load_detailwidget_vehicle(VehiclePointer* iVehicle);
         void show_detailwidget(ConnectionPointer iConnection);
 
         // UI events
@@ -52,6 +54,8 @@ namespace iRail
 
         // Temporary data
         ConnectionRequestPointer tInitialRequest;
+        ConnectionPointer tConnection;
+        QMap<QString, VehiclePointer> tVehicles;
 
         // UI members
         QLabel *mViewDummy;

@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     ui/dialogs/optionalprogressdialog.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
     ui/auxiliary/delegates/connectionrequestdelegate.cpp \
-    ui/auxiliary/delegates/connectionpoidelegate.cpp
+    ui/auxiliary/delegates/connectionpoidelegate.cpp \
+    ui/auxiliary/delegates/vehiclestopdelegate.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -33,7 +34,8 @@ HEADERS += \
     ui/dialogs/optionalprogressdialog.h \
     ui/auxiliary/delegates/connectiondelegate.h \
     ui/auxiliary/delegates/connectionrequestdelegate.h \
-    ui/auxiliary/delegates/connectionpoidelegate.h
+    ui/auxiliary/delegates/connectionpoidelegate.h \
+    ui/auxiliary/delegates/vehiclestopdelegate.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

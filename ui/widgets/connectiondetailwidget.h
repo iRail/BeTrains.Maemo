@@ -10,6 +10,8 @@
 #include "ui/global.h"
 #include "api/station.h"
 #include "api/connection.h"
+#include "api/vehicle.h"
+#include <QMap>
 #include <QVBoxLayout>
 #include <QScrollArea>
 
@@ -21,10 +23,7 @@ namespace iRail
     public:
         explicit ConnectionDetailWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
         ~ConnectionDetailWidget();
-
-        // Public slots
-    public slots:
-        void setConnection(ConnectionPointer iConnection);
+        void load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
     private:
         // Member data
@@ -33,9 +32,9 @@ namespace iRail
         // Initialization
     private:
         void init_ui();
-        void update_ui(ConnectionPointer iConnection);
+        void update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
         void init_children();
-        void init_line(const Connection::Line& iLine);
+        void init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle);
 
         // UI members
     private:

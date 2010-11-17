@@ -8,7 +8,7 @@
 #include <QStringBuilder>
 #include <QStandardItemModel>
 #include <QListView>
-#include "ui/auxiliary/delegates/connectionpoidelegate.h"
+#include "ui/auxiliary/delegates/vehiclestopdelegate.h"
 
 // Namespaces
 using namespace iRail;
@@ -29,22 +29,16 @@ ConnectionDetailWidget::~ConnectionDetailWidget()
 {
 }
 
-
-//
-// Public slots
-//
-
-void ConnectionDetailWidget::setConnection(ConnectionPointer iConnection)
+void ConnectionDetailWidget::load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
     // Alter the UI
-    update_ui(iConnection);
+    update_ui(iConnection, iVehicles);
 }
 
 
 //
 // Initialisation
 //
-
 
 void ConnectionDetailWidget::init_ui()
 {
@@ -58,7 +52,7 @@ void ConnectionDetailWidget::init_ui()
     tWidget->setLayout(mUILayout);
 }
 
-void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
+void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
     // Window settings
     this->setWindowTitle(QString(tr("Detail - %1 to %2")
@@ -78,14 +72,14 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
     // Add new items
     foreach (Connection::Line tLine, iConnection->lines())
     {
-        init_line(tLine);
+        init_line(tLine, iVehicles[tLine.vehicle]);
     }
 
     // Add a spacer (setAlignment(Qt::AlignTop) doesn't seem to work)
     mUILayout->addStretch();
 }
 
-void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
+void ConnectionDetailWidget::init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle)
 {
     // Title label
     QFont tFont;
@@ -103,18 +97,34 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     QListView *tView = new QListView();
     tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tView->setModel(tModel);
-    tView->setItemDelegate(new ConnectionPOIDelegate(mStations));
+    tView->setItemDelegate(new VehicleStopDelegate(mStations));
     tView->setSelectionMode(QAbstractItemView::NoSelection);
     tView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     mUILayout->addWidget(tView);
 
-    // Add the endpoints (TODO: the stops between also, needs line lookup)
-    QStandardItem *tItem = new QStandardItem();
-    tItem->setData(QVariant::fromValue(iLine.departure), ConnectionPOIRole);
-    tModel->appendRow(tItem);
-    tItem = new QStandardItem();
-    tItem->setData(QVariant::fromValue(iLine.arrival), ConnectionPOIRole);
-    tModel->appendRow(tItem);
+    // Add the stops
+    bool tWithinEndpoints = false;
+    foreach (Vehicle::Stop tStop, iVehicle->stops())
+    {
+        if (!tWithinEndpoints && tStop.station == iLine.departure.station)
+        {
+            tStop.platform = iLine.departure.platform;
+            tWithinEndpoints = true;
+        }
+        bool tDisplay = tWithinEndpoints;
+        if (tWithinEndpoints && tStop.station == iLine.arrival.station)
+        {
+            tStop.platform = iLine.arrival.platform;
+            tWithinEndpoints = false;
+        }
+
+        if (tDisplay)
+        {
+            QStandardItem *tItem = new QStandardItem();
+            tItem->setData(QVariant::fromValue(tStop), VehicleStopRole);
+            tModel->appendRow(tItem);
+        }
+    }
 
     // TODO: configure the QListView to be expanding within the QScrollArea
     // SizePolicy doesn't work
@@ -123,7 +133,7 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     tView->setFixedHeight(70*tModel->rowCount());   // HACK
 
     // Add some space
-    mUILayout->addSpacing(36);
+    mUILayout->addSpacing(42);
 }
 
 void ConnectionDetailWidget::init_children()

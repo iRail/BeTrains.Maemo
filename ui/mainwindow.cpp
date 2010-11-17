@@ -178,7 +178,7 @@ void MainWindow::load_resultwidget()
     mChildConnectionResult = new ConnectionResultWidget(mChildConnectionRequest->stations(), mChildConnectionRequest);
     mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(show_detailwidget(ConnectionPointer)));
+    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(process_resultwidget(ConnectionPointer)));
 }
 
 void MainWindow::show_resultwidget(QList<ConnectionPointer>* iConnections)
@@ -186,12 +186,12 @@ void MainWindow::show_resultwidget(QList<ConnectionPointer>* iConnections)
     // Disconnect the signal (as the only way this widget can be shown
     // is through the API)
     disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_resultwidget(QList<ConnectionPointer>*)));
+    mChildProgressDialog->setEnabled(false);
 
     // Check if the widget is loaded already
     if (mChildConnectionResult == 0)
         load_resultwidget();
 
-    mChildProgressDialog->setEnabled(false);
 
     if (iConnections != 0)
     {
@@ -210,6 +210,22 @@ void MainWindow::show_resultwidget(QList<ConnectionPointer>* iConnections)
     }
 }
 
+void MainWindow::process_resultwidget(ConnectionPointer iConnection)
+{
+    tConnection = iConnection;
+    tVehicles.clear();
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching vehicle information"));
+    show_detailwidget(iConnection);
+}
+
+void MainWindow::load_detailwidget_vehicle(VehiclePointer* iVehicle)
+{
+    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(load_detailwidget_vehicle(VehiclePointer*)));
+    tVehicles.insert((*iVehicle)->id(), *iVehicle);
+    show_detailwidget(tConnection);
+}
+
 void MainWindow::load_detailwidget()
 {
     // Detail widget
@@ -225,9 +241,22 @@ void MainWindow::show_detailwidget(ConnectionPointer iConnection)
     if (mChildConnectionDetail == 0)
         load_detailwidget();
 
+    // Check if we got all the vehicle data
+    for (int i = 0; i < tConnection->lines().size(); i++)
+    {
+        QString tVehicleId = tConnection->lines().at(i).vehicle;
+        if (! tVehicles.contains(tVehicleId))
+        {
+            connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(load_detailwidget_vehicle(VehiclePointer*)));
+            mAPI->requestVehicle(tVehicleId);
+            return;
+        }
+    }
+    mChildProgressDialog->setEnabled(false);
+
     // Show the details
     mChildConnectionDetail->show();
-    mChildConnectionDetail->setConnection(iConnection);
+    mChildConnectionDetail->load(iConnection, tVehicles);
 }
 
 
