@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFont>
+#include <QStringBuilder>
 
 // Namespaces
 using namespace iRail;
@@ -22,6 +23,11 @@ MainWidget::MainWidget(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), 
 {
     init_ui();
     init_children();
+}
+
+MainWidget::~MainWidget()
+{
+    delete mChildProgressDialog;
 }
 
 //
@@ -90,7 +96,7 @@ void MainWidget::init_children()
     mChildConnectionRequest = new ConnectionRequestWidget(mAPI, this);
     mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(show_result(ConnectionRequestPointer)));
+    connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(do_result(ConnectionRequestPointer)));
 
     // Result widget
     mChildConnectionResult = new ConnectionResultWidget(mAPI, mChildConnectionRequest);
@@ -102,6 +108,12 @@ void MainWidget::init_children()
     mChildConnectionDetail = new ConnectionDetailWidget(mAPI, mChildConnectionResult);
     mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
+
+    // Construct and connect the progress dialog (we can persistently connect
+    // as the dialog'll only be used for API progress)
+    mChildProgressDialog = new OptionalProgressDialog(this);
+    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
+    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 
 
@@ -115,15 +127,42 @@ void MainWidget::show_request()
     mChildConnectionRequest->show();
 }
 
-void MainWidget::show_result(ConnectionRequestPointer iConnectionRequest)
+void MainWidget::do_result(ConnectionRequestPointer iConnectionRequest)
 {
     // Fix the history model
     mConnectionRequestHistory.prepend(iConnectionRequest);
-    populateModel();    
+    populateModel();
 
-    // Show the results
-    mChildConnectionResult->show();
-    mChildConnectionResult->setRequest(iConnectionRequest);
+    // Request the data
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching list of connections"));
+    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_result(QList<ConnectionPointer>*)));
+    mAPI->requestConnections(iConnectionRequest);
+
+    // Prepare the child widget
+    mChildConnectionResult->load(iConnectionRequest);
+}
+
+void MainWidget::show_result(QList<ConnectionPointer>* iConnections)
+{
+    mChildProgressDialog->setEnabled(false);
+    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_result(QList<ConnectionPointer>*)));
+
+    if (iConnections != 0)
+    {
+        // Show the results
+        mChildConnectionResult->show();
+        mChildConnectionResult->load(*iConnections);
+        delete iConnections;
+    }
+    else
+    {
+        if (mAPI->hasError())
+            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
+        else
+            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
+
+    }
 }
 
 void MainWidget::show_detail(ConnectionPointer iConnection)

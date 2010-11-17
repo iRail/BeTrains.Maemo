@@ -13,12 +13,14 @@
 #include "widgets/connectionrequestwidget.h"
 #include "widgets/connectionresultwidget.h"
 #include "widgets/connectiondetailwidget.h"
+#include "dialogs/optionalprogressdialog.h"
 #include <QScrollArea>
 #include <QListView>
 #include <QStandardItem>
 #include <QList>
 #include <QModelIndex>
 #include <QLabel>
+#include <QtMaemo5/QMaemo5InformationBox>
 
 namespace iRail
 {
@@ -27,11 +29,13 @@ namespace iRail
     Q_OBJECT
     public:
         explicit MainWidget(CachedAPI* iAPI, QWidget *parent = 0);
+        ~MainWidget();
 
         // Public slots
     public slots:
         void show_request();
-        void show_result(ConnectionRequestPointer iConnectionRequest);
+        void do_result(ConnectionRequestPointer iConnectionRequest);
+        void show_result(QList<ConnectionPointer>* iConnections);
         void show_detail(ConnectionPointer iConnection);
 
         // UI events
@@ -49,6 +53,7 @@ namespace iRail
         QStandardItemModel *mModel;
 
         // UI children
+        OptionalProgressDialog* mChildProgressDialog;
         ConnectionRequestWidget* mChildConnectionRequest;
         ConnectionResultWidget* mChildConnectionResult;
         ConnectionDetailWidget* mChildConnectionDetail;

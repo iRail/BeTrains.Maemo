@@ -7,7 +7,6 @@
 #include <QVBoxLayout>
 #include <QProgressDialog>
 #include "ui/auxiliary/delegates/connectiondelegate.h"
-#include <QtMaemo5/QMaemo5InformationBox>
 #include <QStringBuilder>
 
 // Namespaces
@@ -25,9 +24,21 @@ ConnectionResultWidget::ConnectionResultWidget(CachedAPI *iAPI, QWidget *iParent
     init_children();
 }
 
-ConnectionResultWidget::~ConnectionResultWidget()
+void ConnectionResultWidget::load(const QList<ConnectionPointer>& iConnections)
 {
-    delete mChildProgressDialog;
+    populateModel(iConnections);
+}
+
+void ConnectionResultWidget::load(const ConnectionRequestPointer& iConnectionRequest)
+{
+    // Window settings
+    this->setWindowTitle(QString(tr("Connections - %1 to %2")
+                                 .arg(iConnectionRequest->origin())
+                                 .arg(iConnectionRequest->destination()))
+                         );
+
+    mModel->clear();
+
 }
 
 
@@ -35,46 +46,12 @@ ConnectionResultWidget::~ConnectionResultWidget()
 // Public slots
 //
 
-void ConnectionResultWidget::setRequest(ConnectionRequestPointer iConnectionRequest)
-{
-    // Progress dialog
-    mChildProgressDialog->setEnabled(true);
-    mChildProgressDialog->setWindowTitle(tr("Fetching list of connections"));
-
-    // Alter the UI
-    update_ui(iConnectionRequest);
-
-    // Fetch the stations
-    // requestStations fails here?
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
-    mAPI->requestConnections(iConnectionRequest);
-}
-
 
 //
 // UI events
 //
 
-void ConnectionResultWidget::show_connections(QList<ConnectionPointer>* iConnections)
-{
-    mChildProgressDialog->setEnabled(false);
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_connections(QList<ConnectionPointer>*)));
-
-    if (iConnections != 0)
-    {
-        populateModel(iConnections);
-        delete iConnections;
-    }
-    else
-    {
-        if (mAPI->hasError())
-            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
-        else
-            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
-    }
-}
-
-void ConnectionResultWidget::load_details(QModelIndex iIndex)
+void ConnectionResultWidget::activated(QModelIndex iIndex)
 {
     ConnectionPointer tConnection = iIndex.data(ConnectionRole).value<ConnectionPointer>();
     emit finished(tConnection);
@@ -102,43 +79,26 @@ void ConnectionResultWidget::init_ui()
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::SingleSelection);
     tView->setItemDelegate(new ConnectionDelegate());
-    connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_details(QModelIndex)));
+    connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
     mUILayout->addWidget(tView);
-}
-
-void ConnectionResultWidget::update_ui(ConnectionRequestPointer iConnectionRequest)
-{
-    // Window settings
-    this->setWindowTitle(QString(tr("Connections - %1 to %2")
-                                 .arg(iConnectionRequest->origin())
-                                 .arg(iConnectionRequest->destination()))
-                         );
-
-    mModel->clear();
-
 }
 
 void ConnectionResultWidget::init_children()
 {
-    // Construct and connect the progress dialog (we can persistently connect
-    // as the dialog'll only be used for API progress)
-    mChildProgressDialog = new OptionalProgressDialog(this);
-    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
-    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 
 //
 // Auxiliary
 //
 
-void ConnectionResultWidget::populateModel(QList<ConnectionPointer>* iConnections)
+void ConnectionResultWidget::populateModel(const QList<ConnectionPointer>& iConnections)
 {
     mModel->clear();
-    if (iConnections->size() > 0)
+    if (iConnections.size() > 0)
     {
-        for (int i = 0; i < iConnections->size(); i++)
+        for (int i = 0; i < iConnections.size(); i++)
         {
-            ConnectionPointer tConnection = iConnections->at(i);
+            ConnectionPointer tConnection = iConnections.at(i);
             QStandardItem *tItem = new QStandardItem();
             tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
             mModel->appendRow(tItem);

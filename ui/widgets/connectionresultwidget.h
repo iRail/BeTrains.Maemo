@@ -13,8 +13,6 @@
 #include <QListView>
 #include <QStandardItem>
 #include "ui/global.h"
-#include "ui/dialogs/optionalprogressdialog.h"
-#include "connectiondetailwidget.h"
 #include <QModelIndex>
 
 namespace iRail
@@ -24,16 +22,12 @@ namespace iRail
     Q_OBJECT
     public:
         explicit ConnectionResultWidget(CachedAPI* iAPI, QWidget *iParent);
-        ~ConnectionResultWidget();
-
-        // Public slots
-    public slots:
-        void setRequest(ConnectionRequestPointer iConnectionRequest);
+        void load(const ConnectionRequestPointer& iConnectionRequest);
+        void load(const QList<ConnectionPointer>& iConnections);
 
         // UI events
     private slots:
-        void show_connections(QList<ConnectionPointer>* iConnections);
-        void load_details(QModelIndex iIndex);
+        void activated(QModelIndex iIndex);
 
     signals:
         void finished(ConnectionPointer iConnection);
@@ -45,7 +39,6 @@ namespace iRail
         // Initialization
     private:
         void init_ui();
-        void update_ui(ConnectionRequestPointer iConnectionRequest);
         void init_children();
 
         // UI members
@@ -53,11 +46,8 @@ namespace iRail
         QListView *mView;
         QStandardItemModel *mModel;
 
-        // UI children
-        OptionalProgressDialog* mChildProgressDialog;
-
         // Auxiliary
-        void populateModel(QList<ConnectionPointer>* iConnections);
+        void populateModel(const QList<ConnectionPointer>& iConnections);
     };
 }
 
