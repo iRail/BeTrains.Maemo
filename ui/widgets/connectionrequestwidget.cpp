@@ -17,7 +17,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionRequestWidget::ConnectionRequestWidget(CachedAPI *iAPI, QWidget *iParent) : QWidget(iParent), mAPI(iAPI)
+ConnectionRequestWidget::ConnectionRequestWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QWidget(iParent), mStations(iStations)
 {
     // Initialisation
     init_ui();
@@ -112,7 +112,7 @@ void ConnectionRequestWidget::stations_pick_to()
 
 void ConnectionRequestWidget::stations_load()
 {
-    StationChooser tChooser(mAPI, this);
+    StationChooser tChooser(mStations, this);
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {

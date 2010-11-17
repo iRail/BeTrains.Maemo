@@ -9,6 +9,7 @@
 // Includes
 #include <QWidget>
 #include <QList>
+#include <QMap>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -20,7 +21,6 @@
 #include <QtMaemo5/QMaemo5DatePickSelector>
 #include <QtMaemo5/QMaemo5TimePickSelector>
 #include <QtMaemo5/QMaemo5ValueButton>
-#include "cachedapi.h"
 #include "api/station.h"
 #include "api/connectionrequest.h"
 
@@ -30,9 +30,10 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        explicit ConnectionRequestWidget(CachedAPI* iAPI, QWidget *iParent);
+        explicit ConnectionRequestWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
         ~ConnectionRequestWidget();
         void load(ConnectionRequestPointer iConnectionRequest);
+        void configure(QMap<QString, StationPointer>* iStations);
 
         // UI Events
     private slots:
@@ -49,7 +50,7 @@ namespace iRail
 
     private:
         // Member data
-        CachedAPI* mAPI;
+        QMap<QString, StationPointer> mStations;
 
         // Initialization
         void init_ui();

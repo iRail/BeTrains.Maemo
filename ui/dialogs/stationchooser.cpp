@@ -16,25 +16,24 @@ using namespace iRail;
 // Construction and destruction
 //
 
-StationChooser::StationChooser(CachedAPI* iAPI, QWidget* iParent) : QDialog(iParent), mAPI(iAPI), mParent(iParent)
+StationChooser::StationChooser(const QMap<QString, StationPointer>& iStations, QWidget* iParent) : QDialog(iParent), mStations(iStations)
 {
     // Initialisation
     init_ui();
     init_children();
 
-    // Progress dialog
-    mChildProgressDialog->setEnabled(true);
-    mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
+    // Populate the model
+    populateModel();
 
-    // Fetch the stations
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
-    mAPI->requestStations();
+    // Initial selection
+    QModelIndex tInitial = mModel->index(0, 0);
+    mView->setCurrentIndex(tInitial);
+    mStation = tInitial.data(StationRole).value<StationPointer>();
 }
 
 StationChooser::~StationChooser()
 {
     delete mModel;
-    delete mChildProgressDialog;
 }
 
 
@@ -46,7 +45,7 @@ StationChooser::~StationChooser()
 void StationChooser::init_ui()
 {
     // Dialog configuration
-    resize(mParent->size());
+    resize(parentWidget()->size());
     setWindowTitle(QString(tr("Pick a station")));
 
     // Populate the list model
@@ -75,43 +74,6 @@ void StationChooser::init_ui()
 
 void StationChooser::init_children()
 {
-    // Construct and connect the progress dialog (we can persistently connect
-    // as the dialog'll only be used for API progress)
-    mChildProgressDialog = new OptionalProgressDialog(this);
-    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
-    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
-}
-
-
-//
-// Slots
-//
-
-void StationChooser::gotStations(QMap<QString, StationPointer>* iStations)
-{
-    mChildProgressDialog->setEnabled(false);
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
-
-    if (iStations != 0)
-    {
-        // Populate the model
-        populateModel(iStations);
-        delete iStations;
-
-        // Initial selection
-        QModelIndex tInitial = mModel->index(0, 0);
-        mView->setCurrentIndex(tInitial);
-        mStation = tInitial.data(StationRole).value<StationPointer>();
-    }
-    else
-    {
-        if (mAPI->hasError())
-            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
-        else
-            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
-
-        reject();
-    }
 }
 
 
@@ -128,9 +90,9 @@ StationPointer StationChooser::getSelection()
 // Auxiliary
 //
 
-void StationChooser::populateModel(const QMap<QString, StationPointer>* iStations)
+void StationChooser::populateModel()
 {
-    QList<StationPointer> iStationList = iStations->values();
+    QList<StationPointer> iStationList = mStations.values();
     for (int i = 0; i < iStationList.size(); i++)
     {
         StationPointer tStation = iStationList.at(i);

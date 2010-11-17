@@ -24,17 +24,18 @@
 
 namespace iRail
 {
-    class MainWidget : public QScrollArea
+    class MainWindow : public QScrollArea
     {
     Q_OBJECT
     public:
-        explicit MainWidget(CachedAPI* iAPI, QWidget *parent = 0);
-        ~MainWidget();
+        explicit MainWindow(CachedAPI* iAPI, QWidget *parent = 0);
+        ~MainWindow();
 
         // Public slots
     public slots:
+        void load_request(QMap<QString, StationPointer>* iStations);
         void show_request();
-        void do_result(ConnectionRequestPointer iConnectionRequest);
+        void process_request(ConnectionRequestPointer iConnectionRequest);
         void show_result(QList<ConnectionPointer>* iConnections);
         void show_detail(ConnectionPointer iConnection);
 
@@ -51,6 +52,7 @@ namespace iRail
         QLabel *mViewDummy;
         QListView *mView;
         QStandardItemModel *mModel;
+        QPushButton* mUIButtonSearch;
 
         // UI children
         OptionalProgressDialog* mChildProgressDialog;

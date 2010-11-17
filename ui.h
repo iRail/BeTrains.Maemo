@@ -26,7 +26,7 @@ namespace iRail
     private:
         MemoryStorage mStorage;
         CachedAPI mAPI;
-        MainWidget *mMain;
+        MainWindow *mMain;
     };
 }
 

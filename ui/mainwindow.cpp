@@ -19,13 +19,13 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainWidget::MainWidget(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), mAPI(iAPI)
+MainWindow::MainWindow(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), mAPI(iAPI)
 {
     init_ui();
     init_children();
 }
 
-MainWidget::~MainWidget()
+MainWindow::~MainWindow()
 {
     delete mChildProgressDialog;
 }
@@ -34,7 +34,7 @@ MainWidget::~MainWidget()
 // Initialization
 //
 
-void MainWidget::init_ui()
+void MainWindow::init_ui()
 {
     // Window settings
     this->setWindowTitle(QString("BeTrains"));
@@ -52,13 +52,13 @@ void MainWidget::init_ui()
 
     // Top buttons
     QHBoxLayout *blayout = new QHBoxLayout;
-    QPushButton *button1 = new QPushButton(tr("New query"));
-    button1->setIcon(QIcon(":ui/assets/icons/train.png"));
+    mUIButtonSearch = new QPushButton(tr("New query"));
+    mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
     QPushButton *button2 = new QPushButton(tr("Chat"));
     button2->setIcon(QIcon::fromTheme("general_chat_button"));
-    blayout->addWidget(button1);
+    blayout->addWidget(mUIButtonSearch);
     blayout->addWidget(button2);
-    connect(button1, SIGNAL(clicked()), this, SLOT(show_request()));
+    connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(show_request()));
     layout->addLayout(blayout);
 
     // Populate the history list model
@@ -90,17 +90,23 @@ void MainWidget::init_ui()
 
 }
 
-void MainWidget::init_children()
-{
-    // Connection request widget
-    mChildConnectionRequest = new ConnectionRequestWidget(mAPI, this);
-    mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
-    mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(do_result(ConnectionRequestPointer)));
+void MainWindow::init_children()
+{    
+    // Construct and connect the progress dialog (we can persistently connect
+    // as the dialog'll only be used for API progress)
+    mChildProgressDialog = new OptionalProgressDialog(this);
+    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
+    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
+
+    // Connection request widget -- data request (queued connection since the child widgets must exist already)
+    mUIButtonSearch->setEnabled(false);
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
+    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(load_request(QMap<QString, StationPointer>*)), Qt::QueuedConnection);
+    mAPI->requestStations();
 
     // Result widget
-    mChildConnectionResult = new ConnectionResultWidget(mAPI, mChildConnectionRequest);
-    mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionResult = new ConnectionResultWidget(mAPI, 0);
     mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
     connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(show_detail(ConnectionPointer)));
 
@@ -108,12 +114,6 @@ void MainWidget::init_children()
     mChildConnectionDetail = new ConnectionDetailWidget(mAPI, mChildConnectionResult);
     mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
-
-    // Construct and connect the progress dialog (we can persistently connect
-    // as the dialog'll only be used for API progress)
-    mChildProgressDialog = new OptionalProgressDialog(this);
-    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
-    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 
 
@@ -122,12 +122,42 @@ void MainWidget::init_children()
 //
 
 
-void MainWidget::show_request()
+void MainWindow::load_request(QMap<QString, StationPointer>* iStations)
+{
+    mChildProgressDialog->setEnabled(false);
+    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(init_children(QMap<QString, ConnectionPointer>*)));
+
+    if (iStations != 0)
+    {
+        // Connection request widget
+        mChildConnectionRequest = new ConnectionRequestWidget(*iStations, this);
+        mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
+        mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
+        connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(process_request(ConnectionRequestPointer)));
+
+        // Reconfigure other widgets
+        mChildConnectionResult->setParent(mChildConnectionRequest);
+        mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
+
+        // Finish up
+        mUIButtonSearch->setEnabled(true);
+        delete iStations;
+    }
+    else
+    {
+        if (mAPI->hasError())
+            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
+        else
+            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
+    }
+}
+
+void MainWindow::show_request()
 {
     mChildConnectionRequest->show();
 }
 
-void MainWidget::do_result(ConnectionRequestPointer iConnectionRequest)
+void MainWindow::process_request(ConnectionRequestPointer iConnectionRequest)
 {
     // Fix the history model
     mConnectionRequestHistory.prepend(iConnectionRequest);
@@ -143,7 +173,7 @@ void MainWidget::do_result(ConnectionRequestPointer iConnectionRequest)
     mChildConnectionResult->load(iConnectionRequest);
 }
 
-void MainWidget::show_result(QList<ConnectionPointer>* iConnections)
+void MainWindow::show_result(QList<ConnectionPointer>* iConnections)
 {
     mChildProgressDialog->setEnabled(false);
     disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_result(QList<ConnectionPointer>*)));
@@ -165,7 +195,7 @@ void MainWidget::show_result(QList<ConnectionPointer>* iConnections)
     }
 }
 
-void MainWidget::show_detail(ConnectionPointer iConnection)
+void MainWindow::show_detail(ConnectionPointer iConnection)
 {
     // Show the details
     mChildConnectionDetail->show();
@@ -177,7 +207,7 @@ void MainWidget::show_detail(ConnectionPointer iConnection)
 // UI events
 //
 
-void MainWidget::load_history(QModelIndex iIndex)
+void MainWindow::load_history(QModelIndex iIndex)
 {
     // Bug in Qt? Non-selectable QStandardItem can be doubleClicked...
     if (mConnectionRequestHistory.size() == 0)
@@ -193,7 +223,7 @@ void MainWidget::load_history(QModelIndex iIndex)
 // Auxiliary
 //
 
-void MainWidget::populateModel()
+void MainWindow::populateModel()
 {
     mModel->clear();
     if (mConnectionRequestHistory.size() > 0)
