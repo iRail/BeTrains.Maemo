@@ -3,8 +3,7 @@
 //
 
 // Includes
-#include "mainwidget.h"
-#include "connectionrequestwidget.h"
+#include "mainwindow.h"
 #include "auxiliary/delegates/connectionrequestdelegate.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -53,7 +52,7 @@ void MainWidget::init_ui()
     button2->setIcon(QIcon::fromTheme("general_chat_button"));
     blayout->addWidget(button1);
     blayout->addWidget(button2);
-    connect(button1, SIGNAL(clicked()), this, SLOT(show_connectionquerywidget()));
+    connect(button1, SIGNAL(clicked()), this, SLOT(show_request()));
     layout->addLayout(blayout);
 
     // Populate the history list model
@@ -87,11 +86,16 @@ void MainWidget::init_ui()
 
 void MainWidget::init_children()
 {
-    // Query widget
+    // Connection request widget
     mChildConnectionRequest = new ConnectionRequestWidget(mAPI, this);
     mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mChildConnectionRequest, SIGNAL(search(ConnectionRequestPointer)), this, SLOT(add_history(ConnectionRequestPointer)));
+    connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(show_result(ConnectionRequestPointer)));
+
+    // Result widget
+    mChildConnectionResult = new ConnectionResultWidget(mAPI, mChildConnectionRequest);
+    mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 
 
@@ -100,15 +104,20 @@ void MainWidget::init_children()
 //
 
 
-void MainWidget::show_connectionquerywidget()
+void MainWidget::show_request()
 {
     mChildConnectionRequest->show();
 }
 
-void MainWidget::add_history(ConnectionRequestPointer iConnectionRequest)
+void MainWidget::show_result(ConnectionRequestPointer iConnectionRequest)
 {
+    // Fix the history model
     mConnectionRequestHistory.prepend(iConnectionRequest);
-    populateModel();
+    populateModel();    
+
+    // Show the results
+    mChildConnectionResult->show();
+    mChildConnectionResult->setRequest(iConnectionRequest);
 }
 
 

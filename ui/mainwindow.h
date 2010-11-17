@@ -10,7 +10,9 @@
 #include "ui/global.h"
 #include "cachedapi.h"
 #include "api/connectionrequest.h"
-#include "connectionrequestwidget.h"
+#include "widgets/connectionrequestwidget.h"
+#include "widgets/connectionresultwidget.h"
+#include "widgets/connectiondetailwidget.h"
 #include <QScrollArea>
 #include <QListView>
 #include <QStandardItem>
@@ -28,8 +30,8 @@ namespace iRail
 
         // Public slots
     public slots:
-        void show_connectionquerywidget();
-        void add_history(ConnectionRequestPointer iConnectionRequest);
+        void show_request();
+        void show_result(ConnectionRequestPointer iConnectionRequest);
 
         // UI events
     private slots:
@@ -45,12 +47,13 @@ namespace iRail
         QListView *mView;
         QStandardItemModel *mModel;
 
+        // UI children
+        ConnectionRequestWidget* mChildConnectionRequest;
+        ConnectionResultWidget* mChildConnectionResult;
+
         // Initialization
         void init_ui();
         void init_children();
-
-        // Child widgets
-        ConnectionRequestWidget* mChildConnectionRequest;
 
         // Auxiliary
         void populateModel();

@@ -30,7 +30,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->save();
 
     // Header
-    QString tHeader = tConnection->departure().station->name() % tr(" to ") % tConnection->arrival().station->name();
+    QString tHeader = tConnection->departure().station % tr(" to ") % tConnection->arrival().station;
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tHeader);
 
     // Transfer count

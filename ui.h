@@ -10,7 +10,7 @@
 #include <QObject>
 #include "cachedapi.h"
 #include "api/storage/memorystorage.h"
-#include "ui/mainwidget.h"
+#include "ui/mainwindow.h"
 
 namespace iRail
 {

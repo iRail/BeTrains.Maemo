@@ -4,8 +4,7 @@
 
 // Includes
 #include "connectionrequestwidget.h"
-#include "dialogs/stationchooser.h"
-#include "connectionresultwidget.h"
+#include "ui/dialogs/stationchooser.h"
 #include <QtMaemo5/QMaemo5InformationBox>
 #include <QButtonGroup>
 #include <QProgressDialog>
@@ -81,12 +80,7 @@ void ConnectionRequestWidget::search()
             tConnectionRequest->setTime(tTime);
         }
 
-        emit search(tConnectionRequest);
-
-
-        // Query widgets
-        mChildConnectionResult->show();
-        mChildConnectionResult->setRequest(tConnectionRequest);
+        emit finished(tConnectionRequest);
     }
 }
 
@@ -246,10 +240,6 @@ void ConnectionRequestWidget::init_ui()
 }
 
 void ConnectionRequestWidget::init_children()
-{    
-    // Result widget
-    mChildConnectionResult = new ConnectionResultWidget(mAPI, this);
-    mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
-    mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
+{
 }
 

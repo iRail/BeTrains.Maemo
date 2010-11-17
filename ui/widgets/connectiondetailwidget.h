@@ -8,7 +8,7 @@
 
 // Includes
 #include "cachedapi.h"
-#include "global.h"
+#include "ui/global.h"
 #include <QVBoxLayout>
 #include <QScrollArea>
 

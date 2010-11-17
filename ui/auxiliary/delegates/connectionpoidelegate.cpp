@@ -32,7 +32,7 @@ void ConnectionPOIDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem
     iPainter->save();
 
     // Station
-    QString tStation = tConnectionPOI.station->name();
+    QString tStation = tConnectionPOI.station;
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tStation);
 
     // Platform (TODO: might not be available for stops between endpoints)

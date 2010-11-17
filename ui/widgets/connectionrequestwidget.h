@@ -23,7 +23,6 @@
 #include "cachedapi.h"
 #include "api/station.h"
 #include "api/connectionrequest.h"
-#include "connectionresultwidget.h"
 
 namespace iRail
 {
@@ -38,15 +37,15 @@ namespace iRail
         // UI Events
     private slots:
         void use_datetime(bool iUseDatetime);
+        void search();
         void clear();
         void clear_datetime();
-        void search();
         void stations_pick_to();
         void stations_pick_from();
         void stations_load();
 
     signals:
-        void search(ConnectionRequestPointer iConnectionRequest);
+        void finished(ConnectionRequestPointer iConnectionRequest);
 
     private:
         // Member data
@@ -62,9 +61,6 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
-
-        // UI children
-        ConnectionResultWidget* mChildConnectionResult;
 
         // Temporary data
         QLineEdit *mTarget;

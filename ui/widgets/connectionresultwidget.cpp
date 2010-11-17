@@ -6,7 +6,7 @@
 #include "connectionresultwidget.h"
 #include <QVBoxLayout>
 #include <QProgressDialog>
-#include "auxiliary/delegates/connectiondelegate.h"
+#include "ui/auxiliary/delegates/connectiondelegate.h"
 #include <QtMaemo5/QMaemo5InformationBox>
 #include <QStringBuilder>
 

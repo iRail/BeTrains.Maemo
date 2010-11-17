@@ -8,7 +8,7 @@
 #include <QStringBuilder>
 #include <QStandardItemModel>
 #include <QListView>
-#include "auxiliary/delegates/connectionpoidelegate.h"
+#include "ui/auxiliary/delegates/connectionpoidelegate.h"
 
 // Namespaces
 using namespace iRail;
@@ -62,8 +62,8 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection)
 {
     // Window settings
     this->setWindowTitle(QString(tr("Detail - %1 to %2")
-                                 .arg(iConnection->departure().station->name())
-                                 .arg(iConnection->arrival().station->name()))
+                                 .arg(iConnection->departure().station)
+                                 .arg(iConnection->arrival().station))
                          );
 
     // Remove all items
@@ -91,7 +91,7 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine)
     QFont tFont;
     tFont.setPointSize(18);
     tFont.setBold(true);
-    QLabel* tPOILabel = new QLabel(iLine.departure.station->name() % tr(" to ") % iLine.arrival.station->name());
+    QLabel* tPOILabel = new QLabel(iLine.departure.station % tr(" to ") % iLine.arrival.station);
     tPOILabel->setFont(tFont);
     tPOILabel->setAlignment(Qt::AlignCenter);
     mUILayout->addWidget(tPOILabel);

@@ -13,26 +13,26 @@ RESOURCES += ui.qrc \
     translations.qrc
 SOURCES += main.cpp \
     ui.cpp \
-    ui/mainwidget.cpp \
-    ui/connectionrequestwidget.cpp \
-    ui/connectionresultwidget.cpp \
+    ui/mainwindow.cpp \
+    ui/widgets/connectionrequestwidget.cpp \
+    ui/widgets/connectionresultwidget.cpp \
+    ui/widgets/connectiondetailwidget.cpp \
     ui/dialogs/stationchooser.cpp \
     ui/dialogs/optionalprogressdialog.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
     ui/auxiliary/delegates/connectionrequestdelegate.cpp \
-    ui/connectiondetailwidget.cpp \
     ui/auxiliary/delegates/connectionpoidelegate.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
-    ui/mainwidget.h \
-    ui/connectionrequestwidget.h \
-    ui/connectionresultwidget.h \
+    ui/mainwindow.h \
+    ui/widgets/connectionrequestwidget.h \
+    ui/widgets/connectionresultwidget.h \
+    ui/widgets/connectiondetailwidget.h \
     ui/dialogs/stationchooser.h \
     ui/dialogs/optionalprogressdialog.h \
     ui/auxiliary/delegates/connectiondelegate.h \
     ui/auxiliary/delegates/connectionrequestdelegate.h \
-    ui/connectiondetailwidget.h \
     ui/auxiliary/delegates/connectionpoidelegate.h
 TRANSLATIONS += \
     translations/nl_BE.ts

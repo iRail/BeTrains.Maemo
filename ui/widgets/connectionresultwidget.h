@@ -12,8 +12,8 @@
 #include "cachedapi.h"
 #include <QListView>
 #include <QStandardItem>
-#include "global.h"
-#include "dialogs/optionalprogressdialog.h"
+#include "ui/global.h"
+#include "ui/dialogs/optionalprogressdialog.h"
 #include "connectiondetailwidget.h"
 #include <QModelIndex>
 
