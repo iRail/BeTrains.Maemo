@@ -43,9 +43,6 @@ namespace iRail
 
         // UI events
     private slots:
-        void do_search();
-        void do_result(QList<ConnectionPointer>* iConnections);
-        void do_detail(ConnectionPointer iConnection);
         void load_history(QModelIndex iIndex);
 
     private:

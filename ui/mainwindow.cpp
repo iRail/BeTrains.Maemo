@@ -62,7 +62,7 @@ void MainWindow::init_ui()
     button2->setIcon(QIcon::fromTheme("general_chat_button"));
     blayout->addWidget(mUIButtonSearch);
     blayout->addWidget(button2);
-    connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(do_search()));
+    connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(show_requestwidget()));
     layout->addLayout(blayout);
 
     // Populate the history list model
@@ -133,11 +133,22 @@ void MainWindow::load_requestwidget(QMap<QString, StationPointer>* iStations)
             QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
     }
 
+    // Actually show the widget
     show_requestwidget();
 }
 
 void MainWindow::show_requestwidget()
 {
+    // Check if the widget is loaded already
+    if (mChildConnectionRequest == 0)
+    {
+        mChildProgressDialog->setEnabled(true);
+        mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
+        connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(load_requestwidget(QMap<QString, StationPointer>*)));
+        mAPI->requestStations();
+        return;
+    }
+
     mChildConnectionRequest->clear();
     if (!tInitialRequest.isNull())
     {
@@ -156,7 +167,7 @@ void MainWindow::process_requestwidget(ConnectionRequestPointer iConnectionReque
     // Request the data
     mChildProgressDialog->setEnabled(true);
     mChildProgressDialog->setWindowTitle(tr("Fetching list of connections"));
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(do_result(QList<ConnectionPointer>*)));
+    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_resultwidget(QList<ConnectionPointer>*)));
     mAPI->requestConnections(iConnectionRequest);
 }
 
@@ -167,11 +178,19 @@ void MainWindow::load_resultwidget()
     mChildConnectionResult = new ConnectionResultWidget(mAPI, mChildConnectionRequest);
     mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(do_detail(ConnectionPointer)));
+    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(show_detailwidget(ConnectionPointer)));
 }
 
 void MainWindow::show_resultwidget(QList<ConnectionPointer>* iConnections)
 {
+    // Disconnect the signal (as the only way this widget can be shown
+    // is through the API)
+    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_resultwidget(QList<ConnectionPointer>*)));
+
+    // Check if the widget is loaded already
+    if (mChildConnectionResult == 0)
+        load_resultwidget();
+
     mChildProgressDialog->setEnabled(false);
 
     if (iConnections != 0)
@@ -202,6 +221,10 @@ void MainWindow::load_detailwidget()
 
 void MainWindow::show_detailwidget(ConnectionPointer iConnection)
 {
+    // Check if the widget is loaded already
+    if (mChildConnectionDetail == 0)
+        load_detailwidget();
+
     // Show the details
     mChildConnectionDetail->show();
     mChildConnectionDetail->setConnection(iConnection);
@@ -219,40 +242,7 @@ void MainWindow::load_history(QModelIndex iIndex)
         return;
 
     tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
-    do_search();
-}
-
-// TODO: merge "do_*" in "show_*"
-void MainWindow::do_search()
-{
-    if (mChildConnectionRequest == 0)
-    {
-        // Connection request widget -- data request (queued connection since the child widgets must exist already)
-        mChildProgressDialog->setEnabled(true);
-        mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
-        connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(load_requestwidget(QMap<QString, StationPointer>*)));
-        mAPI->requestStations();
-    }
-    else
-        show_requestwidget();
-}
-
-void MainWindow::do_result(QList<ConnectionPointer>* iConnections)
-{
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(do_result(QList<ConnectionPointer>*)));
-
-    if (mChildConnectionResult == 0)
-        load_resultwidget();
-
-    show_resultwidget(iConnections);
-}
-
-void MainWindow::do_detail(ConnectionPointer iConnection)
-{
-    if (mChildConnectionDetail == 0)
-        load_detailwidget();
-
-    show_detailwidget(iConnection);
+    show_requestwidget();
 }
 
 
