@@ -32,6 +32,7 @@ namespace iRail
     public slots:
         void show_request();
         void show_result(ConnectionRequestPointer iConnectionRequest);
+        void show_detail(ConnectionPointer iConnection);
 
         // UI events
     private slots:
@@ -50,6 +51,7 @@ namespace iRail
         // UI children
         ConnectionRequestWidget* mChildConnectionRequest;
         ConnectionResultWidget* mChildConnectionResult;
+        ConnectionDetailWidget* mChildConnectionDetail;
 
         // Initialization
         void init_ui();

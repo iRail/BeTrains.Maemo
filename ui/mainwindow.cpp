@@ -96,6 +96,12 @@ void MainWidget::init_children()
     mChildConnectionResult = new ConnectionResultWidget(mAPI, mChildConnectionRequest);
     mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
     mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
+    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(show_detail(ConnectionPointer)));
+
+    // Detail widget
+    mChildConnectionDetail = new ConnectionDetailWidget(mAPI, mChildConnectionResult);
+    mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 
 
@@ -118,6 +124,13 @@ void MainWidget::show_result(ConnectionRequestPointer iConnectionRequest)
     // Show the results
     mChildConnectionResult->show();
     mChildConnectionResult->setRequest(iConnectionRequest);
+}
+
+void MainWidget::show_detail(ConnectionPointer iConnection)
+{
+    // Show the details
+    mChildConnectionDetail->show();
+    mChildConnectionDetail->setConnection(iConnection);
 }
 
 

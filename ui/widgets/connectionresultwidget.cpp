@@ -77,8 +77,7 @@ void ConnectionResultWidget::show_connections(QList<ConnectionPointer>* iConnect
 void ConnectionResultWidget::load_details(QModelIndex iIndex)
 {
     ConnectionPointer tConnection = iIndex.data(ConnectionRole).value<ConnectionPointer>();
-    mChildConnectionDetail->show();
-    mChildConnectionDetail->setConnection(tConnection);
+    emit finished(tConnection);
 }
 
 
@@ -126,11 +125,6 @@ void ConnectionResultWidget::init_children()
     mChildProgressDialog = new OptionalProgressDialog(this);
     connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
     connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
-
-    // Detail widget
-    mChildConnectionDetail = new ConnectionDetailWidget(mAPI, this);
-    mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
-    mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 
 //

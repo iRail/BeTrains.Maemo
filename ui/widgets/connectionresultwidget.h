@@ -35,6 +35,9 @@ namespace iRail
         void show_connections(QList<ConnectionPointer>* iConnections);
         void load_details(QModelIndex iIndex);
 
+    signals:
+        void finished(ConnectionPointer iConnection);
+
     private:
         // Member data
         CachedAPI* mAPI;
@@ -52,7 +55,6 @@ namespace iRail
 
         // UI children
         OptionalProgressDialog* mChildProgressDialog;
-        ConnectionDetailWidget* mChildConnectionDetail;
 
         // Auxiliary
         void populateModel(QList<ConnectionPointer>* iConnections);
