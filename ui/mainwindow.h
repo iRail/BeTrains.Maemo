@@ -36,12 +36,16 @@ namespace iRail
         void load_requestwidget(QMap<QString, StationPointer>* iStations);
         void show_requestwidget();
         void process_requestwidget(ConnectionRequestPointer iConnectionRequest);
+        void load_resultwidget();
         void show_resultwidget(QList<ConnectionPointer>* iConnections);
+        void load_detailwidget();
         void show_detailwidget(ConnectionPointer iConnection);
 
         // UI events
     private slots:
         void do_search();
+        void do_result(QList<ConnectionPointer>* iConnections);
+        void do_detail(ConnectionPointer iConnection);
         void load_history(QModelIndex iIndex);
 
     private:

@@ -22,7 +22,6 @@ namespace iRail
     Q_OBJECT
     public:
         explicit ConnectionResultWidget(CachedAPI* iAPI, QWidget *iParent);
-        void load(const ConnectionRequestPointer& iConnectionRequest);
         void load(const QList<ConnectionPointer>& iConnections);
 
         // UI events

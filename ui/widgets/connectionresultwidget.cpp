@@ -29,18 +29,6 @@ void ConnectionResultWidget::load(const QList<ConnectionPointer>& iConnections)
     populateModel(iConnections);
 }
 
-void ConnectionResultWidget::load(const ConnectionRequestPointer& iConnectionRequest)
-{
-    // Window settings
-    this->setWindowTitle(QString(tr("Connections - %1 to %2")
-                                 .arg(iConnectionRequest->origin())
-                                 .arg(iConnectionRequest->destination()))
-                         );
-
-    mModel->clear();
-
-}
-
 
 //
 // Public slots
@@ -65,6 +53,9 @@ void ConnectionResultWidget::activated(QModelIndex iIndex)
 
 void ConnectionResultWidget::init_ui()
 {
+    // Window settings
+    this->setWindowTitle(QString(tr("Connections")));
+
     // Main layout
     QVBoxLayout *mUILayout = new QVBoxLayout(this);
     mUILayout->setAlignment(Qt::AlignTop);

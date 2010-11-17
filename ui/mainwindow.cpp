@@ -25,6 +25,8 @@ MainWindow::MainWindow(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), 
     init_children();
 
     mChildConnectionRequest = 0;
+    mChildConnectionResult = 0;
+    mChildConnectionDetail = 0;
 }
 
 MainWindow::~MainWindow()
@@ -99,16 +101,6 @@ void MainWindow::init_children()
     mChildProgressDialog = new OptionalProgressDialog(this);
     connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
     connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
-
-    // Result widget
-    mChildConnectionResult = new ConnectionResultWidget(mAPI, 0);
-    mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
-    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(show_detailwidget(ConnectionPointer)));
-
-    // Detail widget
-    mChildConnectionDetail = new ConnectionDetailWidget(mAPI, mChildConnectionResult);
-    mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
-    mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 
 
@@ -129,10 +121,6 @@ void MainWindow::load_requestwidget(QMap<QString, StationPointer>* iStations)
         mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
         connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(process_requestwidget(ConnectionRequestPointer)));
-
-        // Reconfigure other widgets
-        mChildConnectionResult->setParent(mChildConnectionRequest);
-        mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
 
         // Finish up
         delete iStations;
@@ -168,17 +156,23 @@ void MainWindow::process_requestwidget(ConnectionRequestPointer iConnectionReque
     // Request the data
     mChildProgressDialog->setEnabled(true);
     mChildProgressDialog->setWindowTitle(tr("Fetching list of connections"));
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_resultwidget(QList<ConnectionPointer>*)));
+    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(do_result(QList<ConnectionPointer>*)));
     mAPI->requestConnections(iConnectionRequest);
+}
 
-    // Prepare the child widget
-    mChildConnectionResult->load(iConnectionRequest);
+void MainWindow::load_resultwidget()
+{
+    // Result widget
+    Q_ASSERT(mChildConnectionRequest != 0);
+    mChildConnectionResult = new ConnectionResultWidget(mAPI, mChildConnectionRequest);
+    mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
+    connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(do_detail(ConnectionPointer)));
 }
 
 void MainWindow::show_resultwidget(QList<ConnectionPointer>* iConnections)
 {
     mChildProgressDialog->setEnabled(false);
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(show_resultwidget(QList<ConnectionPointer>*)));
 
     if (iConnections != 0)
     {
@@ -195,6 +189,15 @@ void MainWindow::show_resultwidget(QList<ConnectionPointer>* iConnections)
             QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
 
     }
+}
+
+void MainWindow::load_detailwidget()
+{
+    // Detail widget
+    Q_ASSERT(mChildConnectionResult != 0);
+    mChildConnectionDetail = new ConnectionDetailWidget(mAPI, mChildConnectionResult);
+    mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
+    mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 
 void MainWindow::show_detailwidget(ConnectionPointer iConnection)
@@ -219,6 +222,7 @@ void MainWindow::load_history(QModelIndex iIndex)
     do_search();
 }
 
+// TODO: merge "do_*" in "show_*"
 void MainWindow::do_search()
 {
     if (mChildConnectionRequest == 0)
@@ -231,6 +235,24 @@ void MainWindow::do_search()
     }
     else
         show_requestwidget();
+}
+
+void MainWindow::do_result(QList<ConnectionPointer>* iConnections)
+{
+    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(do_result(QList<ConnectionPointer>*)));
+
+    if (mChildConnectionResult == 0)
+        load_resultwidget();
+
+    show_resultwidget(iConnections);
+}
+
+void MainWindow::do_detail(ConnectionPointer iConnection)
+{
+    if (mChildConnectionDetail == 0)
+        load_detailwidget();
+
+    show_detailwidget(iConnection);
 }
 
 
