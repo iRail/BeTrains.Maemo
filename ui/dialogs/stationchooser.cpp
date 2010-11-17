@@ -27,7 +27,7 @@ StationChooser::StationChooser(CachedAPI* iAPI, QWidget* iParent) : QDialog(iPar
     mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
 
     // Fetch the stations
-    connect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(gotStations(QList<StationPointer>*)));
+    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     mAPI->requestStations();
 }
 
@@ -87,10 +87,10 @@ void StationChooser::init_children()
 // Slots
 //
 
-void StationChooser::gotStations(QList<StationPointer>* iStations)
+void StationChooser::gotStations(QMap<QString, StationPointer>* iStations)
 {
     mChildProgressDialog->setEnabled(false);
-    disconnect(mAPI, SIGNAL(replyStations(QList<StationPointer>*)), this, SLOT(gotStations(QList<StationPointer>*)));
+    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
 
     if (iStations != 0)
     {
@@ -128,11 +128,12 @@ StationPointer StationChooser::getSelection()
 // Auxiliary
 //
 
-void StationChooser::populateModel(const QList<StationPointer>* iStations)
+void StationChooser::populateModel(const QMap<QString, StationPointer>* iStations)
 {
-    for (int i = 0; i < iStations->size(); i++)
+    QList<StationPointer> iStationList = iStations->values();
+    for (int i = 0; i < iStationList.size(); i++)
     {
-        StationPointer tStation = iStations->at(i);
+        StationPointer tStation = iStationList.at(i);
         // TODO: delegate
         QStandardItem *tItem = new QStandardItem(tStation->name());
         tItem->setData(QVariant::fromValue(tStation), StationRole);

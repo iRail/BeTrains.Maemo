@@ -8,7 +8,7 @@
 
 // Includes
 #include <QDialog>
-#include <QList>
+#include <QMap>
 #include <QStandardItemModel>
 #include <QListView>
 #include <QHBoxLayout>
@@ -30,11 +30,11 @@ namespace iRail
 
         // Slots
     public slots:
-        void gotStations(QList<StationPointer>* iStations);
+        void gotStations(QMap<QString, StationPointer>* iStations);
 
     private:
         CachedAPI* mAPI;
-        const QList<StationPointer>* mStations;
+        const QMap<QString, StationPointer>* mStations;
         StationPointer mStation;
 
         // Initialization
@@ -50,7 +50,7 @@ namespace iRail
         OptionalProgressDialog* mChildProgressDialog;
 
         // Auxiliary
-        void populateModel(const QList<StationPointer>* iStations);
+        void populateModel(const QMap<QString, StationPointer>* iStations);
     };
 }
 
