@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>ui/assets/icons/train.png</file>
+        <file>ui/assets/icons/liveboard.png</file>
     </qresource>
 </RCC>

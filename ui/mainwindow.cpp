@@ -56,10 +56,10 @@ void MainWindow::init_ui()
 
     // Top buttons
     QHBoxLayout *blayout = new QHBoxLayout;
-    mUIButtonSearch = new QPushButton(tr("New query"));
+    mUIButtonSearch = new QPushButton(tr("Plan a journey"));
     mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
-    QPushButton *button2 = new QPushButton(tr("Chat"));
-    button2->setIcon(QIcon::fromTheme("general_chat_button"));
+    QPushButton *button2 = new QPushButton(tr("View departures"));
+    button2->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
     blayout->addWidget(mUIButtonSearch);
     blayout->addWidget(button2);
     connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(show_requestwidget()));
@@ -81,7 +81,7 @@ void MainWindow::init_ui()
     // TODO: configure the QListView to be expanding within the QScrollArea
 
     // Create the history listview dummy
-    mViewDummy = new QLabel(tr("No history"));
+    mViewDummy = new QLabel(tr("No history or favorites"));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     mViewDummy->setEnabled(false);
