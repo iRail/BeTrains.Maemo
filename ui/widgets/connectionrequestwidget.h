@@ -33,7 +33,6 @@ namespace iRail
         explicit ConnectionRequestWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
         ~ConnectionRequestWidget();
         void load(ConnectionRequestPointer iConnectionRequest);
-        void configure(QMap<QString, StationPointer>* iStations);
 
         // Public slots
     public slots:
