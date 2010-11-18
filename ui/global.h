@@ -18,7 +18,9 @@ namespace iRail
         ConnectionPOIRole,
         ConnectionRole,
         VehicleRole,
-        VehicleStopRole
+        VehicleStopRole,
+        LiveboardRole,
+        LiveboardDepartureRole
     };
 }
 

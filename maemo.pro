@@ -22,7 +22,9 @@ SOURCES += main.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
     ui/auxiliary/delegates/connectionrequestdelegate.cpp \
     ui/auxiliary/delegates/connectionpoidelegate.cpp \
-    ui/auxiliary/delegates/vehiclestopdelegate.cpp
+    ui/auxiliary/delegates/vehiclestopdelegate.cpp \
+    ui/widgets/liveboardwidget.cpp \
+    ui/auxiliary/delegates/liveboarddeparturedelegate.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -35,7 +37,9 @@ HEADERS += \
     ui/auxiliary/delegates/connectiondelegate.h \
     ui/auxiliary/delegates/connectionrequestdelegate.h \
     ui/auxiliary/delegates/connectionpoidelegate.h \
-    ui/auxiliary/delegates/vehiclestopdelegate.h
+    ui/auxiliary/delegates/vehiclestopdelegate.h \
+    ui/widgets/liveboardwidget.h \
+    ui/auxiliary/delegates/liveboarddeparturedelegate.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

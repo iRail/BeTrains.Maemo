@@ -13,6 +13,7 @@
 #include "widgets/connectionrequestwidget.h"
 #include "widgets/connectionresultwidget.h"
 #include "widgets/connectiondetailwidget.h"
+#include "widgets/liveboardwidget.h"
 #include "dialogs/optionalprogressdialog.h"
 #include <QScrollArea>
 #include <QListView>
@@ -36,12 +37,18 @@ namespace iRail
         void load_requestwidget(QMap<QString, StationPointer>* iStations);
         void show_requestwidget();
         void process_requestwidget(ConnectionRequestPointer iConnectionRequest);
+
         void load_resultwidget();
         void show_resultwidget(QList<ConnectionPointer>* iConnections);
         void process_resultwidget(ConnectionPointer iConnection);
+
         void load_detailwidget();
         void load_detailwidget_vehicle(VehiclePointer* iVehicle);
         void show_detailwidget(ConnectionPointer iConnection);
+
+        void load_liveboardwidget(QMap<QString, StationPointer>* iStations);
+        void show_liveboardwidget();
+        void process_liveboardwidget(Liveboard::Departure iDeparture);
 
         // UI events
     private slots:
@@ -68,6 +75,7 @@ namespace iRail
         ConnectionRequestWidget* mChildConnectionRequest;
         ConnectionResultWidget* mChildConnectionResult;
         ConnectionDetailWidget* mChildConnectionDetail;
+        LiveboardWidget* mChildLiveboard;
 
         // Initialization
         void init_ui();

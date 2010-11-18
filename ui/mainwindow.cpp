@@ -27,6 +27,7 @@ MainWindow::MainWindow(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), 
     mChildConnectionRequest = 0;
     mChildConnectionResult = 0;
     mChildConnectionDetail = 0;
+    mChildLiveboard = 0;
 }
 
 MainWindow::~MainWindow()
@@ -58,11 +59,12 @@ void MainWindow::init_ui()
     QHBoxLayout *blayout = new QHBoxLayout;
     mUIButtonSearch = new QPushButton(tr("Plan a journey"));
     mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
-    QPushButton *button2 = new QPushButton(tr("View departures"));
-    button2->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
+    QPushButton *mUIButtonLiveboard = new QPushButton(tr("View departures"));
+    mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
     blayout->addWidget(mUIButtonSearch);
-    blayout->addWidget(button2);
+    blayout->addWidget(mUIButtonLiveboard);
     connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(show_requestwidget()));
+    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SLOT(show_liveboardwidget()));
     layout->addLayout(blayout);
 
     // Populate the history list model
@@ -77,7 +79,7 @@ void MainWindow::init_ui()
     mView->setItemDelegate(new ConnectionRequestDelegate());
     mView->setResizeMode(QListView::Adjust);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
-    layout->addWidget(mView);    
+    layout->addWidget(mView);
     // TODO: configure the QListView to be expanding within the QScrollArea
 
     // Create the history listview dummy
@@ -124,6 +126,9 @@ void MainWindow::load_requestwidget(QMap<QString, StationPointer>* iStations)
 
         // Finish up
         delete iStations;
+
+        // Actually show the widget
+        show_requestwidget();
     }
     else
     {
@@ -132,9 +137,6 @@ void MainWindow::load_requestwidget(QMap<QString, StationPointer>* iStations)
         else
             QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
     }
-
-    // Actually show the widget
-    show_requestwidget();
 }
 
 void MainWindow::show_requestwidget()
@@ -258,7 +260,54 @@ void MainWindow::show_detailwidget(ConnectionPointer iConnection)
     mChildConnectionDetail->show();
     mChildConnectionDetail->load(iConnection, tVehicles);
 }
+void MainWindow::load_liveboardwidget(QMap<QString, StationPointer>* iStations)
+{
+    mChildProgressDialog->setEnabled(false);
+    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(load_liveboardwidget(QMap<QString, StationPointer>*)));
 
+    if (iStations != 0)
+    {
+        // Connection request widget
+        mChildLiveboard = new LiveboardWidget(*iStations, this);
+        mChildLiveboard->setWindowFlags(this->windowFlags() | Qt::Window);
+        mChildLiveboard->setAttribute(Qt::WA_Maemo5StackedWindow);
+        connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
+
+        // Finish up
+        delete iStations;
+
+        // Actually show the widget
+        show_liveboardwidget();
+    }
+    else
+    {
+        if (mAPI->hasError())
+            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
+        else
+            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
+    }
+}
+
+void MainWindow::show_liveboardwidget()
+{
+    // Check if the widget is loaded already
+    if (mChildLiveboard == 0)
+    {
+        mChildProgressDialog->setEnabled(true);
+        mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
+        connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(load_liveboardwidget(QMap<QString, StationPointer>*)));
+        mAPI->requestStations();
+        return;
+    }
+
+    mChildLiveboard->clear();
+    mChildLiveboard->show();
+}
+
+void MainWindow::process_liveboardwidget(Liveboard::Departure iDeparture)
+{
+
+}
 
 //
 // UI events
@@ -300,11 +349,6 @@ void MainWindow::populateModel()
     }
     else
     {
-        QStandardItem *tDummy = new QStandardItem(tr("History is empty."));
-        tDummy->setEditable(false);
-        tDummy->setSelectable(false);
-        mModel->appendRow(tDummy);
-
         mViewDummy->setVisible(true);
         mView->setVisible(false);
     }
