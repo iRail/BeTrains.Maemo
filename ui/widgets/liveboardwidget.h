@@ -7,7 +7,7 @@
 #define LIVEBOARDWIDGET_H
 
 // Includes
-#include <QWidget>
+#include <QScrollArea>
 #include <QMap>
 #include <QLabel>
 #include <QListView>
@@ -18,7 +18,7 @@
 
 namespace iRail
 {
-    class LiveboardWidget : public QWidget
+    class LiveboardWidget : public QScrollArea
     {
     Q_OBJECT
     public:

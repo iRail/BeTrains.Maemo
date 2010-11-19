@@ -17,7 +17,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-LiveboardWidget::LiveboardWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QWidget(iParent), mStations(iStations)
+LiveboardWidget::LiveboardWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QScrollArea(iParent), mStations(iStations)
 {
     // Initialisation
     init_ui();
@@ -85,9 +85,14 @@ void LiveboardWidget::init_ui()
     // Window settings
     this->setWindowTitle(tr("Departures"));
 
+    // Parent widget
+    QWidget *tWidget = new QWidget();
+    setWidget(tWidget);
+    setWidgetResizable(true);
+
     // Main layout
-    QVBoxLayout *mUILayout = new QVBoxLayout(this);
-    mUILayout->setAlignment(Qt::AlignTop);
+    QVBoxLayout* mUILayout = new QVBoxLayout(this);
+    tWidget->setLayout(mUILayout);
 
 
     // STATION //
