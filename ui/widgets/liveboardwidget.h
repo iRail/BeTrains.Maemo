@@ -24,12 +24,11 @@ namespace iRail
     public:
         explicit LiveboardWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
         ~LiveboardWidget();
-        void load(StationPointer iStation);
+        void load(LiveboardPointer iLiveboard);
 
         // Public slots
     public slots:
         void clear();
-        void clear_id();
 
         // UI Events
     private slots:
@@ -38,12 +37,12 @@ namespace iRail
         void do_detail(QModelIndex iIndex);
 
     signals:
-        void finished(Liveboard::Departure iDeparture);
+        void request(QString iStationId);
+        void finished(Liveboard::Departure iLiveboardDeparture);
 
     private:
         // Member data
         const QMap<QString, StationPointer> mStations;
-        LiveboardPointer mLiveboard;
         QString tStationId;
 
         // UI Members
@@ -57,7 +56,7 @@ namespace iRail
         void init_children();
 
         // Auxiliary
-        void populateModel();
+        void populateModel(const QList<Liveboard::Departure>& iDepartures);
     };
 }
 

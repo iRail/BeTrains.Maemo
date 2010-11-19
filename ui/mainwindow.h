@@ -47,7 +47,9 @@ namespace iRail
         void show_detailwidget(ConnectionPointer iConnection);
 
         void load_liveboardwidget(QMap<QString, StationPointer>* iStations);
+        void load_liveboardwidget_liveboard(LiveboardPointer* iLiveboard);
         void show_liveboardwidget();
+        void process_liveboardwidget_station(QString iStationId);
         void process_liveboardwidget(Liveboard::Departure iDeparture);
 
         // UI events

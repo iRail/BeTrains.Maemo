@@ -272,6 +272,7 @@ void MainWindow::load_liveboardwidget(QMap<QString, StationPointer>* iStations)
         mChildLiveboard->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildLiveboard->setAttribute(Qt::WA_Maemo5StackedWindow);
         connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
+        connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(process_liveboardwidget_station(QString)));
 
         // Finish up
         delete iStations;
@@ -288,6 +289,29 @@ void MainWindow::load_liveboardwidget(QMap<QString, StationPointer>* iStations)
     }
 }
 
+void MainWindow::load_liveboardwidget_liveboard(LiveboardPointer* iLiveboard)
+{
+    mChildProgressDialog->setEnabled(false);
+    disconnect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(load_liveboardwidget_liveboard(LiveboardPointer*)));
+
+    if (iLiveboard != 0)
+    {
+        // Connection request widget
+        mChildLiveboard->load(*iLiveboard);
+
+        // Finish up
+        delete iLiveboard;
+    }
+    else
+    {
+        if (mAPI->hasError())
+            QMaemo5InformationBox::information(this, tr("Error: ") % mAPI->errorString(), QMaemo5InformationBox::DefaultTimeout);
+        else
+            QMaemo5InformationBox::information(this, tr("Unknown error"), QMaemo5InformationBox::DefaultTimeout);
+    }
+}
+
+
 void MainWindow::show_liveboardwidget()
 {
     // Check if the widget is loaded already
@@ -302,6 +326,14 @@ void MainWindow::show_liveboardwidget()
 
     mChildLiveboard->clear();
     mChildLiveboard->show();
+}
+
+void MainWindow::process_liveboardwidget_station(QString iStationId)
+{
+    mChildProgressDialog->setEnabled(true);
+    mChildProgressDialog->setWindowTitle(tr("Fetching liveboard"));
+    connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(load_liveboardwidget_liveboard(LiveboardPointer*)));
+    mAPI->requestLiveboard(iStationId);
 }
 
 void MainWindow::process_liveboardwidget(Liveboard::Departure iDeparture)

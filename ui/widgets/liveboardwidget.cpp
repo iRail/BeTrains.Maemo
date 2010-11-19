@@ -29,9 +29,9 @@ LiveboardWidget::~LiveboardWidget()
 }
 
 
-void LiveboardWidget::load(StationPointer iStation)
+void LiveboardWidget::load(LiveboardPointer iLiveboard)
 {
-    // TODO
+    populateModel(iLiveboard->departures());
 }
 
 
@@ -47,34 +47,14 @@ void LiveboardWidget::do_search()
     }
     else
     {
-        LiveboardPointer tLiveboard;
-
-        // TODO
-        if (tStationId.length() > 0)
-        {
-            // Lookup using station ID
-        }
-        else
-        {
-            // Lookup using textbox string
-            // TODO: event -> typing in textbox string == clear saved id
-        }
-
-        //emit finished(oLiveboardDeparture);
+        emit request(tStationId);
     }
 }
 
 void LiveboardWidget::clear()
 {
     mUIStationEdit->clear();
-    tStationId = "";
-    mLiveboard.clear();
-    populateModel();
-}
-
-void LiveboardWidget::clear_id()
-{
-    tStationId = "";
+    populateModel(QList<Liveboard::Departure>());
 }
 
 void LiveboardWidget::do_stations()
@@ -92,10 +72,6 @@ void LiveboardWidget::do_stations()
 
 void LiveboardWidget::do_detail(QModelIndex iIndex)
 {
-    // Bug in Qt? Non-selectable QStandardItem can be doubleClicked...
-    if (mLiveboard->departures().size() == 0)
-        return;
-
     emit finished(iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
 }
 
@@ -125,8 +101,8 @@ void LiveboardWidget::init_ui()
 
     // Station Edit
     mUIStationEdit = new QLineEdit;
+    mUIStationEdit->setEnabled(false);
     mUIStation->addWidget(mUIStationEdit);
-    connect(mUIStationEdit, SIGNAL(editingFinished()), this, SLOT(clear_id()));
 
     // Search button
     QPushButton *mUISearchButton = new QPushButton(QString(tr("Search")));
@@ -161,12 +137,7 @@ void LiveboardWidget::init_ui()
     font.setPointSize(24);
     mViewDummy->setFont(font);
     mUILayout->addWidget(mViewDummy);
-    populateModel();
-
-    // OTHER //
-
-    // Submit by return
-    connect(mUIStationEdit, SIGNAL(returnPressed()), this, SLOT(do_search()));
+    populateModel(QList<Liveboard::Departure>());
 
 }
 
@@ -179,28 +150,20 @@ void LiveboardWidget::init_children()
 // Auxiliary
 //
 
-void LiveboardWidget::populateModel()
+void LiveboardWidget::populateModel(const QList<Liveboard::Departure>& iDepartures)
 {
     mModel->clear();
-    if (mLiveboard.isNull())
+    if (iDepartures.size() == 0)
     {
-        mViewDummy->setText(tr("No station selected."));
-
-        mViewDummy->setVisible(true);
-        mView->setVisible(false);
-    }
-    else if (mLiveboard->departures().size() == 0)
-    {
-        mViewDummy->setText(tr("No departures from selected station."));
+        mViewDummy->setText(tr("No departures to be shown."));
         mViewDummy->setVisible(true);
         mView->setVisible(false);
     }
     else
     {
-        const QList<Liveboard::Departure>& tDepartures = mLiveboard->departures();
-        for (int i = 0; i < tDepartures.size(); i++)
+        for (int i = 0; i < iDepartures.size(); i++)
         {
-            Liveboard::Departure tDeparture = tDepartures.at(i);
+            Liveboard::Departure tDeparture = iDepartures.at(i);
             QStandardItem *tItem = new QStandardItem;
 
             tItem->setData(QVariant::fromValue(tDeparture), LiveboardDepartureRole);
