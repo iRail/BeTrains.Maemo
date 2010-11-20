@@ -15,7 +15,7 @@
 #include <QList>
 #include <QMap>
 #include "liveboardcontroller.h"
-#include "vehiclecontroller.h"
+#include "connectioncontroller.h"
 
 
 namespace iRail
@@ -31,14 +31,12 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
-        void _downloadConnections(ConnectionRequestPointer iConnectionRequest);
-        void _launchVehicle(ConnectionPointer iConnection);
+        void _launchConnection(ConnectionRequestPointer iConnectionRequest);
         void _launchLiveboard();
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations);
-        void gotConnections(QList<ConnectionPointer>* iConnections);
 
     private:
         // Member data
@@ -47,7 +45,7 @@ namespace iRail
 
         // Screens
         LiveboardController* mScreenLiveboard;
-        VehicleController* mScreenVehicle;
+        ConnectionController* mScreenConnection;
     };
 }
 

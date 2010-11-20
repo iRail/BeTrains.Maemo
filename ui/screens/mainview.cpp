@@ -31,7 +31,6 @@ MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
     }
 
     mChildConnectionRequest = 0;
-    mChildConnectionResult = 0;
 
     this->hide();
     init_ui();
@@ -149,7 +148,7 @@ void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStat
         mChildConnectionRequest = new ConnectionRequestWidget(iStations, this);
         mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(_showConnectionResult(ConnectionRequestPointer)));
+        connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SIGNAL(launchConnection(ConnectionRequestPointer)));
     }
 
     mChildConnectionRequest->clear();
@@ -159,33 +158,6 @@ void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStat
         tInitialRequest.clear();
     }
     mChildConnectionRequest->show();
-}
-
-void MainView::_showConnectionResult(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    mAction = CONNECTIONRESULT;
-    emit downloadConnections(iConnectionRequest);
-}
-
-void MainView::_showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    if (mChildConnectionResult == 0)
-    {
-        // Connection request widget
-        Q_ASSERT(mChildConnectionRequest != 0);
-        mChildConnectionResult = new ConnectionResultWidget(iStations, mChildConnectionRequest);
-        mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
-        mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SIGNAL(launchVehicle(ConnectionPointer)));
-    }
-
-    // Show the results
-    mChildConnectionResult->show();
-    mChildConnectionResult->load(iConnections);
 }
 
 void MainView::load_history(QModelIndex iIndex)
@@ -210,27 +182,6 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
     case CONNECTIONREQUEST:
         _showConnectionRequest(*iStations);
         delete iStations;
-        break;
-    case CONNECTIONRESULT:
-        _showConnectionResult(*iStations, *tConnections);
-        delete iStations;
-        delete tConnections;
-        break;
-    }
-}
-
-void MainView::setConnections(QList<ConnectionPointer>* iConnections)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    switch (mAction)
-    {
-    case CONNECTIONRESULT:
-        tConnections = iConnections;
-        emit downloadStations();
-        break;
-    default:
-        qWarning() << "! " << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }

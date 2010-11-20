@@ -8,6 +8,7 @@
 
 // Inclused
 #include <QDebug>
+#include "ui/global.h"
 #include "api/connection.h"
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"
@@ -18,9 +19,7 @@
 #include <QStandardItem>
 #include <QModelIndex>
 #include <QLabel>
-#include "ui/widgets/connectiondetailwidget.h"
 #include "ui/widgets/connectionrequestwidget.h"
-#include "ui/widgets/connectionresultwidget.h"
 #include "ui/dialogs/optionalprogressdialog.h"
 
 namespace iRail
@@ -37,8 +36,7 @@ namespace iRail
         // Auxiliary types
         enum MainAction
         {
-            CONNECTIONREQUEST = 0,
-            CONNECTIONRESULT
+            CONNECTIONREQUEST = 0
         };
         MainAction mAction;
         QMap<QString, StationPointer>* tStations;
@@ -50,13 +48,10 @@ namespace iRail
     private slots:
         void _showConnectionRequest();
         void _showConnectionRequest(const QMap<QString, StationPointer>& iStations);
-        void _showConnectionResult(ConnectionRequestPointer iConnectionRequest);
-        void _showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
 
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
-        void setConnections(QList<ConnectionPointer>* iConnections);
         void showError(const QString& iError);
 
         // Controller signals
@@ -65,6 +60,7 @@ namespace iRail
         void downloadConnections(ConnectionRequestPointer iConnectionRequest);
         void launchVehicle(ConnectionPointer iConnection);
         void launchLiveboard();
+        void launchConnection(ConnectionRequestPointer iConnectionRequest);
 
         // UI events
     private slots:
@@ -85,7 +81,6 @@ namespace iRail
         friend class MainController;
         OptionalProgressDialog* mChildProgressDialog;
         ConnectionRequestWidget* mChildConnectionRequest;
-        ConnectionResultWidget* mChildConnectionResult;
 
         // Initialization
         void init_ui();

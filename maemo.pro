@@ -29,7 +29,9 @@ SOURCES += main.cpp \
     ui/screens/liveboardcontroller.cpp \
     ui/screens/liveboardview.cpp \
     ui/screens/vehicleview.cpp \
-    ui/screens/vehiclecontroller.cpp
+    ui/screens/vehiclecontroller.cpp \
+    ui/screens/connectioncontroller.cpp \
+    ui/screens/connectionview.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -49,7 +51,9 @@ HEADERS += \
     ui/screens/liveboardcontroller.h \
     ui/screens/liveboardview.h \
     ui/screens/vehicleview.h \
-    ui/screens/vehiclecontroller.h
+    ui/screens/vehiclecontroller.h \
+    ui/screens/connectioncontroller.h \
+    ui/screens/connectionview.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

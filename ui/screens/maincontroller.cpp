@@ -19,12 +19,11 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 
     mView = new MainView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
     connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
-    connect(mView, SIGNAL(launchVehicle(ConnectionPointer)), this, SLOT(_launchVehicle(ConnectionPointer)));
+    connect(mView, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
 
     mScreenLiveboard = 0;
-    mScreenVehicle = 0;
+    mScreenConnection = 0;
 }
 
 MainController::~MainController()
@@ -54,14 +53,6 @@ void MainController::_downloadStations()
     mAPI->requestStations();
 }
 
-void MainController::_downloadConnections(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
-    mAPI->requestConnections(iConnectionRequest);
-}
-
 void MainController::_launchLiveboard()
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
@@ -74,16 +65,16 @@ void MainController::_launchLiveboard()
     mScreenLiveboard->showView();
 }
 
-void MainController::_launchVehicle(ConnectionPointer iConnection)
+void MainController::_launchConnection(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    if (mScreenVehicle == 0)
+    if (mScreenConnection == 0)
     {
-        mScreenVehicle = new VehicleController(mAPI, mView->mChildConnectionResult);
+        mScreenConnection = new ConnectionController(mAPI, mView->mChildConnectionRequest);
     }
 
-    mScreenVehicle->showView(iConnection);
+    mScreenConnection->showView(iConnectionRequest);
 }
 
 
@@ -101,15 +92,3 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations)
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
-
-void MainController::gotConnections(QList<ConnectionPointer>* iConnections)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
-    if (iConnections != 0)
-        mView->setConnections(iConnections);
-    else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
-}
-
