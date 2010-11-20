@@ -25,8 +25,8 @@ LiveboardView::LiveboardView(QWidget* iParent) : QWidget(iParent)
         setAttribute(Qt::WA_Maemo5StackedWindow);
     }
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
+    mUILayout = new QVBoxLayout(this);
+    mUILayout->setMargin(0);
 
     mChildConnectionDetail = 0;
     mChildLiveboard = 0;
@@ -67,7 +67,7 @@ void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& i
     {
         // Connection request widget
         mChildLiveboard = new LiveboardWidget(iStations, this);
-        layout()->addWidget(mChildLiveboard);
+        mUILayout->addWidget(mChildLiveboard);
         connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(_showLiveboardResult(QString)));
         //connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
     }

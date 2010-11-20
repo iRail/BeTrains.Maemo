@@ -57,6 +57,9 @@ namespace iRail
         void downloadLiveboard(QString iStationId);
 
     private:
+        // UI members
+        QVBoxLayout *mUILayout;
+
         // UI children
         ConnectionDetailWidget* mChildConnectionDetail;
         LiveboardWidget* mChildLiveboard;
