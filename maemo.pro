@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     ui/auxiliary/delegates/vehiclestopdelegate.cpp \
     ui/widgets/liveboardwidget.cpp \
     ui/auxiliary/delegates/liveboarddeparturedelegate.cpp \
-    ui/screens/mainview.cpp
+    ui/screens/mainview.cpp \
+    ui/screens/liveboardcontroller.cpp \
+    ui/screens/liveboardview.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -41,7 +43,9 @@ HEADERS += \
     ui/auxiliary/delegates/vehiclestopdelegate.h \
     ui/widgets/liveboardwidget.h \
     ui/auxiliary/delegates/liveboarddeparturedelegate.h \
-    ui/screens/mainview.h
+    ui/screens/mainview.h \
+    ui/screens/liveboardcontroller.h \
+    ui/screens/liveboardview.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

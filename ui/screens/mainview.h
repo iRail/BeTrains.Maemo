@@ -18,11 +18,9 @@
 #include <QStandardItem>
 #include <QModelIndex>
 #include <QLabel>
-#include <QtMaemo5/QMaemo5InformationBox>
 #include "ui/widgets/connectiondetailwidget.h"
 #include "ui/widgets/connectionrequestwidget.h"
 #include "ui/widgets/connectionresultwidget.h"
-#include "ui/widgets/liveboardwidget.h"
 #include "ui/dialogs/optionalprogressdialog.h"
 
 namespace iRail
@@ -34,22 +32,19 @@ namespace iRail
     public:
         MainView(QWidget *iParent);
         ~MainView();
+        void showUI();
 
         // Auxiliary types
-        // TODO: when splitting the several widgets in separate screens, we won't need this
         enum MainAction
         {
             CONNECTIONREQUEST = 0,
             CONNECTIONRESULT,
-            CONNECTIONDETAIL,
-            LIVEBOARDREQUEST,
-            LIVEBOARDRESULT
+            CONNECTIONDETAIL
         };
         MainAction mAction;
         QMap<QString, StationPointer>* tStations;
         QList<ConnectionPointer>* tConnections;
         QMap<QString, VehiclePointer>* tVehicles;
-        LiveboardPointer tLiveboard;
         ConnectionPointer tConnection;
         ConnectionRequestPointer tInitialRequest;
 
@@ -61,17 +56,12 @@ namespace iRail
         void _showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
         void _showConnectionDetail(ConnectionPointer iConnection);
         void _showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
-        void _showLiveboardRequest();
-        void _showLiveboardRequest(const QMap<QString, StationPointer>& iStations);
-        void _showLiveboardResult(QString iStationId);
-        void _showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard);
 
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
         void setConnections(QList<ConnectionPointer>* iConnections);
         void setVehicle(VehiclePointer* iVehicle);
-        void setLiveboard(LiveboardPointer* iLiveboard);
         void showError(const QString& iError);
 
         // Controller signals
@@ -80,6 +70,7 @@ namespace iRail
         void downloadConnections(ConnectionRequestPointer iConnectionRequest);
         void downloadVehicle(QString iVehicleId);
         void downloadLiveboard(QString iStationId);
+        void launchLiveboard();
 
         // UI events
     private slots:
@@ -100,7 +91,6 @@ namespace iRail
         ConnectionRequestWidget* mChildConnectionRequest;
         ConnectionResultWidget* mChildConnectionResult;
         ConnectionDetailWidget* mChildConnectionDetail;
-        LiveboardWidget* mChildLiveboard;
 
         // Initialization
         void init_ui();

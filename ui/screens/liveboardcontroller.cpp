@@ -3,7 +3,7 @@
 //
 
 // Includes
-#include "maincontroller.h"
+#include "liveboardcontroller.h"
 
 // Namespaces
 using namespace iRail;
@@ -13,27 +13,25 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
+LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    mView = new MainView(iParent);
+    mView = new LiveboardView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
+    connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
     connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
-    connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
-
-    mScreenLiveboard = 0;
+    connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
 }
 
-MainController::~MainController()
+LiveboardController::~LiveboardController()
 {
     qDebug() << "~ " << __PRETTY_FUNCTION__;
 
     delete mView;
 }
 
-void MainController::showView()
+void LiveboardController::showView()
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
@@ -45,7 +43,7 @@ void MainController::showView()
 // View slots
 //
 
-void MainController::_downloadStations()
+void LiveboardController::_downloadStations()
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
@@ -53,15 +51,7 @@ void MainController::_downloadStations()
     mAPI->requestStations();
 }
 
-void MainController::_downloadConnections(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
-    mAPI->requestConnections(iConnectionRequest);
-}
-
-void MainController::_downloadVehicle(QString iVehicleId)
+void LiveboardController::_downloadVehicle(QString iVehicleId)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
@@ -69,16 +59,12 @@ void MainController::_downloadVehicle(QString iVehicleId)
     mAPI->requestVehicle(iVehicleId);
 }
 
-void MainController::_launchLiveboard()
+void LiveboardController::_downloadLiveboard(QString iStationId)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    if (mScreenLiveboard == 0)
-    {
-        mScreenLiveboard = new LiveboardController(mAPI, mView);
-    }
-
-    mScreenLiveboard->showView();
+    connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(gotLiveboard(LiveboardPointer*)));
+    mAPI->requestLiveboard(iStationId);
 }
 
 
@@ -86,7 +72,7 @@ void MainController::_launchLiveboard()
 // Internal slots
 //
 
-void MainController::gotStations(QMap<QString, StationPointer>* iStations)
+void LiveboardController::gotStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
@@ -97,24 +83,24 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations)
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
-void MainController::gotConnections(QList<ConnectionPointer>* iConnections)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
-    if (iConnections != 0)
-        mView->setConnections(iConnections);
-    else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
-}
-
-void MainController::gotVehicle(VehiclePointer* iVehicle)
+void LiveboardController::gotVehicle(VehiclePointer* iVehicle)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     if (iVehicle != 0)
         mView->setVehicle(iVehicle);
+    else
+        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+}
+
+void LiveboardController::gotLiveboard(LiveboardPointer* iLiveboard)
+{
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
+    disconnect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(gotLiveboard(LiveboardPointer*)));
+    if (iLiveboard != 0)
+        mView->setLiveboard(iLiveboard);
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }

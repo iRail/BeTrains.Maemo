@@ -12,12 +12,9 @@
 #include "cachedapi.h"
 #include "api/connectionrequest.h"
 #include "mainview.h"
-#include "ui/widgets/connectionrequestwidget.h"
-#include "ui/widgets/connectionresultwidget.h"
-#include "ui/widgets/connectiondetailwidget.h"
-#include "ui/widgets/liveboardwidget.h"
-#include "ui/dialogs/optionalprogressdialog.h"
 #include <QList>
+#include <QMap>
+#include "liveboardcontroller.h"
 
 
 namespace iRail
@@ -35,23 +32,21 @@ namespace iRail
         void _downloadStations();
         void _downloadConnections(ConnectionRequestPointer iConnectionRequest);
         void _downloadVehicle(QString iVehicleId);
-        void _downloadLiveboard(QString iStationId);
+        void _launchLiveboard();
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations);
         void gotConnections(QList<ConnectionPointer>* iConnections);
         void gotVehicle(VehiclePointer* iVehicle);
-        void gotLiveboard(LiveboardPointer* iLiveboard);
 
     private:
         // Member data
         CachedAPI* mAPI;
         MainView* mView;
 
-        // Temporary data
-        ConnectionPointer tConnection;
-        QMap<QString, VehiclePointer> tVehicles;
+        // Screens
+        LiveboardController* mScreenLiveboard;
     };
 }
 

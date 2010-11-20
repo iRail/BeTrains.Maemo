@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QFont>
 #include <QStringBuilder>
+#include <QtMaemo5/QMaemo5InformationBox>
 
 // Namespaces
 using namespace iRail;
@@ -23,19 +24,32 @@ MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    init_ui();
-    init_children();
+    if (iParent != 0)
+    {
+        setWindowFlags(windowFlags() | Qt::Window);
+        setAttribute(Qt::WA_Maemo5StackedWindow);
+    }
 
     mChildConnectionRequest = 0;
     mChildConnectionResult = 0;
     mChildConnectionDetail = 0;
-    mChildLiveboard = 0;
+
+    this->hide();
+    init_ui();
+    init_children();
 }
 
 MainView::~MainView()
 {
     qDebug() << "~ " << __PRETTY_FUNCTION__;
 
+}
+
+void MainView::showUI()
+{
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
+    this->show();
 }
 
 
@@ -61,7 +75,7 @@ void MainView::init_ui()
     layout->setAlignment(Qt::AlignTop);
     tWidget->setLayout(layout);
 
-    // Top buttons
+    // Top buttonsmScreenLiveboard
     QHBoxLayout *blayout = new QHBoxLayout;
     mUIButtonSearch = new QPushButton(tr("Plan a journey"));
     mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
@@ -70,7 +84,7 @@ void MainView::init_ui()
     blayout->addWidget(mUIButtonSearch);
     blayout->addWidget(mUIButtonLiveboard);
     connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(_showConnectionRequest()));
-    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SLOT(_showLiveboardRequest()));
+    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SIGNAL(launchLiveboard()));
     layout->addLayout(blayout);
 
     // Populate the history list model
@@ -203,50 +217,6 @@ void MainView::_showConnectionDetail(const QMap<QString, StationPointer>& iStati
     mChildConnectionDetail->load(iConnection, iVehicles);
 }
 
-void MainView::_showLiveboardRequest()
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    mAction = LIVEBOARDREQUEST;
-    emit downloadStations();
-}
-
-void MainView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStations)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    if (mChildLiveboard == 0)
-    {
-        // Connection request widget
-        mChildLiveboard = new LiveboardWidget(iStations, this);
-        mChildLiveboard->setWindowFlags(this->windowFlags() | Qt::Window);
-        mChildLiveboard->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(_showLiveboardResult(QString)));
-        //connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
-    }
-
-    mChildLiveboard->clear();
-    mChildLiveboard->show();
-}
-
-void MainView::_showLiveboardResult(QString iStationId)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    mAction = LIVEBOARDRESULT;
-    emit downloadLiveboard(iStationId);
-}
-
-void MainView::_showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-    Q_UNUSED(iStations);
-    Q_ASSERT(mChildLiveboard != 0);
-
-    // Connection request widget
-    mChildLiveboard->load(iLiveboard);
-}
-
 void MainView::load_history(QModelIndex iIndex)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
@@ -280,15 +250,6 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
         delete iStations;
         delete tVehicles;
         tConnection.clear();
-        break;
-    case LIVEBOARDREQUEST:
-        _showLiveboardRequest(*iStations);
-        delete iStations;
-        break;
-    case LIVEBOARDRESULT:
-        _showLiveboardResult(*iStations, tLiveboard);
-        delete iStations;
-        tLiveboard.clear();
         break;
     }
 }
@@ -328,24 +289,10 @@ void MainView::setVehicle(VehiclePointer* iVehicle)
     }
 }
 
-void MainView::setLiveboard(LiveboardPointer* iLiveboard)
+void MainView::showError(const QString &iError)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    switch (mAction)
-    {
-    case LIVEBOARDRESULT:
-        tLiveboard = *iLiveboard;
-        emit downloadStations();
-        break;
-    default:
-        qWarning() << "! " << "Action" << mAction << "isn't implemented here!";
-        break;
-    }
-}
-
-void MainView::showError(const QString &iError)
-{
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }
 
