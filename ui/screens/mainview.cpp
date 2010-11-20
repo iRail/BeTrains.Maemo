@@ -21,6 +21,8 @@ using namespace iRail;
 
 MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     init_ui();
     init_children();
 
@@ -32,6 +34,7 @@ MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 
 MainView::~MainView()
 {
+    qDebug() << "~ " << __PRETTY_FUNCTION__;
 
 }
 
@@ -42,6 +45,8 @@ MainView::~MainView()
 
 void MainView::init_ui()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Window settings
     this->setWindowTitle(QString("BeTrains"));
     this->setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -99,6 +104,8 @@ void MainView::init_ui()
 
 void MainView::init_children()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Construct and connect the progress dialog (we can persistently connect
     // as the dialog'll only be used for API progress)
     mChildProgressDialog = new OptionalProgressDialog(this);
@@ -113,12 +120,16 @@ void MainView::init_children()
 
 void MainView::_showConnectionRequest()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mAction = CONNECTIONREQUEST;
     emit downloadStations();
 }
 
 void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     if (mChildConnectionRequest == 0)
     {
         // Connection request widget
@@ -139,12 +150,16 @@ void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStat
 
 void MainView::_showConnectionResult(ConnectionRequestPointer iConnectionRequest)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mAction = CONNECTIONRESULT;
     emit downloadConnections(iConnectionRequest);
 }
 
 void MainView::_showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     if (mChildConnectionResult == 0)
     {
         // Connection request widget
@@ -162,6 +177,8 @@ void MainView::_showConnectionResult(const QMap<QString, StationPointer>& iStati
 
 void MainView::_showConnectionDetail(ConnectionPointer iConnection)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mAction = CONNECTIONDETAIL;
     tConnection = iConnection;
     tVehicles = new QMap<QString, VehiclePointer>();
@@ -170,6 +187,8 @@ void MainView::_showConnectionDetail(ConnectionPointer iConnection)
 
 void MainView::_showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     if (mChildConnectionDetail == 0)
     {
         // Connection request widget
@@ -186,12 +205,16 @@ void MainView::_showConnectionDetail(const QMap<QString, StationPointer>& iStati
 
 void MainView::_showLiveboardRequest()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mAction = LIVEBOARDREQUEST;
     emit downloadStations();
 }
 
 void MainView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     if (mChildLiveboard == 0)
     {
         // Connection request widget
@@ -208,12 +231,16 @@ void MainView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStati
 
 void MainView::_showLiveboardResult(StationPointer iStation)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mAction = LIVEBOARDRESULT;
     emit downloadLiveboard(iStation->id());
 }
 
 void MainView::_showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     Q_ASSERT(mChildLiveboard != 0);
 
     // Connection request widget
@@ -222,6 +249,8 @@ void MainView::_showLiveboardResult(const QMap<QString, StationPointer>& iStatio
 
 void MainView::load_history(QModelIndex iIndex)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
     _showConnectionRequest();
 }
@@ -233,6 +262,8 @@ void MainView::load_history(QModelIndex iIndex)
 
 void MainView::setStations(QMap<QString, StationPointer>* iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     switch (mAction)
     {
     case CONNECTIONREQUEST:
@@ -264,6 +295,8 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
 
 void MainView::setConnections(QList<ConnectionPointer>* iConnections)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     switch (mAction)
     {
     case CONNECTIONRESULT:
@@ -278,6 +311,8 @@ void MainView::setConnections(QList<ConnectionPointer>* iConnections)
 
 void MainView::setVehicle(VehiclePointer* iVehicle)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     switch (mAction)
     {
     case CONNECTIONDETAIL:
@@ -292,6 +327,8 @@ void MainView::setVehicle(VehiclePointer* iVehicle)
 
 void MainView::setLiveboard(LiveboardPointer* iLiveboard)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     switch (mAction)
     {
     case LIVEBOARDRESULT:
@@ -311,6 +348,8 @@ void MainView::setLiveboard(LiveboardPointer* iLiveboard)
 
 void MainView::populateModel()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mModel->clear();
     if (mConnectionRequestHistory.size() > 0)
     {

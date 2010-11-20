@@ -7,6 +7,7 @@
 #define MAINVIEW_H
 
 // Inclused
+#include <QDebug>
 #include "api/connection.h"
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"

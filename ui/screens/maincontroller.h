@@ -7,6 +7,7 @@
 #define MAINCONTROLLER_H
 
 // Includes
+#include <QDebug>
 #include "ui/global.h"
 #include "cachedapi.h"
 #include "api/connectionrequest.h"
