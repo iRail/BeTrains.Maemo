@@ -7,6 +7,10 @@
 #define MAINVIEW_H
 
 // Inclused
+#include "api/connection.h"
+#include "api/connectionrequest.h"
+#include "api/vehicle.h"
+#include "api/liveboard.h"
 #include <QObject>
 #include <QScrollArea>
 #include <QListView>
@@ -14,6 +18,11 @@
 #include <QModelIndex>
 #include <QLabel>
 #include <QtMaemo5/QMaemo5InformationBox>
+#include "ui/widgets/connectiondetailwidget.h"
+#include "ui/widgets/connectionrequestwidget.h"
+#include "ui/widgets/connectionresultwidget.h"
+#include "ui/widgets/liveboardwidget.h"
+#include "ui/dialogs/optionalprogressdialog.h"
 
 namespace iRail
 {
@@ -25,11 +34,59 @@ namespace iRail
         MainView(QWidget *iParent);
         ~MainView();
 
+        // Auxiliary types
+        // TODO: when splitting the several widgets in separate screens, we won't need this
+        enum MainAction
+        {
+            CONNECTIONREQUEST,
+            CONNECTIONRESULT,
+            CONNECTIONDETAIL,
+            LIVEBOARDREQUEST,
+            LIVEBOARDRESULT
+        };
+        MainAction mAction;
+        QMap<QString, StationPointer>* tStations;
+        QList<ConnectionPointer>* tConnections;
+        QMap<QString, VehiclePointer>* tVehicles;
+        LiveboardPointer tLiveboard;
+        ConnectionPointer tConnection;
+        ConnectionRequestPointer tInitialRequest;
+
+        // UI events
+    private slots:
+        void _showConnectionRequest();
+        void _showConnectionRequest(QMap<QString, StationPointer>* iStations);
+        void _showConnectionResult(ConnectionRequestPointer iConnectionRequest);
+        void _showConnectionResult(QMap<QString, StationPointer>* iStations, QList<ConnectionPointer>* iConnections);
+        void _showConnectionDetail(ConnectionPointer iConnection);
+        void _showConnectionDetail(QMap<QString, StationPointer>* iStations, ConnectionPointer iConnection, QMap<QString, VehiclePointer>* iVehicles);
+        void _showLiveboardRequest();
+        void _showLiveboardRequest(QMap<QString, StationPointer>* iStations);
+        void _showLiveboardResult(StationPointer* iStation);
+        void _showLiveboardResult(QMap<QString, StationPointer>* iStations, LiveboardPointer* iLiveboard);
+
+        // Controller actions
+    public slots:
+        void setStations(QMap<QString, StationPointer>* iStations);
+        void setConnections(QList<ConnectionPointer>* iConnections);
+        void setVehicle(VehiclePointer* iVehicle);
+        void setLiveboard(LiveboardPointer* iLiveboard);
+
+        // Controller signals
+    signals:
+        void downloadStations();
+        void downloadConnections(ConnectionRequestPointer iConnectionRequest);
+        void downloadVehicle(QString iVehicleId);
+        void downloadLiveboard(QString iStationId);
+
         // UI events
     private slots:
         void load_history(QModelIndex iIndex);
 
     private:
+        // Member data
+        QList<ConnectionRequestPointer> mConnectionRequestHistory;
+
         // UI members
         QLabel *mViewDummy;
         QListView *mView;

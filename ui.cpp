@@ -22,9 +22,9 @@ UI::UI() : mAPI("Maemo", "0.1", &mStorage)
 
 UI::~UI()
 {
-    delete mMain;
+    delete mController;
 }
 
 void UI::run() {
-    mMain->show();
+    mController->show();
 }

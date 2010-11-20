@@ -55,10 +55,7 @@ void ConnectionDetailWidget::init_ui()
 void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
     // Window settings
-    this->setWindowTitle(QString(tr("Detail - %1 to %2")
-                                 .arg(iConnection->departure().station)
-                                 .arg(iConnection->arrival().station))
-                         );
+    this->setWindowTitle(QString(tr("Connection detail")));
 
     // Remove all items
     QLayoutItem* tItem;
