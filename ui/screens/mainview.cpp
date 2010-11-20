@@ -344,6 +344,11 @@ void MainView::setLiveboard(LiveboardPointer* iLiveboard)
     }
 }
 
+void MainView::showError(const QString &iError)
+{
+    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
+}
+
 
 //
 // Auxiliary

@@ -85,7 +85,10 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations)
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
-    mView->setStations(iStations);
+    if (iStations != 0)
+        mView->setStations(iStations);
+    else
+        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
 void MainController::gotConnections(QList<ConnectionPointer>* iConnections)
@@ -93,7 +96,10 @@ void MainController::gotConnections(QList<ConnectionPointer>* iConnections)
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
-    mView->setConnections(iConnections);
+    if (iConnections != 0)
+        mView->setConnections(iConnections);
+    else
+        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
 void MainController::gotVehicle(VehiclePointer* iVehicle)
@@ -101,7 +107,10 @@ void MainController::gotVehicle(VehiclePointer* iVehicle)
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
-    mView->setVehicle(iVehicle);
+    if (iVehicle != 0)
+        mView->setVehicle(iVehicle);
+    else
+        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
 void MainController::gotLiveboard(LiveboardPointer* iLiveboard)
@@ -109,5 +118,8 @@ void MainController::gotLiveboard(LiveboardPointer* iLiveboard)
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     disconnect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(gotLiveboard(LiveboardPointer*)));
-    mView->setLiveboard(iLiveboard);
+    if (iLiveboard != 0)
+        mView->setLiveboard(iLiveboard);
+    else
+        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }

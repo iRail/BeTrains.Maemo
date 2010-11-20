@@ -72,6 +72,7 @@ namespace iRail
         void setConnections(QList<ConnectionPointer>* iConnections);
         void setVehicle(VehiclePointer* iVehicle);
         void setLiveboard(LiveboardPointer* iLiveboard);
+        void showError(const QString& iError);
 
         // Controller signals
     signals:
