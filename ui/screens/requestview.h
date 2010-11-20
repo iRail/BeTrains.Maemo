@@ -3,8 +3,8 @@
 //
 
 // Include guard
-#ifndef MAINVIEW_H
-#define MAINVIEW_H
+#ifndef REQUESTVIEW_H
+#define REQUESTVIEW_H
 
 // Inclused
 #include <QDebug>
@@ -19,18 +19,25 @@
 #include <QStandardItem>
 #include <QModelIndex>
 #include <QLabel>
+#include "ui/widgets/connectionrequestwidget.h"
 #include "ui/dialogs/optionalprogressdialog.h"
 
 namespace iRail
 {
-    class MainView : public QScrollArea
+    class RequestView : public QWidget
     {
 
     Q_OBJECT
     public:
-        MainView(QWidget *iParent);
-        ~MainView();
+        RequestView(QWidget *iParent);
+        ~RequestView();
         void showUI();
+        void showUI(ConnectionRequestPointer iInitialRequest);
+
+        // UI events
+    private slots:
+        void _showConnectionRequest();
+        void _showConnectionRequest(const QMap<QString, StationPointer>& iStations);
 
         // Controller actions
     public slots:
@@ -40,31 +47,15 @@ namespace iRail
         // Controller signals
     signals:
         void downloadStations();
-        void launchLiveboard();
-        void launchRequest();
-        void setInitialRequest(ConnectionRequestPointer iInitialRequest);
-
-        // UI events
-    private slots:
-        void load_history(QModelIndex iIndex);
+        void launchConnection(ConnectionRequestPointer iConnectionRequest);
 
     private:
-        // Member data
-        QList<ConnectionRequestPointer> mConnectionRequestHistory;
-
         // UI members
-        QLabel *mViewDummy;
-        QListView *mView;
-        QStandardItemModel *mModel;
-        QPushButton* mUIButtonSearch;
+        QVBoxLayout *mUILayout;
 
-        // Initialization
-        void init_ui();
-        void init_children();
-
-        // Auxiliary
-        void populateModel();
+        // UI children
+        ConnectionRequestWidget* mChildConnectionRequest;
     };
 }
 
-#endif // MAINVIEW_H
+#endif // REQUESTVIEW_H

@@ -20,10 +20,10 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
     mView = new MainView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
     connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
-    connect(mView, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
+    connect(mView, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
 
     mScreenLiveboard = 0;
-    mScreenConnection = 0;
+    mScreenRequest = 0;
 }
 
 MainController::~MainController()
@@ -65,16 +65,24 @@ void MainController::_launchLiveboard()
     mScreenLiveboard->showView();
 }
 
-void MainController::_launchConnection(ConnectionRequestPointer iConnectionRequest)
+void MainController::_launchRequest()
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    if (mScreenConnection == 0)
+    if (mScreenRequest == 0)
     {
-        mScreenConnection = new ConnectionController(mAPI, mView->mChildConnectionRequest);
+        mScreenRequest = new RequestController(mAPI, mView);
     }
 
-    mScreenConnection->showView(iConnectionRequest);
+    if (!mInitialRequest.isNull())
+        mScreenRequest->showView(mInitialRequest);
+    else
+        mScreenRequest->showView();
+}
+
+void MainController::_setInitialRequest(ConnectionRequestPointer iInitialRequest)
+{
+    mInitialRequest = iInitialRequest;
 }
 
 

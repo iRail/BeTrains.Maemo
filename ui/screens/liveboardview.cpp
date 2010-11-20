@@ -28,7 +28,6 @@ LiveboardView::LiveboardView(QWidget* iParent) : QWidget(iParent)
     mUILayout = new QVBoxLayout(this);
     mUILayout->setMargin(0);
 
-    mChildConnectionDetail = 0;
     mChildLiveboard = 0;
 
     this->hide();

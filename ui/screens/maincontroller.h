@@ -15,7 +15,7 @@
 #include <QList>
 #include <QMap>
 #include "liveboardcontroller.h"
-#include "connectioncontroller.h"
+#include "requestcontroller.h"
 
 
 namespace iRail
@@ -31,8 +31,9 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
-        void _launchConnection(ConnectionRequestPointer iConnectionRequest);
         void _launchLiveboard();
+        void _launchRequest();
+        void _setInitialRequest(ConnectionRequestPointer iInitialRequest);
 
         // Internal slots
     private slots:
@@ -43,9 +44,12 @@ namespace iRail
         CachedAPI* mAPI;
         MainView* mView;
 
+        // Temporary data
+        ConnectionRequestPointer mInitialRequest;
+
         // Screens
         LiveboardController* mScreenLiveboard;
-        ConnectionController* mScreenConnection;
+        RequestController* mScreenRequest;
     };
 }
 

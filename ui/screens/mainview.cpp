@@ -30,8 +30,6 @@ MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
         setAttribute(Qt::WA_Maemo5StackedWindow);
     }
 
-    mChildConnectionRequest = 0;
-
     this->hide();
     init_ui();
     init_children();
@@ -81,7 +79,7 @@ void MainView::init_ui()
     mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
     blayout->addWidget(mUIButtonSearch);
     blayout->addWidget(mUIButtonLiveboard);
-    connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(_showConnectionRequest()));
+    connect(mUIButtonSearch, SIGNAL(clicked()), this, SIGNAL(launchRequest()));
     connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SIGNAL(launchLiveboard()));
     layout->addLayout(blayout);
 
@@ -117,12 +115,6 @@ void MainView::init_ui()
 void MainView::init_children()
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    // Construct and connect the progress dialog (we can persistently connect
-    // as the dialog'll only be used for API progress)
-    mChildProgressDialog = new OptionalProgressDialog(this);
-    //connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
-    //connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
 }
 
 
@@ -130,42 +122,12 @@ void MainView::init_children()
 // UI events
 //
 
-void MainView::_showConnectionRequest()
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    mAction = CONNECTIONREQUEST;
-    emit downloadStations();
-}
-
-void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStations)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    if (mChildConnectionRequest == 0)
-    {
-        // Connection request widget
-        mChildConnectionRequest = new ConnectionRequestWidget(iStations, this);
-        mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
-        mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SIGNAL(launchConnection(ConnectionRequestPointer)));
-    }
-
-    mChildConnectionRequest->clear();
-    if (!tInitialRequest.isNull())
-    {
-        mChildConnectionRequest->load(tInitialRequest);
-        tInitialRequest.clear();
-    }
-    mChildConnectionRequest->show();
-}
-
 void MainView::load_history(QModelIndex iIndex)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
-    _showConnectionRequest();
+    ConnectionRequestPointer tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
+    emit setInitialRequest(tInitialRequest);
 }
 
 
@@ -177,13 +139,7 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
-    switch (mAction)
-    {
-    case CONNECTIONREQUEST:
-        _showConnectionRequest(*iStations);
-        delete iStations;
-        break;
-    }
+    qWarning() << "! " << "Handler not currently used";
 }
 
 void MainView::showError(const QString &iError)

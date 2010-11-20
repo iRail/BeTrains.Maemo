@@ -31,7 +31,9 @@ SOURCES += main.cpp \
     ui/screens/vehicleview.cpp \
     ui/screens/vehiclecontroller.cpp \
     ui/screens/connectioncontroller.cpp \
-    ui/screens/connectionview.cpp
+    ui/screens/connectionview.cpp \
+    ui/screens/requestcontroller.cpp \
+    ui/screens/requestview.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -53,7 +55,9 @@ HEADERS += \
     ui/screens/vehicleview.h \
     ui/screens/vehiclecontroller.h \
     ui/screens/connectioncontroller.h \
-    ui/screens/connectionview.h
+    ui/screens/connectionview.h \
+    ui/screens/requestcontroller.h \
+    ui/screens/requestview.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

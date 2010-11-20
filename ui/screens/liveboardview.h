@@ -61,7 +61,6 @@ namespace iRail
         QVBoxLayout *mUILayout;
 
         // UI children
-        ConnectionDetailWidget* mChildConnectionDetail;
         LiveboardWidget* mChildLiveboard;
     };
 }
