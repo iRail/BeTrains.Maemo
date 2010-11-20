@@ -240,6 +240,7 @@ void MainView::_showLiveboardResult(StationPointer iStation)
 void MainView::_showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
+    Q_UNUSED(iStations);
 
     Q_ASSERT(mChildLiveboard != 0);
 
@@ -304,7 +305,7 @@ void MainView::setConnections(QList<ConnectionPointer>* iConnections)
         emit downloadStations();
         break;
     default:
-        // TODO: warn
+        qWarning() << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }
@@ -320,7 +321,7 @@ void MainView::setVehicle(VehiclePointer* iVehicle)
         emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
         break;
     default:
-        // TODO: warn
+        qWarning() << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }
@@ -336,7 +337,7 @@ void MainView::setLiveboard(LiveboardPointer* iLiveboard)
         emit downloadStations();
         break;
     default:
-        // TODO: warn
+        qWarning() << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }

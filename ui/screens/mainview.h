@@ -39,7 +39,7 @@ namespace iRail
         // TODO: when splitting the several widgets in separate screens, we won't need this
         enum MainAction
         {
-            CONNECTIONREQUEST,
+            CONNECTIONREQUEST = 0,
             CONNECTIONRESULT,
             CONNECTIONDETAIL,
             LIVEBOARDREQUEST,
