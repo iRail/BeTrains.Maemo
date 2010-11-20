@@ -221,27 +221,26 @@ void MainView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStati
         mChildLiveboard = new LiveboardWidget(iStations, this);
         mChildLiveboard->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildLiveboard->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
-        connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(process_liveboardwidget_station(QString)));
+        connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(_showLiveboardResult(QString)));
+        //connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
     }
 
     mChildLiveboard->clear();
     mChildLiveboard->show();
 }
 
-void MainView::_showLiveboardResult(StationPointer iStation)
+void MainView::_showLiveboardResult(QString iStationId)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     mAction = LIVEBOARDRESULT;
-    emit downloadLiveboard(iStation->id());
+    emit downloadLiveboard(iStationId);
 }
 
 void MainView::_showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
     Q_UNUSED(iStations);
-
     Q_ASSERT(mChildLiveboard != 0);
 
     // Connection request widget
@@ -305,7 +304,7 @@ void MainView::setConnections(QList<ConnectionPointer>* iConnections)
         emit downloadStations();
         break;
     default:
-        qWarning() << "Action" << mAction << "isn't implemented here!";
+        qWarning() << "! " << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }
@@ -321,7 +320,7 @@ void MainView::setVehicle(VehiclePointer* iVehicle)
         emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
         break;
     default:
-        qWarning() << "Action" << mAction << "isn't implemented here!";
+        qWarning() << "! " << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }
@@ -337,7 +336,7 @@ void MainView::setLiveboard(LiveboardPointer* iLiveboard)
         emit downloadStations();
         break;
     default:
-        qWarning() << "Action" << mAction << "isn't implemented here!";
+        qWarning() << "! " << "Action" << mAction << "isn't implemented here!";
         break;
     }
 }

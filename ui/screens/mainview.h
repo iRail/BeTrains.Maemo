@@ -63,7 +63,7 @@ namespace iRail
         void _showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
         void _showLiveboardRequest();
         void _showLiveboardRequest(const QMap<QString, StationPointer>& iStations);
-        void _showLiveboardResult(StationPointer iStation);
+        void _showLiveboardResult(QString iStationId);
         void _showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard);
 
         // Controller actions

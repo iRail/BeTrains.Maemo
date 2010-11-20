@@ -18,6 +18,10 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     mView = new MainView(iParent);
+    connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(mView, SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
+    connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
+    connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
 }
 
 MainController::~MainController()
