@@ -10,7 +10,7 @@
 #include <QObject>
 #include "cachedapi.h"
 #include "api/storage/memorystorage.h"
-#include "ui/mainwindow.h"
+#include "ui/screens/maincontroller.h"
 
 namespace iRail
 {
@@ -26,7 +26,7 @@ namespace iRail
     private:
         MemoryStorage mStorage;
         CachedAPI mAPI;
-        MainWindow *mMain;
+        MainController *mController;
     };
 }
 

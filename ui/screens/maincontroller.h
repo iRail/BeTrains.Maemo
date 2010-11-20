@@ -3,34 +3,30 @@
 //
 
 // Include guard
-#ifndef MAINWIDGET_H
-#define MAINWIDGET_H
+#ifndef MAINCONTROLLER_H
+#define MAINCONTROLLER_H
 
 // Includes
 #include "ui/global.h"
 #include "cachedapi.h"
 #include "api/connectionrequest.h"
-#include "widgets/connectionrequestwidget.h"
-#include "widgets/connectionresultwidget.h"
-#include "widgets/connectiondetailwidget.h"
-#include "widgets/liveboardwidget.h"
-#include "dialogs/optionalprogressdialog.h"
-#include <QScrollArea>
-#include <QListView>
-#include <QStandardItem>
+#include "mainview.h"
+#include "ui/widgets/connectionrequestwidget.h"
+#include "ui/widgets/connectionresultwidget.h"
+#include "ui/widgets/connectiondetailwidget.h"
+#include "ui/widgets/liveboardwidget.h"
+#include "ui/dialogs/optionalprogressdialog.h"
 #include <QList>
-#include <QModelIndex>
-#include <QLabel>
-#include <QtMaemo5/QMaemo5InformationBox>
+
 
 namespace iRail
 {
-    class MainWindow : public QScrollArea
+    class MainController : public QScrollArea
     {
     Q_OBJECT
     public:
-        explicit MainWindow(CachedAPI* iAPI, QWidget *parent = 0);
-        ~MainWindow();
+        explicit MainController(CachedAPI* iAPI, QWidget *parent = 0);
+        ~MainController();
 
         // Public slots
     public slots:
@@ -75,40 +71,17 @@ namespace iRail
         void reply_vehicle(VehiclePointer* iVehicle);
         void reply_liveboard(LiveboardPointer* iLiveboard);
 
-        // UI events
-    private slots:
-        void load_history(QModelIndex iIndex);
-
     private:
         // Member data
         CachedAPI* mAPI;
+        MainView* mView;
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
 
         // Temporary data
         ConnectionRequestPointer tInitialRequest;
         ConnectionPointer tConnection;
         QMap<QString, VehiclePointer> tVehicles;
-
-        // UI members
-        QLabel *mViewDummy;
-        QListView *mView;
-        QStandardItemModel *mModel;
-        QPushButton* mUIButtonSearch;
-
-        // UI children
-        OptionalProgressDialog* mChildProgressDialog;
-        ConnectionRequestWidget* mChildConnectionRequest;
-        ConnectionResultWidget* mChildConnectionResult;
-        ConnectionDetailWidget* mChildConnectionDetail;
-        LiveboardWidget* mChildLiveboard;
-
-        // Initialization
-        void init_ui();
-        void init_children();
-
-        // Auxiliary
-        void populateModel();
     };
 }
 
-#endif // MAINWIDGET_H
+#endif // MAINCONTROLLER_H

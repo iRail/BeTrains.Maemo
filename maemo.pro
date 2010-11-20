@@ -13,7 +13,7 @@ RESOURCES += ui.qrc \
     translations.qrc
 SOURCES += main.cpp \
     ui.cpp \
-    ui/mainwindow.cpp \
+    ui/screens/maincontroller.cpp \
     ui/widgets/connectionrequestwidget.cpp \
     ui/widgets/connectionresultwidget.cpp \
     ui/widgets/connectiondetailwidget.cpp \
@@ -24,11 +24,12 @@ SOURCES += main.cpp \
     ui/auxiliary/delegates/connectionpoidelegate.cpp \
     ui/auxiliary/delegates/vehiclestopdelegate.cpp \
     ui/widgets/liveboardwidget.cpp \
-    ui/auxiliary/delegates/liveboarddeparturedelegate.cpp
+    ui/auxiliary/delegates/liveboarddeparturedelegate.cpp \
+    ui/screens/mainview.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
-    ui/mainwindow.h \
+    ui/screens/maincontroller.h \
     ui/widgets/connectionrequestwidget.h \
     ui/widgets/connectionresultwidget.h \
     ui/widgets/connectiondetailwidget.h \
@@ -39,7 +40,8 @@ HEADERS += \
     ui/auxiliary/delegates/connectionpoidelegate.h \
     ui/auxiliary/delegates/vehiclestopdelegate.h \
     ui/widgets/liveboardwidget.h \
-    ui/auxiliary/delegates/liveboarddeparturedelegate.h
+    ui/auxiliary/delegates/liveboarddeparturedelegate.h \
+    ui/screens/mainview.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

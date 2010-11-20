@@ -17,7 +17,7 @@ using namespace iRail;
 UI::UI() : mAPI("Maemo", "0.1", &mStorage)
 {
     // Setup the main widget
-    mMain = new MainWindow(&mAPI);
+    mController = new MainController(&mAPI);
 }
 
 UI::~UI()

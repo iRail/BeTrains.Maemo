@@ -2,15 +2,6 @@
 // Configuration
 //
 
-// Includes
-#include "mainwindow.h"
-#include "auxiliary/delegates/connectionrequestdelegate.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QFont>
-#include <QStringBuilder>
-
 // Namespaces
 using namespace iRail;
 
@@ -19,10 +10,9 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainWindow::MainWindow(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), mAPI(iAPI)
+MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
-    init_ui();
-    init_children();
+    mView = new MainView(iParent);
 
     mChildConnectionRequest = 0;
     mChildConnectionResult = 0;
@@ -30,79 +20,10 @@ MainWindow::MainWindow(CachedAPI* iAPI, QWidget* parent) : QScrollArea(parent), 
     mChildLiveboard = 0;
 }
 
-MainWindow::~MainWindow()
+MainController::~MainController()
 {
     delete mChildProgressDialog;
-}
-
-//
-// Initialization
-//
-
-void MainWindow::init_ui()
-{
-    // Window settings
-    this->setWindowTitle(QString("BeTrains"));
-    this->setAttribute(Qt::WA_Maemo5StackedWindow);
-
-    // Parent widget
-    QWidget *tWidget = new QWidget();
-    setWidget(tWidget);
-    setWidgetResizable(true);
-
-    // Main layout
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment(Qt::AlignTop);
-    tWidget->setLayout(layout);
-
-    // Top buttons
-    QHBoxLayout *blayout = new QHBoxLayout;
-    mUIButtonSearch = new QPushButton(tr("Plan a journey"));
-    mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
-    QPushButton *mUIButtonLiveboard = new QPushButton(tr("View departures"));
-    mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
-    blayout->addWidget(mUIButtonSearch);
-    blayout->addWidget(mUIButtonLiveboard);
-    connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(show_connectionrequestwidget()));
-    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SLOT(show_liveboardwidget()));
-    layout->addLayout(blayout);
-
-    // Populate the history list model
-    mModel = new QStandardItemModel(0, 1);
-
-    // Create the history listview
-    mView = new QListView();
-    mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    mView->setModel(mModel);
-    mView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    mView->setSelectionMode(QAbstractItemView::SingleSelection);
-    mView->setItemDelegate(new ConnectionRequestDelegate());
-    mView->setResizeMode(QListView::Adjust);
-    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
-    layout->addWidget(mView);
-    // TODO: configure the QListView to be expanding within the QScrollArea
-
-    // Create the history listview dummy
-    mViewDummy = new QLabel(tr("No history or favorites"));
-    mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    mViewDummy->setEnabled(false);
-    QFont font;
-    font.setPointSize(24);
-    mViewDummy->setFont(font);
-    layout->addWidget(mViewDummy);
-    // TODO: load history from file
-    populateModel();
-
-}
-
-void MainWindow::init_children()
-{    
-    // Construct and connect the progress dialog (we can persistently connect
-    // as the dialog'll only be used for API progress)
-    mChildProgressDialog = new OptionalProgressDialog(this);
-    connect(mAPI, SIGNAL(miss()), mChildProgressDialog, SLOT(show()));
-    connect(mAPI, SIGNAL(action(QString)), mChildProgressDialog, SLOT(setLabelText(QString)));
+    delete mView;
 }
 
 
@@ -110,7 +31,7 @@ void MainWindow::init_children()
 // Public slots
 //
 
-void MainWindow::load_stations(QObject* iObject, const char* iSlot)
+void MainController::load_stations(QObject* iObject, const char* iSlot)
 {
     mChildProgressDialog->setEnabled(true);
     mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
@@ -119,7 +40,7 @@ void MainWindow::load_stations(QObject* iObject, const char* iSlot)
     mAPI->requestStations();
 }
 
-void MainWindow::process_stations(QMap<QString, StationPointer>* iStations)
+void MainController::process_stations(QMap<QString, StationPointer>* iStations)
 {
     mChildProgressDialog->setEnabled(false);
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(load_connectionrequestwidget(QMap<QString, StationPointer>*)));
@@ -136,12 +57,12 @@ void MainWindow::process_stations(QMap<QString, StationPointer>* iStations)
     // TODO: disconnect this slot automatically, so we should only emit upon != 0
 }
 
-void MainWindow::disconnect_stations(QObject* iObject, const char* iSlot)
+void MainController::disconnect_stations(QObject* iObject, const char* iSlot)
 {
     disconnect(this, SIGNAL(reply_stations(QMap<QString, StationPointer>*)), iObject, iSlot);
 }
 
-void MainWindow::load_connections(ConnectionRequestPointer iConnectionRequest, QObject* iObject, const char* iSlot)
+void MainController::load_connections(ConnectionRequestPointer iConnectionRequest, QObject* iObject, const char* iSlot)
 {
     mChildProgressDialog->setEnabled(true);
     mChildProgressDialog->setWindowTitle(tr("Fetching list of stations"));
@@ -150,7 +71,7 @@ void MainWindow::load_connections(ConnectionRequestPointer iConnectionRequest, Q
     mAPI->requestConnections(iConnectionRequest);
 }
 
-void MainWindow::process_connections(QList<ConnectionPointer>* iConnections)
+void MainController::process_connections(QList<ConnectionPointer>* iConnections)
 {
     mChildProgressDialog->setEnabled(false);
     disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(process_connections(QList<ConnectionPointer>*)));
@@ -167,12 +88,12 @@ void MainWindow::process_connections(QList<ConnectionPointer>* iConnections)
     // TODO: disconnect this slot automatically, so we should only emit upon != 0
 }
 
-void MainWindow::disconnect_connections(QObject* iObject, const char* iSlot)
+void MainController::disconnect_connections(QObject* iObject, const char* iSlot)
 {
     disconnect(this, SIGNAL(reply_connections(QList<ConnectionPointer>*)), iObject, iSlot);
 }
 
-void MainWindow::load_connectionrequestwidget(QMap<QString, StationPointer>* iStations)
+void MainController::load_connectionrequestwidget(QMap<QString, StationPointer>* iStations)
 {
     disconnect_stations(this, SLOT(load_connectionrequestwidget(QMap<QString, StationPointer>*)));
     if (iStations != 0)
@@ -191,7 +112,7 @@ void MainWindow::load_connectionrequestwidget(QMap<QString, StationPointer>* iSt
     }
 }
 
-void MainWindow::show_connectionrequestwidget()
+void MainController::show_connectionrequestwidget()
 {
     // Check if the widget is loaded already
     if (mChildConnectionRequest == 0)
@@ -209,7 +130,7 @@ void MainWindow::show_connectionrequestwidget()
     mChildConnectionRequest->show();
 }
 
-void MainWindow::process_connectionrequestwidget(ConnectionRequestPointer iConnectionRequest)
+void MainController::process_connectionrequestwidget(ConnectionRequestPointer iConnectionRequest)
 {
     // Fix the history model
     mConnectionRequestHistory.prepend(iConnectionRequest);
@@ -219,7 +140,7 @@ void MainWindow::process_connectionrequestwidget(ConnectionRequestPointer iConne
     load_connections(iConnectionRequest, this, SLOT(show_connectionresultwidget(QList<ConnectionPointer>*)));
 }
 
-void MainWindow::load_connectionresultwidget()
+void MainController::load_connectionresultwidget()
 {
     // Result widget
     Q_ASSERT(mChildConnectionRequest != 0);
@@ -229,7 +150,7 @@ void MainWindow::load_connectionresultwidget()
     connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(process_connectionresultwidget(ConnectionPointer)));
 }
 
-void MainWindow::load_vehicle(QString iVehicleId, QObject* iObject, const char* iSlot)
+void MainController::load_vehicle(QString iVehicleId, QObject* iObject, const char* iSlot)
 {
     mChildProgressDialog->setEnabled(true);
     mChildProgressDialog->setWindowTitle(tr("Fetching vehicle information"));
@@ -238,7 +159,7 @@ void MainWindow::load_vehicle(QString iVehicleId, QObject* iObject, const char* 
     mAPI->requestVehicle(iVehicleId);
 }
 
-void MainWindow::process_vehicle(VehiclePointer* iVehicle)
+void MainController::process_vehicle(VehiclePointer* iVehicle)
 {
     mChildProgressDialog->setEnabled(false);
     disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(process_vehicle(VehiclePointer*)));
@@ -255,12 +176,12 @@ void MainWindow::process_vehicle(VehiclePointer* iVehicle)
     // TODO: disconnect this slot automatically, so we should only emit upon != 0
 }
 
-void MainWindow::disconnect_vehicle(QObject* iObject, const char* iSlot)
+void MainController::disconnect_vehicle(QObject* iObject, const char* iSlot)
 {
     disconnect(this, SIGNAL(reply_vehicle(VehiclePointer*)), iObject, iSlot);
 }
 
-void MainWindow::load_liveboard(QString iStationId, QObject* iObject, const char* iSlot)
+void MainController::load_liveboard(QString iStationId, QObject* iObject, const char* iSlot)
 {
     mChildProgressDialog->setEnabled(true);
     mChildProgressDialog->setWindowTitle(tr("Fetching liveboard"));
@@ -269,7 +190,7 @@ void MainWindow::load_liveboard(QString iStationId, QObject* iObject, const char
     mAPI->requestLiveboard(iStationId);
 }
 
-void MainWindow::process_liveboard(LiveboardPointer* iLiveboard)
+void MainController::process_liveboard(LiveboardPointer* iLiveboard)
 {
     mChildProgressDialog->setEnabled(false);
     disconnect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(process_liveboard(LiveboardPointer*)));
@@ -286,12 +207,12 @@ void MainWindow::process_liveboard(LiveboardPointer* iLiveboard)
     // TODO: disconnect this slot automatically, so we should only emit upon != 0
 }
 
-void MainWindow::disconnect_liveboard(QObject* iObject, const char* iSlot)
+void MainController::disconnect_liveboard(QObject* iObject, const char* iSlot)
 {
     disconnect(this, SIGNAL(reply_liveboard(LiveboardPointer*)), iObject, iSlot);
 }
 
-void MainWindow::show_connectionresultwidget(QList<ConnectionPointer>* iConnections)
+void MainController::show_connectionresultwidget(QList<ConnectionPointer>* iConnections)
 {
     disconnect_connections(this, SLOT(show_connectionresultwidget(QList<ConnectionPointer>*)));
 
@@ -308,7 +229,7 @@ void MainWindow::show_connectionresultwidget(QList<ConnectionPointer>* iConnecti
     }
 }
 
-void MainWindow::process_connectionresultwidget(ConnectionPointer iConnection)
+void MainController::process_connectionresultwidget(ConnectionPointer iConnection)
 {
     tConnection = iConnection;
     tVehicles.clear();
@@ -317,14 +238,14 @@ void MainWindow::process_connectionresultwidget(ConnectionPointer iConnection)
     show_connectiondetailwidget(iConnection);
 }
 
-void MainWindow::load_connectiondetailwidget_vehicle(VehiclePointer* iVehicle)
+void MainController::load_connectiondetailwidget_vehicle(VehiclePointer* iVehicle)
 {
     disconnect_vehicle(this, SLOT(load_connectiondetailwidget_vehicle(VehiclePointer*)));
     tVehicles.insert((*iVehicle)->id(), *iVehicle);
     show_connectiondetailwidget(tConnection);
 }
 
-void MainWindow::load_connectiondetailwidget()
+void MainController::load_connectiondetailwidget()
 {
     // Detail widget
     Q_ASSERT(mChildConnectionResult != 0);
@@ -333,7 +254,7 @@ void MainWindow::load_connectiondetailwidget()
     mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
 }
 
-void MainWindow::show_connectiondetailwidget(ConnectionPointer iConnection)
+void MainController::show_connectiondetailwidget(ConnectionPointer iConnection)
 {
     // Check if the widget is loaded already
     if (mChildConnectionDetail == 0)
@@ -356,7 +277,7 @@ void MainWindow::show_connectiondetailwidget(ConnectionPointer iConnection)
     mChildConnectionDetail->load(iConnection, tVehicles);
 }
 
-void MainWindow::load_liveboardwidget(QMap<QString, StationPointer>* iStations)
+void MainController::load_liveboardwidget(QMap<QString, StationPointer>* iStations)
 {
     disconnect_stations(this, SLOT(load_liveboardwidget(QMap<QString, StationPointer>*)));
     if (iStations != 0)
@@ -376,7 +297,7 @@ void MainWindow::load_liveboardwidget(QMap<QString, StationPointer>* iStations)
     }
 }
 
-void MainWindow::load_liveboardwidget_liveboard(LiveboardPointer* iLiveboard)
+void MainController::load_liveboardwidget_liveboard(LiveboardPointer* iLiveboard)
 {
     disconnect_liveboard(this, SLOT(load_liveboardwidget_liveboard(LiveboardPointer*)));
 
@@ -391,7 +312,7 @@ void MainWindow::load_liveboardwidget_liveboard(LiveboardPointer* iLiveboard)
 }
 
 
-void MainWindow::show_liveboardwidget()
+void MainController::show_liveboardwidget()
 {
     // Check if the widget is loaded already
     if (mChildLiveboard == 0)
@@ -404,57 +325,12 @@ void MainWindow::show_liveboardwidget()
     mChildLiveboard->show();
 }
 
-void MainWindow::process_liveboardwidget_station(QString iStationId)
+void MainController::process_liveboardwidget_station(QString iStationId)
 {
     load_liveboard(iStationId, this, SLOT(load_liveboardwidget_liveboard(LiveboardPointer*)));
 }
 
-void MainWindow::process_liveboardwidget(Liveboard::Departure iDeparture)
+void MainController::process_liveboardwidget(Liveboard::Departure iDeparture)
 {
 
-}
-
-//
-// UI events
-//
-
-void MainWindow::load_history(QModelIndex iIndex)
-{
-    // Bug in Qt? Non-selectable QStandardItem can be doubleClicked...
-    if (mConnectionRequestHistory.size() == 0)
-        return;
-
-    tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
-    show_connectionrequestwidget();
-}
-
-
-//
-// Auxiliary
-//
-
-void MainWindow::populateModel()
-{
-    mModel->clear();
-    if (mConnectionRequestHistory.size() > 0)
-    {
-        for (int i = 0; i < mConnectionRequestHistory.size(); i++)
-        {
-            ConnectionRequestPointer tConnectionRequest = mConnectionRequestHistory.at(i);
-            QStandardItem *tItem = new QStandardItem;
-
-            tItem->setData(QVariant::fromValue(tConnectionRequest), ConnectionRequestRole);
-            mModel->appendRow(tItem);
-        }
-
-        mViewDummy->setVisible(false);
-        mView->setVisible(true);
-        mView->setModel(mModel);
-        mView->setFixedHeight(70*mModel->rowCount());   // HACK
-    }
-    else
-    {
-        mViewDummy->setVisible(true);
-        mView->setVisible(false);
-    }
 }
