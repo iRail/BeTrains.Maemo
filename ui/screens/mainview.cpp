@@ -270,6 +270,9 @@ void MainView::setConnections(QList<ConnectionPointer>* iConnections)
         tConnections = iConnections;
         emit downloadStations();
         break;
+    default:
+        // TODO: warn
+        break;
     }
 }
 
@@ -281,6 +284,9 @@ void MainView::setVehicle(VehiclePointer* iVehicle)
         tVehicles->insert((*iVehicle)->id(), *iVehicle);
         emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
         break;
+    default:
+        // TODO: warn
+        break;
     }
 }
 
@@ -291,6 +297,9 @@ void MainView::setLiveboard(LiveboardPointer* iLiveboard)
     case LIVEBOARDRESULT:
         tLiveboard = *iLiveboard;
         emit downloadStations();
+        break;
+    default:
+        // TODO: warn
         break;
     }
 }
