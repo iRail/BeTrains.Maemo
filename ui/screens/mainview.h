@@ -55,15 +55,15 @@ namespace iRail
         // UI events
     private slots:
         void _showConnectionRequest();
-        void _showConnectionRequest(QMap<QString, StationPointer>* iStations);
+        void _showConnectionRequest(const QMap<QString, StationPointer>& iStations);
         void _showConnectionResult(ConnectionRequestPointer iConnectionRequest);
-        void _showConnectionResult(QMap<QString, StationPointer>* iStations, QList<ConnectionPointer>* iConnections);
+        void _showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
         void _showConnectionDetail(ConnectionPointer iConnection);
-        void _showConnectionDetail(QMap<QString, StationPointer>* iStations, ConnectionPointer iConnection, QMap<QString, VehiclePointer>* iVehicles);
+        void _showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
         void _showLiveboardRequest();
-        void _showLiveboardRequest(QMap<QString, StationPointer>* iStations);
-        void _showLiveboardResult(StationPointer* iStation);
-        void _showLiveboardResult(QMap<QString, StationPointer>* iStations, LiveboardPointer* iLiveboard);
+        void _showLiveboardRequest(const QMap<QString, StationPointer>& iStations);
+        void _showLiveboardResult(StationPointer iStation);
+        void _showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard);
 
         // Controller actions
     public slots:

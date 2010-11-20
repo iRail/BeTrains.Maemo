@@ -117,18 +117,15 @@ void MainView::_showConnectionRequest()
     emit downloadStations();
 }
 
-void MainView::_showConnectionRequest(QMap<QString, StationPointer>* iStations)
+void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStations)
 {
     if (mChildConnectionRequest == 0)
     {
         // Connection request widget
-        mChildConnectionRequest = new ConnectionRequestWidget(*iStations, this);
+        mChildConnectionRequest = new ConnectionRequestWidget(iStations, this);
         mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
         connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(process_connectionrequestwidget(ConnectionRequestPointer)));
-
-        // Finish up
-        delete iStations;
     }
 
     mChildConnectionRequest->clear();
@@ -146,25 +143,21 @@ void MainView::_showConnectionResult(ConnectionRequestPointer iConnectionRequest
     emit downloadConnections(iConnectionRequest);
 }
 
-void MainView::_showConnectionResult(QMap<QString, StationPointer>* iStations, QList<ConnectionPointer>* iConnections)
+void MainView::_showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
 {
     if (mChildConnectionResult == 0)
     {
         // Connection request widget
         Q_ASSERT(mChildConnectionRequest != 0);
-        mChildConnectionResult = new ConnectionResultWidget(*iStations, mChildConnectionRequest);
+        mChildConnectionResult = new ConnectionResultWidget(iStations, mChildConnectionRequest);
         mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
         connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(process_connectionresultwidget(ConnectionPointer)));
-
-        // Finish up
-        delete iStations;
     }
 
     // Show the results
     mChildConnectionResult->show();
-    mChildConnectionResult->load(*iConnections);
-    delete iConnections;
+    mChildConnectionResult->load(iConnections);
 }
 
 void MainView::_showConnectionDetail(ConnectionPointer iConnection)
@@ -175,24 +168,20 @@ void MainView::_showConnectionDetail(ConnectionPointer iConnection)
     emit downloadVehicle(iConnection->lines().at(0).vehicle);
 }
 
-void MainView::_showConnectionDetail(QMap<QString, StationPointer>* iStations, ConnectionPointer iConnection, QMap<QString, VehiclePointer>* iVehicles)
+void MainView::_showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
     if (mChildConnectionDetail == 0)
     {
         // Connection request widget
         Q_ASSERT(mChildConnectionResult != 0);
-        mChildConnectionDetail = new ConnectionDetailWidget(*iStations, mChildConnectionResult);
+        mChildConnectionDetail = new ConnectionDetailWidget(iStations, mChildConnectionResult);
         mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
-
-        // Finish up
-        delete iStations;
     }
 
     // Show the results
     mChildConnectionDetail->show();
-    mChildConnectionDetail->load(iConnection, *iVehicles);
-    delete iVehicles;
+    mChildConnectionDetail->load(iConnection, iVehicles);
 }
 
 void MainView::_showLiveboardRequest()
@@ -201,40 +190,34 @@ void MainView::_showLiveboardRequest()
     emit downloadStations();
 }
 
-void MainView::_showLiveboardRequest(QMap<QString, StationPointer>* iStations)
+void MainView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStations)
 {
     if (mChildLiveboard == 0)
     {
         // Connection request widget
-        mChildLiveboard = new LiveboardWidget(*iStations, this);
+        mChildLiveboard = new LiveboardWidget(iStations, this);
         mChildLiveboard->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildLiveboard->setAttribute(Qt::WA_Maemo5StackedWindow);
         connect(mChildLiveboard, SIGNAL(finished(Liveboard::Departure)), this, SLOT(process_liveboardwidget(Liveboard::Departure)));
         connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(process_liveboardwidget_station(QString)));
-
-        // Finish up
-        delete iStations;
     }
 
     mChildLiveboard->clear();
     mChildLiveboard->show();
 }
 
-void MainView::_showLiveboardResult(StationPointer* iStation)
+void MainView::_showLiveboardResult(StationPointer iStation)
 {
     mAction = LIVEBOARDRESULT;
-    emit downloadLiveboard((*iStation)->id());
+    emit downloadLiveboard(iStation->id());
 }
 
-void MainView::_showLiveboardResult(QMap<QString, StationPointer>* iStations, LiveboardPointer* iLiveboard)
+void MainView::_showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard)
 {
     Q_ASSERT(mChildLiveboard != 0);
 
     // Connection request widget
-    mChildLiveboard->load(*iLiveboard);
-
-    // Finish up
-    delete iLiveboard;
+    mChildLiveboard->load(iLiveboard);
 }
 
 void MainView::load_history(QModelIndex iIndex)
@@ -253,19 +236,28 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
     switch (mAction)
     {
     case CONNECTIONREQUEST:
-        _showConnectionRequest(iStations);
+        _showConnectionRequest(*iStations);
+        delete iStations;
         break;
     case CONNECTIONRESULT:
-        _showConnectionResult(iStations, tConnections);
+        _showConnectionResult(*iStations, *tConnections);
+        delete iStations;
+        delete tConnections;
         break;
     case CONNECTIONDETAIL:
-        _showConnectionDetail(iStations, tConnection, tVehicles);
+        _showConnectionDetail(*iStations, tConnection, *tVehicles);
+        delete iStations;
+        delete tVehicles;
+        tConnection.clear();
         break;
     case LIVEBOARDREQUEST:
-        _showLiveboardRequest(iStations);
+        _showLiveboardRequest(*iStations);
+        delete iStations;
         break;
     case LIVEBOARDRESULT:
-        _showLiveboardResult(iStations, &tLiveboard);
+        _showLiveboardResult(*iStations, tLiveboard);
+        delete iStations;
+        tLiveboard.clear();
         break;
     }
 }
