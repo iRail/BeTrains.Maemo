@@ -3,6 +3,7 @@
 //
 
 // Includes
+#include <QDebug>
 #include "connectiondetailwidget.h"
 #include <QLabel>
 #include <QStringBuilder>
@@ -20,6 +21,8 @@ using namespace iRail;
 
 ConnectionDetailWidget::ConnectionDetailWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QScrollArea(iParent), mStations(iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Initialisation
     init_ui();
     init_children();
@@ -27,10 +30,14 @@ ConnectionDetailWidget::ConnectionDetailWidget(const QMap<QString, StationPointe
 
 ConnectionDetailWidget::~ConnectionDetailWidget()
 {
+    qDebug() << "~ " << __PRETTY_FUNCTION__;
+
 }
 
 void ConnectionDetailWidget::load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Alter the UI
     update_ui(iConnection, iVehicles);
 }
@@ -42,6 +49,8 @@ void ConnectionDetailWidget::load(ConnectionPointer iConnection, const QMap<QStr
 
 void ConnectionDetailWidget::init_ui()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Parent widget
     QWidget *tWidget = new QWidget();
     setWidget(tWidget);
@@ -54,6 +63,8 @@ void ConnectionDetailWidget::init_ui()
 
 void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Window settings
     this->setWindowTitle(QString(tr("Connection detail")));
 
@@ -78,6 +89,8 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap
 
 void ConnectionDetailWidget::init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Title label
     QFont tFont;
     tFont.setPointSize(18);
@@ -135,4 +148,6 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine, const Vehi
 
 void ConnectionDetailWidget::init_children()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
 }

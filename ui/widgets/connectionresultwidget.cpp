@@ -19,13 +19,23 @@ using namespace iRail;
 
 ConnectionResultWidget::ConnectionResultWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QWidget(iParent), mStations(iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Initialisation
     init_ui();
     init_children();
 }
 
+ConnectionResultWidget::~ConnectionResultWidget()
+{
+    qDebug() << "~ " << __PRETTY_FUNCTION__;
+
+}
+
 void ConnectionResultWidget::load(const QList<ConnectionPointer>& iConnections)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     populateModel(iConnections);
 }
 
@@ -41,6 +51,8 @@ void ConnectionResultWidget::load(const QList<ConnectionPointer>& iConnections)
 
 void ConnectionResultWidget::activated(QModelIndex iIndex)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     ConnectionPointer tConnection = iIndex.data(ConnectionRole).value<ConnectionPointer>();
     emit finished(tConnection);
 }
@@ -53,6 +65,8 @@ void ConnectionResultWidget::activated(QModelIndex iIndex)
 
 void ConnectionResultWidget::init_ui()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Window settings
     this->setWindowTitle(QString(tr("Connections")));
 
@@ -76,6 +90,8 @@ void ConnectionResultWidget::init_ui()
 
 void ConnectionResultWidget::init_children()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
 }
 
 //
@@ -84,6 +100,8 @@ void ConnectionResultWidget::init_children()
 
 void ConnectionResultWidget::populateModel(const QList<ConnectionPointer>& iConnections)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mModel->clear();
     if (iConnections.size() > 0)
     {

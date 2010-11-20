@@ -23,6 +23,7 @@ namespace iRail
     Q_OBJECT
     public:
         explicit ConnectionResultWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
+        ~ConnectionResultWidget();
         void load(const QList<ConnectionPointer>& iConnections);
 
         // UI events
