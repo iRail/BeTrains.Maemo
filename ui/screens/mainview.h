@@ -38,13 +38,11 @@ namespace iRail
         enum MainAction
         {
             CONNECTIONREQUEST = 0,
-            CONNECTIONRESULT,
-            CONNECTIONDETAIL
+            CONNECTIONRESULT
         };
         MainAction mAction;
         QMap<QString, StationPointer>* tStations;
         QList<ConnectionPointer>* tConnections;
-        QMap<QString, VehiclePointer>* tVehicles;
         ConnectionPointer tConnection;
         ConnectionRequestPointer tInitialRequest;
 
@@ -54,22 +52,18 @@ namespace iRail
         void _showConnectionRequest(const QMap<QString, StationPointer>& iStations);
         void _showConnectionResult(ConnectionRequestPointer iConnectionRequest);
         void _showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
-        void _showConnectionDetail(ConnectionPointer iConnection);
-        void _showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
         void setConnections(QList<ConnectionPointer>* iConnections);
-        void setVehicle(VehiclePointer* iVehicle);
         void showError(const QString& iError);
 
         // Controller signals
     signals:
         void downloadStations();
         void downloadConnections(ConnectionRequestPointer iConnectionRequest);
-        void downloadVehicle(QString iVehicleId);
-        void downloadLiveboard(QString iStationId);
+        void launchVehicle(ConnectionPointer iConnection);
         void launchLiveboard();
 
         // UI events
@@ -87,10 +81,11 @@ namespace iRail
         QPushButton* mUIButtonSearch;
 
         // UI children
+        // Temporary friend class to get to these data
+        friend class MainController;
         OptionalProgressDialog* mChildProgressDialog;
         ConnectionRequestWidget* mChildConnectionRequest;
         ConnectionResultWidget* mChildConnectionResult;
-        ConnectionDetailWidget* mChildConnectionDetail;
 
         // Initialization
         void init_ui();

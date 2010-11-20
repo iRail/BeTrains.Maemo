@@ -30,6 +30,8 @@ LiveboardView::LiveboardView(QWidget* iParent) : QWidget(iParent)
 
     mChildConnectionDetail = 0;
     mChildLiveboard = 0;
+
+    this->hide();
 }
 
 LiveboardView::~LiveboardView()

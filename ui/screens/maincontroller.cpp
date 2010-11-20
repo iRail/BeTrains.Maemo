@@ -20,10 +20,11 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
     mView = new MainView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
     connect(mView, SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
-    connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
     connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
+    connect(mView, SIGNAL(launchVehicle(ConnectionPointer)), this, SLOT(_launchVehicle(ConnectionPointer)));
 
     mScreenLiveboard = 0;
+    mScreenVehicle = 0;
 }
 
 MainController::~MainController()
@@ -61,14 +62,6 @@ void MainController::_downloadConnections(ConnectionRequestPointer iConnectionRe
     mAPI->requestConnections(iConnectionRequest);
 }
 
-void MainController::_downloadVehicle(QString iVehicleId)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
-    mAPI->requestVehicle(iVehicleId);
-}
-
 void MainController::_launchLiveboard()
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
@@ -79,6 +72,18 @@ void MainController::_launchLiveboard()
     }
 
     mScreenLiveboard->showView();
+}
+
+void MainController::_launchVehicle(ConnectionPointer iConnection)
+{
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
+    if (mScreenVehicle == 0)
+    {
+        mScreenVehicle = new VehicleController(mAPI, mView->mChildConnectionResult);
+    }
+
+    mScreenVehicle->showView(iConnection);
 }
 
 
@@ -108,13 +113,3 @@ void MainController::gotConnections(QList<ConnectionPointer>* iConnections)
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
-void MainController::gotVehicle(VehiclePointer* iVehicle)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
-    if (iVehicle != 0)
-        mView->setVehicle(iVehicle);
-    else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
-}

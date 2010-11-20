@@ -32,7 +32,6 @@ MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 
     mChildConnectionRequest = 0;
     mChildConnectionResult = 0;
-    mChildConnectionDetail = 0;
 
     this->hide();
     init_ui();
@@ -181,40 +180,12 @@ void MainView::_showConnectionResult(const QMap<QString, StationPointer>& iStati
         mChildConnectionResult = new ConnectionResultWidget(iStations, mChildConnectionRequest);
         mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(_showConnectionDetail(ConnectionPointer)));
+        connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SIGNAL(launchVehicle(ConnectionPointer)));
     }
 
     // Show the results
     mChildConnectionResult->show();
     mChildConnectionResult->load(iConnections);
-}
-
-void MainView::_showConnectionDetail(ConnectionPointer iConnection)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    mAction = CONNECTIONDETAIL;
-    tConnection = iConnection;
-    tVehicles = new QMap<QString, VehiclePointer>();
-    emit downloadVehicle(iConnection->lines().at(0).vehicle);
-}
-
-void MainView::_showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    if (mChildConnectionDetail == 0)
-    {
-        // Connection request widget
-        Q_ASSERT(mChildConnectionResult != 0);
-        mChildConnectionDetail = new ConnectionDetailWidget(iStations, mChildConnectionResult);
-        mChildConnectionDetail->setWindowFlags(this->windowFlags() | Qt::Window);
-        mChildConnectionDetail->setAttribute(Qt::WA_Maemo5StackedWindow);
-    }
-
-    // Show the results
-    mChildConnectionDetail->show();
-    mChildConnectionDetail->load(iConnection, iVehicles);
 }
 
 void MainView::load_history(QModelIndex iIndex)
@@ -245,12 +216,6 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
         delete iStations;
         delete tConnections;
         break;
-    case CONNECTIONDETAIL:
-        _showConnectionDetail(*iStations, tConnection, *tVehicles);
-        delete iStations;
-        delete tVehicles;
-        tConnection.clear();
-        break;
     }
 }
 
@@ -263,25 +228,6 @@ void MainView::setConnections(QList<ConnectionPointer>* iConnections)
     case CONNECTIONRESULT:
         tConnections = iConnections;
         emit downloadStations();
-        break;
-    default:
-        qWarning() << "! " << "Action" << mAction << "isn't implemented here!";
-        break;
-    }
-}
-
-void MainView::setVehicle(VehiclePointer* iVehicle)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    switch (mAction)
-    {
-    case CONNECTIONDETAIL:
-        tVehicles->insert((*iVehicle)->id(), *iVehicle);
-        if (tConnection->lines().count() > tVehicles->count())
-            emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
-        else
-            emit downloadStations();
         break;
     default:
         qWarning() << "! " << "Action" << mAction << "isn't implemented here!";

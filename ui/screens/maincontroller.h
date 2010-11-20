@@ -15,11 +15,12 @@
 #include <QList>
 #include <QMap>
 #include "liveboardcontroller.h"
+#include "vehiclecontroller.h"
 
 
 namespace iRail
 {
-    class MainController : public QScrollArea
+    class MainController : public QObject
     {
     Q_OBJECT
     public:
@@ -31,14 +32,13 @@ namespace iRail
     private slots:
         void _downloadStations();
         void _downloadConnections(ConnectionRequestPointer iConnectionRequest);
-        void _downloadVehicle(QString iVehicleId);
+        void _launchVehicle(ConnectionPointer iConnection);
         void _launchLiveboard();
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations);
         void gotConnections(QList<ConnectionPointer>* iConnections);
-        void gotVehicle(VehiclePointer* iVehicle);
 
     private:
         // Member data
@@ -47,6 +47,7 @@ namespace iRail
 
         // Screens
         LiveboardController* mScreenLiveboard;
+        VehicleController* mScreenVehicle;
     };
 }
 

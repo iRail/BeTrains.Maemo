@@ -3,44 +3,44 @@
 //
 
 // Include guard
-#ifndef LIVEBOARDCONTROLLER_H
-#define LIVEBOARDCONTROLLER_H
+#ifndef VEHICLECONTROLLER_H
+#define VEHICLECONTROLLER_H
 
 // Includes
 #include <QDebug>
 #include "ui/global.h"
 #include "cachedapi.h"
-#include "liveboardview.h"
+#include "api/connection.h"
+#include "vehicleview.h"
+#include <QList>
 #include <QMap>
 
 
 namespace iRail
 {
-    class LiveboardController : public QObject
+    class VehicleController : public QObject
     {
     Q_OBJECT
     public:
-        explicit LiveboardController(CachedAPI* iAPI, QWidget *parent = 0);
-        ~LiveboardController();
-        void showView();
+        explicit VehicleController(CachedAPI* iAPI, QWidget *parent = 0);
+        ~VehicleController();
+        void showView(ConnectionPointer iConnection);
 
         // View slots
     private slots:
         void _downloadStations();
         void _downloadVehicle(QString iVehicleId);
-        void _downloadLiveboard(QString iStationId);
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations);
         void gotVehicle(VehiclePointer* iVehicle);
-        void gotLiveboard(LiveboardPointer* iLiveboard);
 
     private:
         // Member data
         CachedAPI* mAPI;
-        LiveboardView* mView;
+        VehicleView* mView;
     };
 }
 
-#endif // LIVEBOARDCONTROLLER_H
+#endif // VEHICLECONTROLLER_H
