@@ -70,8 +70,9 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap
 
     // Remove all items
     QLayoutItem* tItem;
-    while (tItem = mUILayout->takeAt(0))
+    while (mUILayout->count())
     {
+        tItem = mUILayout->takeAt(0);
         if (tItem->widget())
             tItem->widget()->hide();
         delete tItem;

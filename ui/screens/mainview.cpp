@@ -136,7 +136,7 @@ void MainView::_showConnectionRequest(const QMap<QString, StationPointer>& iStat
         mChildConnectionRequest = new ConnectionRequestWidget(iStations, this);
         mChildConnectionRequest->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionRequest->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(process_connectionrequestwidget(ConnectionRequestPointer)));
+        connect(mChildConnectionRequest, SIGNAL(finished(ConnectionRequestPointer)), this, SLOT(_showConnectionResult(ConnectionRequestPointer)));
     }
 
     mChildConnectionRequest->clear();
@@ -167,7 +167,7 @@ void MainView::_showConnectionResult(const QMap<QString, StationPointer>& iStati
         mChildConnectionResult = new ConnectionResultWidget(iStations, mChildConnectionRequest);
         mChildConnectionResult->setWindowFlags(this->windowFlags() | Qt::Window);
         mChildConnectionResult->setAttribute(Qt::WA_Maemo5StackedWindow);
-        connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(process_connectionresultwidget(ConnectionPointer)));
+        connect(mChildConnectionResult, SIGNAL(finished(ConnectionPointer)), this, SLOT(_showConnectionDetail(ConnectionPointer)));
     }
 
     // Show the results
@@ -317,7 +317,10 @@ void MainView::setVehicle(VehiclePointer* iVehicle)
     {
     case CONNECTIONDETAIL:
         tVehicles->insert((*iVehicle)->id(), *iVehicle);
-        emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
+        if (tConnection->lines().count() > tVehicles->count())
+            emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
+        else
+            emit downloadStations();
         break;
     default:
         qWarning() << "! " << "Action" << mAction << "isn't implemented here!";

@@ -88,7 +88,7 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations)
     mView->setStations(iStations);
 }
 
-void MainController::gotConnection(QList<ConnectionPointer>* iConnections)
+void MainController::gotConnections(QList<ConnectionPointer>* iConnections)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 

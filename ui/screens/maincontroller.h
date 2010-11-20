@@ -40,7 +40,7 @@ namespace iRail
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations);
-        void gotConnection(QList<ConnectionPointer>* iConnections);
+        void gotConnections(QList<ConnectionPointer>* iConnections);
         void gotVehicle(VehiclePointer* iVehicle);
         void gotLiveboard(LiveboardPointer* iLiveboard);
 
