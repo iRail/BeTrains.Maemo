@@ -19,6 +19,8 @@ using namespace iRail;
 
 LiveboardWidget::LiveboardWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QScrollArea(iParent), mStations(iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Initialisation
     init_ui();
     init_children();
@@ -26,11 +28,15 @@ LiveboardWidget::LiveboardWidget(const QMap<QString, StationPointer>& iStations,
 
 LiveboardWidget::~LiveboardWidget()
 {
+    qDebug() << "~ " << __PRETTY_FUNCTION__;
+
 }
 
 
 void LiveboardWidget::load(LiveboardPointer iLiveboard)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     populateModel(iLiveboard->departures());
 }
 
@@ -41,6 +47,8 @@ void LiveboardWidget::load(LiveboardPointer iLiveboard)
 
 void LiveboardWidget::do_search()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     if (mUIStationEdit->text().length() == 0)
     {
         QMaemo5InformationBox::information(this, tr("Please fill in the station."), QMaemo5InformationBox::DefaultTimeout);
@@ -53,12 +61,16 @@ void LiveboardWidget::do_search()
 
 void LiveboardWidget::clear()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mUIStationEdit->clear();
     populateModel(QList<Liveboard::Departure>());
 }
 
 void LiveboardWidget::do_stations()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     StationChooser tChooser(mStations, this);
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
@@ -72,6 +84,8 @@ void LiveboardWidget::do_stations()
 
 void LiveboardWidget::do_detail(QModelIndex iIndex)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     emit finished(iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
 }
 
@@ -82,6 +96,8 @@ void LiveboardWidget::do_detail(QModelIndex iIndex)
 
 void LiveboardWidget::init_ui()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Window settings
     this->setWindowTitle(tr("Departures"));
 
@@ -148,6 +164,8 @@ void LiveboardWidget::init_ui()
 
 void LiveboardWidget::init_children()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
 }
 
 
@@ -157,6 +175,8 @@ void LiveboardWidget::init_children()
 
 void LiveboardWidget::populateModel(const QList<Liveboard::Departure>& iDepartures)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mModel->clear();
     if (iDepartures.size() == 0)
     {

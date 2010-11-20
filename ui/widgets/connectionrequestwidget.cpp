@@ -3,6 +3,7 @@
 //
 
 // Includes
+#include <QDebug>
 #include "connectionrequestwidget.h"
 #include "ui/dialogs/stationchooser.h"
 #include <QtMaemo5/QMaemo5InformationBox>
@@ -19,6 +20,8 @@ using namespace iRail;
 
 ConnectionRequestWidget::ConnectionRequestWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QWidget(iParent), mStations(iStations)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Initialisation
     init_ui();
     init_children();
@@ -26,11 +29,15 @@ ConnectionRequestWidget::ConnectionRequestWidget(const QMap<QString, StationPoin
 
 ConnectionRequestWidget::~ConnectionRequestWidget()
 {
+    qDebug() << "~ " << __PRETTY_FUNCTION__;
+
 }
 
 
 void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mUIToLine->setText(iConnectionRequest->destination());
     mUIFromLine->setText(iConnectionRequest->origin());
     if (iConnectionRequest->timed())
@@ -55,6 +62,8 @@ void ConnectionRequestWidget::load(ConnectionRequestPointer iConnectionRequest)
 
 void ConnectionRequestWidget::use_datetime(bool iUseDatetime)
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mUITypeDeparture->setEnabled(iUseDatetime);
     mUITypeArrival->setEnabled(iUseDatetime);
     mUIDate->setEnabled(iUseDatetime);
@@ -63,6 +72,8 @@ void ConnectionRequestWidget::use_datetime(bool iUseDatetime)
 
 void ConnectionRequestWidget::search()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     if (mUIFromLine->text().length() == 0 || mUIToLine->text().length() == 0)
     {
         QMaemo5InformationBox::information(this, tr("Please fill in both locations."), QMaemo5InformationBox::DefaultTimeout);
@@ -86,12 +97,16 @@ void ConnectionRequestWidget::search()
 
 void ConnectionRequestWidget::clear_datetime()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mUITimePicker->setCurrentTime(QTime::currentTime());
     mUIDatePicker->setCurrentDate(QDate::currentDate());
 }
 
 void ConnectionRequestWidget::clear()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mUIFromLine->clear();
     mUIToLine->clear();
     clear_datetime();
@@ -100,18 +115,24 @@ void ConnectionRequestWidget::clear()
 
 void ConnectionRequestWidget::stations_pick_from()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mTarget = mUIFromLine;
     stations_load();
 }
 
 void ConnectionRequestWidget::stations_pick_to()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     mTarget = mUIToLine;
     stations_load();
 }
 
 void ConnectionRequestWidget::stations_load()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     StationChooser tChooser(mStations, this);
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
@@ -128,6 +149,8 @@ void ConnectionRequestWidget::stations_load()
 
 void ConnectionRequestWidget::init_ui()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
     // Window settings
     this->setWindowTitle(tr("New query"));
 
@@ -241,5 +264,7 @@ void ConnectionRequestWidget::init_ui()
 
 void ConnectionRequestWidget::init_children()
 {
+    qDebug() << "+ " << __PRETTY_FUNCTION__;
+
 }
 
