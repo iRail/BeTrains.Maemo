@@ -23,6 +23,11 @@ MainController::~MainController()
     delete mView;
 }
 
+void MainController::showView()
+{
+    mView->show();
+}
+
 
 //
 // View slots

@@ -27,6 +27,7 @@ namespace iRail
     public:
         explicit MainController(CachedAPI* iAPI, QWidget *parent = 0);
         ~MainController();
+        void showView();
 
         // View slots
     private slots:

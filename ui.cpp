@@ -26,5 +26,5 @@ UI::~UI()
 }
 
 void UI::run() {
-    mController->show();
+    mController->showView();
 }

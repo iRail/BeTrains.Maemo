@@ -65,7 +65,7 @@ void MainView::init_ui()
     blayout->addWidget(mUIButtonSearch);
     blayout->addWidget(mUIButtonLiveboard);
     connect(mUIButtonSearch, SIGNAL(clicked()), this, SLOT(_showConnectionRequest()));
-    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SLOT(_showLiveboard()));
+    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SLOT(_showLiveboardRequest()));
     layout->addLayout(blayout);
 
     // Populate the history list model
