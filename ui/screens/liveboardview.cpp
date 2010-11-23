@@ -57,6 +57,7 @@ void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& i
     if (mChildLiveboard == 0)
     {
         // Connection request widget
+        // TODO: create the UI here (no separate widgets) so we can hook in the loader
         mChildLiveboard = new LiveboardWidget(iStations, this);
         mUILayout->addWidget(mChildLiveboard);
         connect(mChildLiveboard, SIGNAL(request(QString)), this, SLOT(_showLiveboardResult(QString)));

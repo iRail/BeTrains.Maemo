@@ -22,6 +22,7 @@ using namespace iRail;
 
 MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 {
+    // TODO: make the scroll area child of something so we can extend the generic view
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     if (iParent != 0)
