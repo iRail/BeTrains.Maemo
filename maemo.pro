@@ -33,7 +33,10 @@ SOURCES += main.cpp \
     ui/screens/connectioncontroller.cpp \
     ui/screens/connectionview.cpp \
     ui/screens/requestcontroller.cpp \
-    ui/screens/requestview.cpp
+    ui/screens/requestview.cpp \
+    ui/auxiliary/applicationitem.cpp \
+    ui/auxiliary/loaderwidget.cpp \
+    ui/screens/genericview.cpp
 HEADERS += \
     ui.h \
     ui/global.h \
@@ -57,7 +60,10 @@ HEADERS += \
     ui/screens/connectioncontroller.h \
     ui/screens/connectionview.h \
     ui/screens/requestcontroller.h \
-    ui/screens/requestview.h
+    ui/screens/requestview.h \
+    ui/auxiliary/applicationitem.h \
+    ui/auxiliary/loaderwidget.h \
+    ui/screens/genericview.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

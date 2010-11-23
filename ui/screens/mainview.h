@@ -20,6 +20,7 @@
 #include <QModelIndex>
 #include <QLabel>
 #include "ui/dialogs/optionalprogressdialog.h"
+#include "genericview.h"
 
 namespace iRail
 {

@@ -8,16 +8,17 @@
 
 // Inclused
 #include <QDebug>
+#include <QObject>
+#include "genericview.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
-#include <QObject>
 #include "ui/widgets/connectiondetailwidget.h"
 #include "ui/widgets/liveboardwidget.h"
 #include "ui/dialogs/optionalprogressdialog.h"
 
 namespace iRail
 {
-    class LiveboardView : public QWidget
+    class LiveboardView : public GenericView
     {
 
     Q_OBJECT
@@ -48,7 +49,6 @@ namespace iRail
         void setStations(QMap<QString, StationPointer>* iStations);
         void setVehicle(VehiclePointer* iVehicle);
         void setLiveboard(LiveboardPointer* iLiveboard);
-        void showError(const QString& iError);
 
         // Controller signals
     signals:

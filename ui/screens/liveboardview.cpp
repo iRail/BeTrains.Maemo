@@ -4,8 +4,6 @@
 
 // Includes
 #include "liveboardview.h"
-#include <QtMaemo5/QMaemo5InformationBox>
-#include <QStringBuilder>
 
 // Namespaces
 using namespace iRail;
@@ -15,22 +13,14 @@ using namespace iRail;
 // Construction and destruction
 //
 
-LiveboardView::LiveboardView(QWidget* iParent) : QWidget(iParent)
+LiveboardView::LiveboardView(QWidget* iParent) : GenericView(iParent)
 {
     qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    if (iParent != 0)
-    {
-        setWindowFlags(windowFlags() | Qt::Window);
-        setAttribute(Qt::WA_Maemo5StackedWindow);
-    }
 
     mUILayout = new QVBoxLayout(this);
     mUILayout->setMargin(0);
 
     mChildLiveboard = 0;
-
-    this->hide();
 }
 
 LiveboardView::~LiveboardView()
@@ -44,7 +34,7 @@ void LiveboardView::showUI()
     qDebug() << "+ " << __PRETTY_FUNCTION__;
 
     _showLiveboardRequest();
-    this->show();
+    GenericView::showUI();
 }
 
 
@@ -145,11 +135,3 @@ void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
         break;
     }
 }
-
-void LiveboardView::showError(const QString &iError)
-{
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
-
-    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
-}
-
