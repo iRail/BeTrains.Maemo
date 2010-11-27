@@ -12,8 +12,8 @@
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
-#include "ui/widgets/connectiondetailwidget.h"
-#include "ui/dialogs/optionalprogressdialog.h"
+#include <QVBoxLayout>
+#include <QScrollArea>
 
 namespace iRail
 {
@@ -25,6 +25,7 @@ namespace iRail
         VehicleView(QWidget *iParent);
         ~VehicleView();
         void showUI(ConnectionPointer iConnection);
+        void load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
         // Auxiliary types
         QMap<QString, StationPointer>* tStations;
@@ -48,11 +49,21 @@ namespace iRail
         void downloadVehicle(QString iVehicleId);
 
     private:
-        // UI members
-        QVBoxLayout *mUILayout;
+        // Member data
+        QMap<QString, StationPointer> mStations;
 
-        // UI children
-        ConnectionDetailWidget* mChildConnectionDetail;
+        // Initialization
+    private:
+        void init_ui();
+        void update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
+        void init_children();
+        void init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle);
+
+        // UI members
+    private:
+        QVBoxLayout *mUIMasterLayout;
+        QVBoxLayout* mUILayout;
+        QScrollArea* mUIMasterWidget;
     };
 }
 

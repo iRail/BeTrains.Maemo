@@ -14,7 +14,6 @@ RESOURCES += ui.qrc \
 SOURCES += main.cpp \
     ui.cpp \
     ui/screens/maincontroller.cpp \
-    ui/widgets/connectiondetailwidget.cpp \
     ui/dialogs/stationchooser.cpp \
     ui/dialogs/optionalprogressdialog.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
@@ -39,7 +38,6 @@ HEADERS += \
     ui.h \
     ui/global.h \
     ui/screens/maincontroller.h \
-    ui/widgets/connectiondetailwidget.h \
     ui/dialogs/stationchooser.h \
     ui/dialogs/optionalprogressdialog.h \
     ui/auxiliary/delegates/connectiondelegate.h \

@@ -12,9 +12,9 @@
 #include "genericview.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
-#include "ui/widgets/connectiondetailwidget.h"
 #include "ui/widgets/liveboardwidget.h"
 #include "ui/dialogs/optionalprogressdialog.h"
+#include <QVBoxLayout>
 
 namespace iRail
 {

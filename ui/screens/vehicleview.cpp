@@ -11,6 +11,11 @@
 #include <QFont>
 #include <QStringBuilder>
 #include <QtMaemo5/QMaemo5InformationBox>
+#include <QLabel>
+#include <QStandardItemModel>
+#include <QListView>
+#include "ui/auxiliary/delegates/vehiclestopdelegate.h"
+#include "ui/global.h"
 
 // Namespaces
 using namespace iRail;
@@ -30,10 +35,14 @@ VehicleView::VehicleView(QWidget* iParent) : QWidget(iParent)
         setAttribute(Qt::WA_Maemo5StackedWindow);
     }
 
-    mUILayout = new QVBoxLayout(this);
-    mUILayout->setMargin(0);
+    mUIMasterLayout = new QVBoxLayout(this);
+    mUIMasterLayout->setMargin(0);
 
-    mChildConnectionDetail = 0;
+    mUIMasterWidget = new QScrollArea(this);
+    mUIMasterLayout->addWidget(mUIMasterWidget);
+
+    init_ui();
+    init_children();
 
     this->hide();
 }
@@ -51,6 +60,16 @@ void VehicleView::showUI(ConnectionPointer iConnection)
     _showConnectionDetail(iConnection);
     this->show();
 }
+
+void VehicleView::load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Alter the UI
+    update_ui(iConnection, iVehicles);
+}
+
+
 
 
 //
@@ -70,16 +89,10 @@ void VehicleView::_showConnectionDetail(const QMap<QString, StationPointer>& iSt
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    if (mChildConnectionDetail == 0)
-    {
-        // Connection request widget
-        mChildConnectionDetail = new ConnectionDetailWidget(iStations, this);
-        mUILayout->addWidget(mChildConnectionDetail);
-    }
+    mStations = iStations;  // TODO: via load()?
 
     // Show the results
-    mChildConnectionDetail->show();
-    mChildConnectionDetail->load(iConnection, iVehicles);
+    load(iConnection, iVehicles);
 }
 
 
@@ -113,4 +126,113 @@ void VehicleView::showError(const QString &iError)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
+}
+//
+// Initialisation
+//
+
+void VehicleView::init_ui()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Parent widget
+    QWidget *tWidget = new QWidget();
+    mUIMasterWidget->setWidget(tWidget);
+    mUIMasterWidget->setWidgetResizable(true);
+
+    // Main layout
+    mUILayout = new QVBoxLayout(mUIMasterWidget);
+    tWidget->setLayout(mUILayout);
+}
+
+void VehicleView::update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Window settings
+    this->setWindowTitle(QString(tr("Connection detail")));
+
+    // Remove all items
+    QLayoutItem* tItem;
+    while (mUILayout->count())
+    {
+        tItem = mUILayout->takeAt(0);
+        if (tItem->widget())
+            tItem->widget()->hide();
+        delete tItem;
+    }
+
+    // Add new items
+    foreach (Connection::Line tLine, iConnection->lines())
+    {
+        init_line(tLine, iVehicles[tLine.vehicle]);
+    }
+
+    // Add a spacer (setAlignment(Qt::AlignTop) doesn't seem to work)
+    mUILayout->addStretch();
+}
+
+void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Title label
+    QFont tFont;
+    tFont.setPointSize(18);
+    tFont.setBold(true);
+    QLabel* tPOILabel = new QLabel(mStations[iLine.departure.station]->name() % tr(" to ") % mStations[iLine.arrival.station]->name());
+    tPOILabel->setFont(tFont);
+    tPOILabel->setAlignment(Qt::AlignCenter);
+    mUILayout->addWidget(tPOILabel);
+
+    // Populate the stops list model
+    QStandardItemModel* tModel = new QStandardItemModel(0, 1);
+
+    // Create the stops listview
+    QListView *tView = new QListView();
+    tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    tView->setModel(tModel);
+    tView->setItemDelegate(new VehicleStopDelegate(mStations));
+    tView->setSelectionMode(QAbstractItemView::NoSelection);
+    tView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    mUILayout->addWidget(tView);
+
+    // Add the stops
+    bool tWithinEndpoints = false;
+    foreach (Vehicle::Stop tStop, iVehicle->stops())
+    {
+        if (!tWithinEndpoints && tStop.station == iLine.departure.station)
+        {
+            tStop.platform = iLine.departure.platform;
+            tWithinEndpoints = true;
+        }
+        bool tDisplay = tWithinEndpoints;
+        if (tWithinEndpoints && tStop.station == iLine.arrival.station)
+        {
+            tStop.platform = iLine.arrival.platform;
+            tWithinEndpoints = false;
+        }
+
+        if (tDisplay)
+        {
+            QStandardItem *tItem = new QStandardItem();
+            tItem->setData(QVariant::fromValue(tStop), VehicleStopRole);
+            tModel->appendRow(tItem);
+        }
+    }
+
+    // TODO: configure the QListView to be expanding within the QScrollArea
+    // SizePolicy doesn't work
+    // Setting the fixed height works for 2 items, but not more, as it _always_
+    // seem to return 192, and doesn't update after adding items/updating the model
+    tView->setFixedHeight(70*tModel->rowCount());   // HACK
+
+    // Add some space
+    mUILayout->addSpacing(42);
+}
+
+void VehicleView::init_children()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
 }
