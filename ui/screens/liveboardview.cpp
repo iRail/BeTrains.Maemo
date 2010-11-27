@@ -157,8 +157,7 @@ void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    tLiveboard = *iLiveboard;
-    emit downloadStations();
+    _showLiveboardResult(*iLiveboard);
 }
 //
 // Initialization
