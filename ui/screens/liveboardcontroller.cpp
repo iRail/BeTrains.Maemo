@@ -15,7 +15,7 @@ using namespace iRail;
 
 LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView = new LiveboardView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
@@ -26,14 +26,14 @@ LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : mA
 
 LiveboardController::~LiveboardController()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
     delete mView;
 }
 
 void LiveboardController::showView()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->showUI();
 }
@@ -45,7 +45,7 @@ void LiveboardController::showView()
 
 void LiveboardController::_downloadStations()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     mAPI->requestStations();
@@ -53,7 +53,7 @@ void LiveboardController::_downloadStations()
 
 void LiveboardController::_downloadVehicle(QString iVehicleId)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     mAPI->requestVehicle(iVehicleId);
@@ -61,7 +61,7 @@ void LiveboardController::_downloadVehicle(QString iVehicleId)
 
 void LiveboardController::_downloadLiveboard(QString iStationId)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(gotLiveboard(LiveboardPointer*)));
     mAPI->requestLiveboard(iStationId);
@@ -74,7 +74,7 @@ void LiveboardController::_downloadLiveboard(QString iStationId)
 
 void LiveboardController::gotStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     if (iStations != 0)
@@ -85,7 +85,7 @@ void LiveboardController::gotStations(QMap<QString, StationPointer>* iStations)
 
 void LiveboardController::gotVehicle(VehiclePointer* iVehicle)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     if (iVehicle != 0)
@@ -96,7 +96,7 @@ void LiveboardController::gotVehicle(VehiclePointer* iVehicle)
 
 void LiveboardController::gotLiveboard(LiveboardPointer* iLiveboard)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*)), this, SLOT(gotLiveboard(LiveboardPointer*)));
     if (iLiveboard != 0)

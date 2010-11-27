@@ -23,7 +23,7 @@ using namespace iRail;
 MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 {
     // TODO: make the scroll area child of something so we can extend the generic view
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (iParent != 0)
     {
@@ -38,13 +38,13 @@ MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
 
 MainView::~MainView()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void MainView::showUI()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     this->show();
 }
@@ -56,7 +56,7 @@ void MainView::showUI()
 
 void MainView::init_ui()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
     this->setWindowTitle(QString("BeTrains"));
@@ -115,7 +115,7 @@ void MainView::init_ui()
 
 void MainView::init_children()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 }
 
 
@@ -125,7 +125,7 @@ void MainView::init_children()
 
 void MainView::load_history(QModelIndex iIndex)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     ConnectionRequestPointer tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
     emit setInitialRequest(tInitialRequest);
@@ -138,14 +138,14 @@ void MainView::load_history(QModelIndex iIndex)
 
 void MainView::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     qWarning() << "! " << "Handler not currently used";
 }
 
 void MainView::showError(const QString &iError)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }
@@ -157,7 +157,7 @@ void MainView::showError(const QString &iError)
 
 void MainView::populateModel()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mModel->clear();
     if (mConnectionRequestHistory.size() > 0)

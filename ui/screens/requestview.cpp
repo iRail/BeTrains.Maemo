@@ -22,7 +22,7 @@ using namespace iRail;
 
 RequestView::RequestView(QWidget* iParent) : QWidget(iParent)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (iParent != 0)
     {
@@ -40,13 +40,13 @@ RequestView::RequestView(QWidget* iParent) : QWidget(iParent)
 
 RequestView::~RequestView()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void RequestView::showUI()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionRequest();
     this->show();
@@ -54,7 +54,7 @@ void RequestView::showUI()
 
 void RequestView::showUI(ConnectionRequestPointer iInitialRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionRequest();
     mChildConnectionRequest->load(iInitialRequest);
@@ -68,14 +68,14 @@ void RequestView::showUI(ConnectionRequestPointer iInitialRequest)
 
 void RequestView::_showConnectionRequest()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     emit downloadStations();
 }
 
 void RequestView::_showConnectionRequest(const QMap<QString, StationPointer>& iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mChildConnectionRequest == 0)
     {
@@ -96,7 +96,7 @@ void RequestView::_showConnectionRequest(const QMap<QString, StationPointer>& iS
 
 void RequestView::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionRequest(*iStations);
     delete iStations;
@@ -104,7 +104,7 @@ void RequestView::setStations(QMap<QString, StationPointer>* iStations)
 
 void RequestView::showError(const QString &iError)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }

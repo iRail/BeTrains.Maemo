@@ -15,7 +15,7 @@ using namespace iRail;
 
 ConnectionController::ConnectionController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView = new ConnectionView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
@@ -27,14 +27,14 @@ ConnectionController::ConnectionController(CachedAPI* iAPI, QWidget* iParent) : 
 
 ConnectionController::~ConnectionController()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
     delete mView;
 }
 
 void ConnectionController::showView(ConnectionRequestPointer iConnectionRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->showUI(iConnectionRequest);
 }
@@ -46,7 +46,7 @@ void ConnectionController::showView(ConnectionRequestPointer iConnectionRequest)
 
 void ConnectionController::_downloadStations()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     mAPI->requestStations();
@@ -54,7 +54,7 @@ void ConnectionController::_downloadStations()
 
 void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnectionRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
     mAPI->requestConnections(iConnectionRequest);
@@ -62,7 +62,7 @@ void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnec
 
 void ConnectionController::_launchVehicle(ConnectionPointer iConnection)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mScreenVehicle == 0)
     {
@@ -79,7 +79,7 @@ void ConnectionController::_launchVehicle(ConnectionPointer iConnection)
 
 void ConnectionController::gotStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     if (iStations != 0)
@@ -90,7 +90,7 @@ void ConnectionController::gotStations(QMap<QString, StationPointer>* iStations)
 
 void ConnectionController::gotConnections(QList<ConnectionPointer>* iConnections)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
     if (iConnections != 0)

@@ -15,7 +15,7 @@ using namespace iRail;
 
 LiveboardView::LiveboardView(QWidget* iParent) : GenericView(iParent)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mUILayout = new QVBoxLayout(this);
     mUILayout->setMargin(0);
@@ -25,13 +25,13 @@ LiveboardView::LiveboardView(QWidget* iParent) : GenericView(iParent)
 
 LiveboardView::~LiveboardView()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void LiveboardView::showUI()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showLiveboardRequest();
     GenericView::showUI();
@@ -44,7 +44,7 @@ void LiveboardView::showUI()
 
 void LiveboardView::_showLiveboardRequest()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mAction = LIVEBOARDREQUEST;
     emit downloadStations();
@@ -52,7 +52,7 @@ void LiveboardView::_showLiveboardRequest()
 
 void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mChildLiveboard == 0)
     {
@@ -70,7 +70,7 @@ void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& i
 
 void LiveboardView::_showLiveboardResult(QString iStationId)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mAction = LIVEBOARDRESULT;
     emit downloadLiveboard(iStationId);
@@ -78,7 +78,7 @@ void LiveboardView::_showLiveboardResult(QString iStationId)
 
 void LiveboardView::_showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
     Q_UNUSED(iStations);
     Q_ASSERT(mChildLiveboard != 0);
 
@@ -93,7 +93,7 @@ void LiveboardView::_showLiveboardResult(const QMap<QString, StationPointer>& iS
 
 void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     switch (mAction)
     {
@@ -111,7 +111,7 @@ void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
 
 void LiveboardView::setVehicle(VehiclePointer* iVehicle)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     switch (mAction)
     {
@@ -123,7 +123,7 @@ void LiveboardView::setVehicle(VehiclePointer* iVehicle)
 
 void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     switch (mAction)
     {

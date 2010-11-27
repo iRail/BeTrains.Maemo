@@ -22,7 +22,7 @@ using namespace iRail;
 
 VehicleView::VehicleView(QWidget* iParent) : QWidget(iParent)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (iParent != 0)
     {
@@ -40,13 +40,13 @@ VehicleView::VehicleView(QWidget* iParent) : QWidget(iParent)
 
 VehicleView::~VehicleView()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void VehicleView::showUI(ConnectionPointer iConnection)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionDetail(iConnection);
     this->show();
@@ -59,7 +59,7 @@ void VehicleView::showUI(ConnectionPointer iConnection)
 
 void VehicleView::_showConnectionDetail(ConnectionPointer iConnection)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     tConnection = iConnection;
     tVehicles = new QMap<QString, VehiclePointer>();
@@ -68,7 +68,7 @@ void VehicleView::_showConnectionDetail(ConnectionPointer iConnection)
 
 void VehicleView::_showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mChildConnectionDetail == 0)
     {
@@ -89,7 +89,7 @@ void VehicleView::_showConnectionDetail(const QMap<QString, StationPointer>& iSt
 
 void VehicleView::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionDetail(*iStations, tConnection, *tVehicles);
     delete iStations;
@@ -99,7 +99,7 @@ void VehicleView::setStations(QMap<QString, StationPointer>* iStations)
 
 void VehicleView::setVehicle(VehiclePointer* iVehicle)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     tVehicles->insert((*iVehicle)->id(), *iVehicle);
     if (tConnection->lines().count() > tVehicles->count())
@@ -110,7 +110,7 @@ void VehicleView::setVehicle(VehiclePointer* iVehicle)
 
 void VehicleView::showError(const QString &iError)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }

@@ -15,7 +15,7 @@ using namespace iRail;
 
 MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView = new MainView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
@@ -28,14 +28,14 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 
 MainController::~MainController()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
     delete mView;
 }
 
 void MainController::showView()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->showUI();
 }
@@ -47,7 +47,7 @@ void MainController::showView()
 
 void MainController::_downloadStations()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     mAPI->requestStations();
@@ -55,7 +55,7 @@ void MainController::_downloadStations()
 
 void MainController::_launchLiveboard()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mScreenLiveboard == 0)
     {
@@ -67,7 +67,7 @@ void MainController::_launchLiveboard()
 
 void MainController::_launchRequest()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mScreenRequest == 0)
     {
@@ -92,7 +92,7 @@ void MainController::_setInitialRequest(ConnectionRequestPointer iInitialRequest
 
 void MainController::gotStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     if (iStations != 0)

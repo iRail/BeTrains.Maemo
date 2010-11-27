@@ -22,7 +22,7 @@ using namespace iRail;
 
 ConnectionView::ConnectionView(QWidget* iParent) : QWidget(iParent)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (iParent != 0)
     {
@@ -40,13 +40,13 @@ ConnectionView::ConnectionView(QWidget* iParent) : QWidget(iParent)
 
 ConnectionView::~ConnectionView()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void ConnectionView::showUI(ConnectionRequestPointer iConnectionRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionResult(iConnectionRequest);
     this->show();
@@ -59,14 +59,14 @@ void ConnectionView::showUI(ConnectionRequestPointer iConnectionRequest)
 
 void ConnectionView::_showConnectionResult(ConnectionRequestPointer iConnectionRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     emit downloadConnections(iConnectionRequest);
 }
 
 void ConnectionView::_showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mChildConnectionResult == 0)
     {
@@ -88,7 +88,7 @@ void ConnectionView::_showConnectionResult(const QMap<QString, StationPointer>& 
 
 void ConnectionView::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionResult(*iStations, *tConnections);
     delete iStations;
@@ -97,7 +97,7 @@ void ConnectionView::setStations(QMap<QString, StationPointer>* iStations)
 
 void ConnectionView::setConnections(QList<ConnectionPointer>* iConnections)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     tConnections = iConnections;
     emit downloadStations();
@@ -105,7 +105,7 @@ void ConnectionView::setConnections(QList<ConnectionPointer>* iConnections)
 
 void ConnectionView::showError(const QString &iError)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }

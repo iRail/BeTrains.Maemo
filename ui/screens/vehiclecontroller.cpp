@@ -15,7 +15,7 @@ using namespace iRail;
 
 VehicleController::VehicleController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView = new VehicleView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
@@ -24,14 +24,14 @@ VehicleController::VehicleController(CachedAPI* iAPI, QWidget* iParent) : mAPI(i
 
 VehicleController::~VehicleController()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
     delete mView;
 }
 
 void VehicleController::showView(ConnectionPointer iConnection)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->showUI(iConnection);
 }
@@ -43,7 +43,7 @@ void VehicleController::showView(ConnectionPointer iConnection)
 
 void VehicleController::_downloadStations()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     mAPI->requestStations();
@@ -51,7 +51,7 @@ void VehicleController::_downloadStations()
 
 void VehicleController::_downloadVehicle(QString iVehicleId)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     mAPI->requestVehicle(iVehicleId);
@@ -64,7 +64,7 @@ void VehicleController::_downloadVehicle(QString iVehicleId)
 
 void VehicleController::gotStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     if (iStations != 0)
@@ -74,7 +74,7 @@ void VehicleController::gotStations(QMap<QString, StationPointer>* iStations)
 }
 void VehicleController::gotVehicle(VehiclePointer* iVehicle)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     if (iVehicle != 0)

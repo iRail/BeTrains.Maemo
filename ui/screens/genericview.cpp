@@ -18,7 +18,7 @@ using namespace iRail;
 
 GenericView::GenericView(QWidget* iParent) : QWidget(iParent)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (iParent != 0)
     {
@@ -32,13 +32,13 @@ GenericView::GenericView(QWidget* iParent) : QWidget(iParent)
 
 GenericView::~GenericView()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void GenericView::showUI()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     this->show();
 }
@@ -50,7 +50,7 @@ void GenericView::showUI()
 
 void GenericView::_deleteLoader()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
     Q_ASSERT(mLoader);
 
     delete mLoader;
@@ -65,14 +65,14 @@ void GenericView::_deleteLoader()
 
 void GenericView::showError(const QString &iError)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }
 
 void GenericView::startLoader()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
     Q_ASSERT(!mLoader);
 
     mLoader = new LoaderWidget();

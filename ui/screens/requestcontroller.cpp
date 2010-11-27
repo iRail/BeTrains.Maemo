@@ -15,7 +15,7 @@ using namespace iRail;
 
 RequestController::RequestController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView = new RequestView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
@@ -26,21 +26,21 @@ RequestController::RequestController(CachedAPI* iAPI, QWidget* iParent) : mAPI(i
 
 RequestController::~RequestController()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
     delete mView;
 }
 
 void RequestController::showView()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->showUI();
 }
 
 void RequestController::showView(ConnectionRequestPointer iInitialRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->showUI(iInitialRequest);
 }
@@ -52,7 +52,7 @@ void RequestController::showView(ConnectionRequestPointer iInitialRequest)
 
 void RequestController::_downloadStations()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     mAPI->requestStations();
@@ -60,7 +60,7 @@ void RequestController::_downloadStations()
 
 void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRequest)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     if (mScreenConnection == 0)
     {
@@ -77,7 +77,7 @@ void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRe
 
 void RequestController::gotStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
     if (iStations != 0)

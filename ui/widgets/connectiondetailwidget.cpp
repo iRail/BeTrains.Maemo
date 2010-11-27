@@ -21,7 +21,7 @@ using namespace iRail;
 
 ConnectionDetailWidget::ConnectionDetailWidget(const QMap<QString, StationPointer>& iStations, QWidget *iParent) : QScrollArea(iParent), mStations(iStations)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
     init_ui();
@@ -30,13 +30,13 @@ ConnectionDetailWidget::ConnectionDetailWidget(const QMap<QString, StationPointe
 
 ConnectionDetailWidget::~ConnectionDetailWidget()
 {
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 
 }
 
 void ConnectionDetailWidget::load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Alter the UI
     update_ui(iConnection, iVehicles);
@@ -49,7 +49,7 @@ void ConnectionDetailWidget::load(ConnectionPointer iConnection, const QMap<QStr
 
 void ConnectionDetailWidget::init_ui()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Parent widget
     QWidget *tWidget = new QWidget();
@@ -63,7 +63,7 @@ void ConnectionDetailWidget::init_ui()
 
 void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
     this->setWindowTitle(QString(tr("Connection detail")));
@@ -90,7 +90,7 @@ void ConnectionDetailWidget::update_ui(ConnectionPointer iConnection, const QMap
 
 void ConnectionDetailWidget::init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Title label
     QFont tFont;
@@ -149,6 +149,6 @@ void ConnectionDetailWidget::init_line(const Connection::Line& iLine, const Vehi
 
 void ConnectionDetailWidget::init_children()
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
 }

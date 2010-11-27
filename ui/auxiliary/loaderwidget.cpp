@@ -60,7 +60,7 @@ LoaderWidget::~LoaderWidget()
     if (_image) {
         delete _image;
     }
-    qDebug() << "~ " << __PRETTY_FUNCTION__;
+    qDebug() << "~ " << Q_FUNC_INFO;
 }
 
 /*!
@@ -69,7 +69,7 @@ LoaderWidget::~LoaderWidget()
  */
 void LoaderWidget::startEntryAnimation(void)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     setEntryAnimation();
     _entryAnimation->start();
@@ -121,7 +121,7 @@ void LoaderWidget::setEntryAnimation(void)
  */
 void LoaderWidget::startExitAnimation(void)
 {
-    qDebug() << "+ " << __PRETTY_FUNCTION__;
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     _entryAnimation->stop();
     setExitAnimation();
