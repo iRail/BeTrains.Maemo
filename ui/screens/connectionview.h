@@ -10,9 +10,10 @@
 #include <QDebug>
 #include "api/connection.h"
 #include "api/connectionrequest.h"
-#include "ui/widgets/connectionresultwidget.h"
-#include "ui/dialogs/optionalprogressdialog.h"
 #include <QVBoxLayout>
+#include <QModelIndex>
+#include <QListView>
+#include <QStandardItemModel>
 
 namespace iRail
 {
@@ -24,6 +25,7 @@ namespace iRail
         ConnectionView(QWidget *iParent);
         ~ConnectionView();
         void showUI(ConnectionRequestPointer iConnectionRequest);
+        void load(const QList<ConnectionPointer>& iConnections);
 
         // Auxiliary types
         QList<ConnectionPointer>* tConnections;
@@ -32,6 +34,7 @@ namespace iRail
     private slots:
         void _showConnectionResult(ConnectionRequestPointer iConnectionRequest);
         void _showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
+        void activated(QModelIndex iIndex);
 
         // Controller actions
     public slots:
@@ -46,12 +49,21 @@ namespace iRail
         void launchVehicle(ConnectionPointer iConnection);
 
     private:
-        // UI members
-        QVBoxLayout *mUILayout;
+        // Member data
+        QMap<QString, StationPointer> mStations;
 
-        // UI children
-        OptionalProgressDialog* mChildProgressDialog;
-        ConnectionResultWidget* mChildConnectionResult;
+        // Initialization
+    private:
+        void init_ui();
+        void init_children();
+
+        // UI members
+    private:
+        QListView *mView;
+        QStandardItemModel *mModel;
+
+        // Auxiliary
+        void populateModel(const QList<ConnectionPointer>& iConnections);
     };
 }
 
