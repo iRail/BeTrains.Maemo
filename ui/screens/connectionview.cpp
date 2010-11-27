@@ -40,14 +40,26 @@ void ConnectionView::showUI(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showConnectionResult(iConnectionRequest);
+    load(iConnectionRequest);
     GenericView::showUI();
 }
 
-void ConnectionView::load(const QList<ConnectionPointer>& iConnections)
+void ConnectionView::load(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    startLoader();
 
+    emit downloadConnections(iConnectionRequest);
+}
+
+void ConnectionView::load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
+
+    mStations = iStations;  // TODO: also in load?
+
+    // Show the results
     populateModel(iConnections);
 }
 
@@ -56,26 +68,7 @@ void ConnectionView::load(const QList<ConnectionPointer>& iConnections)
 // UI events
 //
 
-void ConnectionView::_showConnectionResult(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    startLoader();
-    emit downloadConnections(iConnectionRequest);
-}
-
-void ConnectionView::_showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    stopLoader();
-    mStations = iStations;  // TODO: also in load?
-
-    // Show the results
-    load(iConnections);
-}
-
-void ConnectionView::activated(QModelIndex iIndex)
+void ConnectionView::do_lstConnections_doubleClicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -92,7 +85,7 @@ void ConnectionView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showConnectionResult(*iStations, *tConnections);
+    load(*iStations, *tConnections);
     delete iStations;
     delete tConnections;
 }
@@ -132,7 +125,7 @@ void ConnectionView::init_ui()
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tView->setSelectionMode(QAbstractItemView::SingleSelection);
     tView->setItemDelegate(new ConnectionDelegate(mStations));
-    connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstConnections_doubleClicked(QModelIndex)));
     mUILayout->addWidget(tView);
 }
 

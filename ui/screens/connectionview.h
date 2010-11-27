@@ -26,16 +26,15 @@ namespace iRail
         ConnectionView(QWidget *iParent);
         ~ConnectionView();
         void showUI(ConnectionRequestPointer iConnectionRequest);
-        void load(const QList<ConnectionPointer>& iConnections);
+        void load(ConnectionRequestPointer iConnectionRequest);
+        void load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
 
         // Temporary data
         QList<ConnectionPointer>* tConnections;
 
         // UI events
     private slots:
-        void _showConnectionResult(ConnectionRequestPointer iConnectionRequest);
-        void _showConnectionResult(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
-        void activated(QModelIndex iIndex);
+        void do_lstConnections_doubleClicked(QModelIndex iIndex);
 
         // Controller actions
     public slots:
@@ -53,12 +52,10 @@ namespace iRail
         QMap<QString, StationPointer> mStations;
 
         // Initialization
-    private:
         void init_ui();
         void init_children();
 
         // UI members
-    private:
         QListView *mView;
         QStandardItemModel *mModel;
 

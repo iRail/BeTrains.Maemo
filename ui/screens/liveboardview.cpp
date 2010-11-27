@@ -37,23 +37,11 @@ void LiveboardView::showUI()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showLiveboardRequest();
+    load();
     GenericView::showUI();
 }
 
-void LiveboardView::load(LiveboardPointer iLiveboard)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    populateModel(iLiveboard->departures());
-}
-
-
-//
-// UI events
-//
-
-void LiveboardView::_showLiveboardRequest()
+void LiveboardView::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     startLoader();
@@ -61,7 +49,7 @@ void LiveboardView::_showLiveboardRequest()
     emit downloadStations();
 }
 
-void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStations)
+void LiveboardView::load(const QMap<QString, StationPointer>& iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
@@ -71,7 +59,7 @@ void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& i
     clear();
 }
 
-void LiveboardView::_showLiveboardResult(QString iStationId)
+void LiveboardView::load(QString iStationId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     startLoader();
@@ -79,16 +67,21 @@ void LiveboardView::_showLiveboardResult(QString iStationId)
     emit downloadLiveboard(iStationId);
 }
 
-void LiveboardView::_showLiveboardResult(LiveboardPointer iLiveboard)
+void LiveboardView::load(LiveboardPointer iLiveboard)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
 
-    // Connection request widget
-    load(iLiveboard);
+    // Show the results
+    populateModel(iLiveboard->departures());
 }
 
-void LiveboardView::do_search()
+
+//
+// UI events
+//
+
+void LiveboardView::do_btnSearch_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -98,7 +91,7 @@ void LiveboardView::do_search()
     }
     else
     {
-        emit _showLiveboardResult(tStationId);
+        emit load(tStationId);
     }
 }
 
@@ -110,7 +103,7 @@ void LiveboardView::clear()
     populateModel(QList<Liveboard::Departure>());
 }
 
-void LiveboardView::do_stations()
+void LiveboardView::do_btnStations_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -123,7 +116,7 @@ void LiveboardView::do_stations()
     }
 }
 
-void LiveboardView::do_detail(QModelIndex iIndex)
+void LiveboardView::do_lstDepartures_doubleClicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -139,7 +132,7 @@ void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showLiveboardRequest(*iStations);
+    load(*iStations);
     delete iStations;
 }
 
@@ -155,7 +148,7 @@ void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showLiveboardResult(*iLiveboard);
+    load(*iLiveboard);
 }
 //
 // Initialization
@@ -192,7 +185,7 @@ void LiveboardView::init_ui()
     mUIStationButton = new QPushButton(QString(tr("Station")));
     mUIStationButton->setEnabled(false);
     mUIStation->addWidget(mUIStationButton);
-    connect(mUIStationButton, SIGNAL(clicked()), this, SLOT(do_stations()));
+    connect(mUIStationButton, SIGNAL(clicked()), this, SLOT(do_btnStations_clicked()));
 
     // Station Edit
     mUIStationEdit = new QLineEdit;
@@ -202,7 +195,7 @@ void LiveboardView::init_ui()
     // Search button
     QPushButton *mUISearchButton = new QPushButton(QString(tr("Search")));
     mUIStation->addWidget(mUISearchButton);
-    connect(mUISearchButton, SIGNAL(clicked()), this, SLOT(do_search()));
+    connect(mUISearchButton, SIGNAL(clicked()), this, SLOT(do_btnSearch_clicked()));
 
     mUIScrollLayout->addLayout(mUIStation);
 
@@ -220,7 +213,7 @@ void LiveboardView::init_ui()
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new LiveboardDepartureDelegate(mStations));
     mView->setResizeMode(QListView::Adjust);
-    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_detail(QModelIndex)));
+    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstDepartures_doubleClicked(QModelIndex)));
     mUIScrollLayout->addWidget(mView);
 
     // Create the history listview dummy

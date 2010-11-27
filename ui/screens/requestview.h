@@ -37,19 +37,18 @@ namespace iRail
         ~RequestView();
         void showUI();
         void showUI(ConnectionRequestPointer iInitialRequest);
-        void load(ConnectionRequestPointer iConnectionRequest);
+        void configure(ConnectionRequestPointer iConnectionRequest);
+        void load();
+        void load(const QMap<QString, StationPointer>& iStations);
 
         // UI events
     private slots:
-        void _showConnectionRequest();
-        void _showConnectionRequest(const QMap<QString, StationPointer>& iStations);
-        void use_datetime(bool iUseDatetime);
-        void search();
-        void clear_datetime();
-        void clear();
-        void stations_pick_to();
-        void stations_pick_from();
-        void stations_load();
+        void do_btnDatetime_clicked(bool iUseDatetime);
+        void do_btnSearch_clicked();
+        void do_btnNow_clicked();
+        void do_btnClear_clicked();
+        void do_btnTo_clicked();
+        void do_btnFrom_clicked();
 
         // Controller actions
     public slots:
@@ -60,9 +59,12 @@ namespace iRail
         void downloadStations();
         void launchConnection(ConnectionRequestPointer iConnectionRequest);
 
-    private:
         // Member data
+    private:
         QMap<QString, StationPointer> mStations;
+
+        // Temporary data
+        QLineEdit *tTarget;
 
         // Initialization
         void init_ui();
@@ -75,9 +77,6 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
-
-        // Temporary data
-        QLineEdit *mTarget;
     };
 }
 

@@ -29,20 +29,16 @@ namespace iRail
         LiveboardView(QWidget *iParent);
         ~LiveboardView();
         void showUI();
+        void load();
+        void load(const QMap<QString, StationPointer>& iStations);
+        void load(QString iStationId);
         void load(LiveboardPointer iLiveboard);
-
-        // Temporary data
-        LiveboardPointer tLiveboard;
 
         // UI events
     private slots:
-        void _showLiveboardRequest();
-        void _showLiveboardRequest(const QMap<QString, StationPointer>& iStations);
-        void _showLiveboardResult(QString iStationId);
-        void _showLiveboardResult(LiveboardPointer iLiveboard);
-        void do_search();
-        void do_stations();
-        void do_detail(QModelIndex iIndex);
+        void do_btnSearch_clicked();
+        void do_btnStations_clicked();
+        void do_lstDepartures_doubleClicked(QModelIndex iIndex);
         void clear();
 
         // Controller actions
@@ -61,6 +57,9 @@ namespace iRail
         // Member data
         QMap<QString, StationPointer> mStations;
         QString tStationId;
+
+        // Temporary data
+        LiveboardPointer tLiveboard;
 
         // UI Members
         QLineEdit *mUIStationEdit;

@@ -84,7 +84,7 @@ void MainView::init_ui()
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionRequestDelegate());
     mView->setResizeMode(QListView::Adjust);
-    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
+    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
     mUIScrollLayout->addWidget(mView);
     // TODO: configure the QListView to be expanding within the QScrollArea
 
@@ -112,7 +112,7 @@ void MainView::init_children()
 // UI events
 //
 
-void MainView::load_history(QModelIndex iIndex)
+void MainView::do_lstHistory_clicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

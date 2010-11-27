@@ -39,7 +39,7 @@ void RequestView::showUI()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showConnectionRequest();
+    load();
     GenericView::showUI();
 }
 
@@ -47,12 +47,12 @@ void RequestView::showUI(ConnectionRequestPointer iInitialRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showConnectionRequest();
-    load(iInitialRequest);
+    load();
+    configure(iInitialRequest);
     this->show();
 }
 
-void RequestView::load(ConnectionRequestPointer iConnectionRequest)
+void RequestView::configure(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -73,12 +73,7 @@ void RequestView::load(ConnectionRequestPointer iConnectionRequest)
         mUIUseTime->setChecked(false);
 }
 
-
-//
-// UI events
-//
-
-void RequestView::_showConnectionRequest()
+void RequestView::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -86,7 +81,7 @@ void RequestView::_showConnectionRequest()
     emit downloadStations();
 }
 
-void RequestView::_showConnectionRequest(const QMap<QString, StationPointer>& iStations)
+void RequestView::load(const QMap<QString, StationPointer>& iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
@@ -95,10 +90,15 @@ void RequestView::_showConnectionRequest(const QMap<QString, StationPointer>& iS
     mUIFromButton->setEnabled(true);
     mUIToButton->setEnabled(true);
 
-    clear();
+    do_btnClear_clicked();
 }
 
-void RequestView::use_datetime(bool iUseDatetime)
+
+//
+// UI events
+//
+
+void RequestView::do_btnDatetime_clicked(bool iUseDatetime)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -108,7 +108,7 @@ void RequestView::use_datetime(bool iUseDatetime)
     mUITime->setEnabled(iUseDatetime);
 }
 
-void RequestView::search()
+void RequestView::do_btnSearch_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -133,7 +133,7 @@ void RequestView::search()
     }
 }
 
-void RequestView::clear_datetime()
+void RequestView::do_btnNow_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -141,33 +141,17 @@ void RequestView::clear_datetime()
     mUIDatePicker->setCurrentDate(QDate::currentDate());
 }
 
-void RequestView::clear()
+void RequestView::do_btnClear_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mUIFromLine->clear();
     mUIToLine->clear();
-    clear_datetime();
+    do_btnNow_clicked();
     mUITypeDeparture->setChecked(true);
 }
 
-void RequestView::stations_pick_from()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    mTarget = mUIFromLine;
-    stations_load();
-}
-
-void RequestView::stations_pick_to()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    mTarget = mUIToLine;
-    stations_load();
-}
-
-void RequestView::stations_load()
+void RequestView::do_btnFrom_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -176,7 +160,20 @@ void RequestView::stations_load()
     if (tReturn == QDialog::Accepted)
     {
         QString tStationId = tChooser.getSelection();
-        mTarget->setText(mStations[tStationId]->name());
+        mUIFromLine->setText(mStations[tStationId]->name());
+    }
+}
+
+void RequestView::do_btnTo_clicked()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    StationChooser tChooser(mStations, this);
+    int tReturn = tChooser.exec();
+    if (tReturn == QDialog::Accepted)
+    {
+        QString tStationId = tChooser.getSelection();
+        mUIToLine->setText(mStations[tStationId]->name());
     }
 }
 
@@ -189,7 +186,7 @@ void RequestView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showConnectionRequest(*iStations);
+    load(*iStations);
     delete iStations;
 }
 
@@ -219,7 +216,7 @@ void RequestView::init_ui()
     mUIFromLine = new QLineEdit;
     mUIFrom->addWidget(mUIFromButton);
     mUIFrom->addWidget(mUIFromLine);
-    connect(mUIFromButton, SIGNAL(clicked()), this, SLOT(stations_pick_from()));
+    connect(mUIFromButton, SIGNAL(clicked()), this, SLOT(do_btnFrom_clicked()));
     mUILayout->addLayout(mUIFrom);
 
     // Destination station
@@ -229,7 +226,7 @@ void RequestView::init_ui()
     mUIToLine = new QLineEdit;
     mUITo->addWidget(mUIToButton);
     mUITo->addWidget(mUIToLine);
-    connect(mUIToButton, SIGNAL(clicked()), this, SLOT(stations_pick_to()));
+    connect(mUIToButton, SIGNAL(clicked()), this, SLOT(do_btnTo_clicked()));
     mUILayout->addLayout(mUITo);
 
 
@@ -255,7 +252,7 @@ void RequestView::init_ui()
     mUITypeAndUse->addWidget(mUIUseTime);
     mUITypeAndUse->addLayout(mUIType);
     mUIUseTime->setChecked(false);
-    connect(mUIUseTime, SIGNAL(toggled(bool)), this, SLOT(use_datetime(bool)));
+    connect(mUIUseTime, SIGNAL(toggled(bool)), this, SLOT(do_btnDatetime_clicked(bool)));
 
     // DateTime
     QVBoxLayout *mUIDateTime = new QVBoxLayout();
@@ -292,9 +289,9 @@ void RequestView::init_ui()
     QPushButton *tButtonClear = new QPushButton(QString(tr("Clear")));
     QPushButton *tButtonNow = new QPushButton(QString(tr("Set to now")));
     QPushButton *tButtonSearch = new QPushButton(QString(tr("Search")));
-    connect(tButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
-    connect(tButtonNow, SIGNAL(clicked()), this, SLOT(clear_datetime()));
-    connect(tButtonSearch, SIGNAL(clicked()), this, SLOT(search()));
+    connect(tButtonClear, SIGNAL(clicked()), this, SLOT(do_btnClear_clicked()));
+    connect(tButtonNow, SIGNAL(clicked()), this, SLOT(do_btnNow_clicked()));
+    connect(tButtonSearch, SIGNAL(clicked()), this, SLOT(do_btnSearch_clicked()));
     QHBoxLayout *tActionButtons = new QHBoxLayout();
     tActionButtons->addWidget(tButtonClear);
     tActionButtons->addWidget(tButtonNow);
@@ -310,8 +307,8 @@ void RequestView::init_ui()
     setTabOrder(mUIFromLine, mUIToLine);
 
     // Submit by return
-    connect(mUIFromLine, SIGNAL(returnPressed()), this, SLOT(search()));
-    connect(mUIToLine, SIGNAL(returnPressed()), this, SLOT(search()));
+    connect(mUIFromLine, SIGNAL(returnPressed()), this, SLOT(do_btnSearch_clicked()));
+    connect(mUIToLine, SIGNAL(returnPressed()), this, SLOT(do_btnSearch_clicked()));
 
 }
 
