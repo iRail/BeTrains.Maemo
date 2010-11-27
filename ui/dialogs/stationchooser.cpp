@@ -91,12 +91,19 @@ QString StationChooser::getSelection()
 // Auxiliary
 //
 
+bool compareStationsByName(const StationPointer& iFirst, const StationPointer& iSecond)
+{
+    return iFirst->name().toLower() < iSecond->name().toLower();
+}
+
 void StationChooser::populateModel()
 {
-    QList<StationPointer> iStationList = mStations.values();
-    for (int i = 0; i < iStationList.size(); i++)
+    QList<StationPointer> tStationList = mStations.values();
+    qSort(tStationList.begin(), tStationList.end(), compareStationsByName);
+
+    for (int i = 0; i < tStationList.size(); i++)
     {
-        StationPointer tStation = iStationList.at(i);
+        StationPointer tStation = tStationList.at(i);
         // TODO: delegate
         QStandardItem *tItem = new QStandardItem(tStation->name());
         tItem->setData(QVariant::fromValue(tStation), StationRole);
