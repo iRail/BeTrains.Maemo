@@ -62,6 +62,7 @@ void GenericView::showError(const QString &iError)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    stopLoader();
     QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }
 
@@ -74,8 +75,6 @@ void GenericView::startLoader()
     connect(mLoader, SIGNAL(finished()), this, SLOT(_deleteLoader()));
 
     mLoader->setZValue(1.0);
-    //QGraphicsRectItem *bg = mLoader->getBackground();
-    //bg->setOpacity(0.6);
 
     QGraphicsScene* tScene = new QGraphicsScene();
     mView = new QGraphicsView(tScene, this);

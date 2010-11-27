@@ -58,7 +58,10 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
     stopLoader();
 
     // Show the results
-    populateModel(iLiveboard->departures());
+    if (iLiveboard->departures().count() > 0)
+        populateModel(iLiveboard->departures());
+    else
+        showError(tr("The liveboard seems to be empty."));
 }
 
 
