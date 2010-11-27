@@ -149,7 +149,7 @@ void LiveboardView::init_ui()
     // Scroll area
     QVBoxLayout* mUILayout = new QVBoxLayout(this);
     mUILayout->setMargin(0);
-    QScrollArea* mUIScrollArea = new QScrollArea(this);
+    mUIScrollArea = new QScrollArea(this);
     mUILayout->addWidget(mUIScrollArea);
 
     // Parent widget
@@ -246,4 +246,7 @@ void LiveboardView::populateModel(const QList<Liveboard::Departure>& iDepartures
         mView->setModel(mModel);
         mView->setFixedHeight(70*mModel->rowCount());   // HACK
     }
+
+    // Fix the scroll location
+    mUIScrollArea->ensureVisible(0, 0, 0, 0);
 }

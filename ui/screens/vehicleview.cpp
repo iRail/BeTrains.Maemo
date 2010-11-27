@@ -100,7 +100,7 @@ void VehicleView::init_ui()
     // Scroll area
     QVBoxLayout* mUILayout = new QVBoxLayout(this);
     mUILayout->setMargin(0);
-    QScrollArea* mUIScrollArea = new QScrollArea(this);
+    mUIScrollArea = new QScrollArea(this);
     mUILayout->addWidget(mUIScrollArea);
 
     // Parent widget
@@ -197,4 +197,7 @@ void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer&
 
     // Add some space
     mUIScrollLayout->addSpacing(42);
+
+    // Fix the scroll location
+    mUIScrollArea->ensureVisible(0, 0, 0, 0);
 }
