@@ -9,8 +9,6 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFont>
-#include <QStringBuilder>
-#include <QtMaemo5/QMaemo5InformationBox>
 
 // Namespaces
 using namespace iRail;
@@ -20,15 +18,9 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainView::MainView(QWidget* iParent) : QWidget(iParent)
+MainView::MainView(QWidget* iParent) : GenericView(iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-
-    if (iParent != 0)
-    {
-        setWindowFlags(windowFlags() | Qt::Window);
-        setAttribute(Qt::WA_Maemo5StackedWindow);
-    }
 
     // Initialisation
     this->hide();
@@ -145,13 +137,6 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     qWarning() << "! " << "Handler not currently used";
-}
-
-void MainView::showError(const QString &iError)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }
 
 

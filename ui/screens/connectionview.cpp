@@ -9,8 +9,6 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFont>
-#include <QStringBuilder>
-#include <QtMaemo5/QMaemo5InformationBox>
 #include "ui/global.h"
 #include "ui/auxiliary/delegates/connectiondelegate.h"
 
@@ -22,20 +20,13 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionView::ConnectionView(QWidget* iParent) : QWidget(iParent)
+ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-
-    if (iParent != 0)
-    {
-        setWindowFlags(windowFlags() | Qt::Window);
-        setAttribute(Qt::WA_Maemo5StackedWindow);
-    }    
 
     // Initialisation
     init_ui();
     init_children();
-
     this->hide();
 }
 
@@ -112,12 +103,8 @@ void ConnectionView::setConnections(QList<ConnectionPointer>* iConnections)
     emit downloadStations();
 }
 
-void ConnectionView::showError(const QString &iError)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
 
-    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
-}//
+//
 // Initialisation
 //
 

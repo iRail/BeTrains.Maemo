@@ -25,20 +25,14 @@ using namespace iRail;
 // Construction and destruction
 //
 
-VehicleView::VehicleView(QWidget* iParent) : QWidget(iParent)
+VehicleView::VehicleView(QWidget* iParent) : GenericView(iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    if (iParent != 0)
-    {
-        setWindowFlags(windowFlags() | Qt::Window);
-        setAttribute(Qt::WA_Maemo5StackedWindow);
-    }
-
+    // Initialisation
+    this->hide();
     init_ui();
     init_children();
-
-    this->hide();
 }
 
 VehicleView::~VehicleView()
@@ -115,12 +109,7 @@ void VehicleView::setVehicle(VehiclePointer* iVehicle)
         emit downloadStations();
 }
 
-void VehicleView::showError(const QString &iError)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
 
-    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
-}
 //
 // Initialisation
 //

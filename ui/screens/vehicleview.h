@@ -14,10 +14,11 @@
 #include "api/liveboard.h"
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include "genericview.h"
 
 namespace iRail
 {
-    class VehicleView : public QWidget
+    class VehicleView : public GenericView
     {
 
     Q_OBJECT
@@ -41,7 +42,6 @@ namespace iRail
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
         void setVehicle(VehiclePointer* iVehicle);
-        void showError(const QString& iError);
 
         // Controller signals
     signals:

@@ -24,7 +24,7 @@
 
 namespace iRail
 {
-    class MainView : public QWidget
+    class MainView : public GenericView
     {
 
     Q_OBJECT
@@ -36,7 +36,6 @@ namespace iRail
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
-        void showError(const QString& iError);
 
         // Controller signals
     signals:

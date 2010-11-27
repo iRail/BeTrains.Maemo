@@ -25,10 +25,11 @@
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QButtonGroup>
+#include "genericview.h"
 
 namespace iRail
 {
-    class RequestView : public QWidget
+    class RequestView : public GenericView
     {
 
     Q_OBJECT
@@ -54,7 +55,6 @@ namespace iRail
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
-        void showError(const QString& iError);
 
         // Controller signals
     signals:

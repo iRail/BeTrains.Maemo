@@ -72,6 +72,7 @@ void VehicleController::gotStations(QMap<QString, StationPointer>* iStations)
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
+
 void VehicleController::gotVehicle(VehiclePointer* iVehicle)
 {
     qDebug() << "+ " << Q_FUNC_INFO;

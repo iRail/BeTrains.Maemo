@@ -14,10 +14,11 @@
 #include <QModelIndex>
 #include <QListView>
 #include <QStandardItemModel>
+#include "genericview.h"
 
 namespace iRail
 {
-    class ConnectionView : public QWidget
+    class ConnectionView : public GenericView
     {
 
     Q_OBJECT
@@ -40,7 +41,6 @@ namespace iRail
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
         void setConnections(QList<ConnectionPointer>* iConnections);
-        void showError(const QString& iError);
 
         // Controller signals
     signals:

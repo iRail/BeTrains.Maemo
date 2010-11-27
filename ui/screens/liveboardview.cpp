@@ -4,10 +4,10 @@
 
 // Includes
 #include "liveboardview.h"
-#include <QtMaemo5/QMaemo5InformationBox>
 #include "ui/dialogs/stationchooser.h"
 #include <QScrollArea>
 #include "ui/auxiliary/delegates/liveboarddeparturedelegate.h"
+#include <QtMaemo5/QMaemo5InformationBox>
 
 // Namespaces
 using namespace iRail;

@@ -9,9 +9,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFont>
-#include <QStringBuilder>
-#include <QtMaemo5/QMaemo5InformationBox>
 #include "ui/dialogs/stationchooser.h"
+#include <QtMaemo5/QMaemo5InformationBox>
 
 // Namespaces
 using namespace iRail;
@@ -21,20 +20,13 @@ using namespace iRail;
 // Construction and destruction
 //
 
-RequestView::RequestView(QWidget* iParent) : QWidget(iParent)
+RequestView::RequestView(QWidget* iParent) : GenericView(iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-
-    if (iParent != 0)
-    {
-        setWindowFlags(windowFlags() | Qt::Window);
-        setAttribute(Qt::WA_Maemo5StackedWindow);
-    }
 
     // Initialisation
     init_ui();
     init_children();
-
     this->hide();
 }
 
@@ -200,12 +192,6 @@ void RequestView::setStations(QMap<QString, StationPointer>* iStations)
     delete iStations;
 }
 
-void RequestView::showError(const QString &iError)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
-}
 
 //
 // Initialization
