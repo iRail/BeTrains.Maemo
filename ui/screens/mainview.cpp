@@ -30,6 +30,7 @@ MainView::MainView(QWidget* iParent) : QWidget(iParent)
         setAttribute(Qt::WA_Maemo5StackedWindow);
     }
 
+    // Initialisation
     this->hide();
     init_ui();
     init_children();
@@ -58,8 +59,7 @@ void MainView::init_ui()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
-    this->setWindowTitle(QString("BeTrains"));
-    this->setAttribute(Qt::WA_Maemo5StackedWindow);
+    setWindowTitle(QString("BeTrains"));
 
     // Scroll area
     QVBoxLayout* mUILayout = new QVBoxLayout(this);

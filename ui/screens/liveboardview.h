@@ -12,9 +12,12 @@
 #include "genericview.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
-#include "ui/widgets/liveboardwidget.h"
-#include "ui/dialogs/optionalprogressdialog.h"
 #include <QVBoxLayout>
+#include <QModelIndex>
+#include <QLineEdit>
+#include <QLabel>
+#include <QListView>
+#include <QStandardItemModel>
 
 namespace iRail
 {
@@ -26,6 +29,7 @@ namespace iRail
         LiveboardView(QWidget *iParent);
         ~LiveboardView();
         void showUI();
+        void load(LiveboardPointer iLiveboard);
 
         // Auxiliary types
         enum MainAction
@@ -43,6 +47,10 @@ namespace iRail
         void _showLiveboardRequest(const QMap<QString, StationPointer>& iStations);
         void _showLiveboardResult(QString iStationId);
         void _showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard);
+        void do_search();
+        void do_stations();
+        void do_detail(QModelIndex iIndex);
+        void clear();
 
         // Controller actions
     public slots:
@@ -57,11 +65,22 @@ namespace iRail
         void downloadLiveboard(QString iStationId);
 
     private:
-        // UI members
-        QVBoxLayout *mUILayout;
+        // Member data
+        const QMap<QString, StationPointer> mStations;
+        QString tStationId;
 
-        // UI children
-        LiveboardWidget* mChildLiveboard;
+        // UI Members
+        QLineEdit *mUIStationEdit;
+        QLabel *mViewDummy;
+        QListView *mView;
+        QStandardItemModel *mModel;
+
+        // Initialization
+        void init_ui();
+        void init_children();
+
+        // Auxiliary
+        void populateModel(const QList<Liveboard::Departure>& iDepartures);
     };
 }
 
