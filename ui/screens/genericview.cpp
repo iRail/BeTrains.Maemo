@@ -34,13 +34,6 @@ GenericView::~GenericView()
 
 }
 
-void GenericView::showUI()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    this->show();
-}
-
 
 //
 // UI events

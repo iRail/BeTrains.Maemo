@@ -34,9 +34,6 @@ namespace iRail
     Q_OBJECT
     public:
         RequestView(QWidget *iParent);
-        ~RequestView();
-        void showUI();
-        void showUI(ConnectionRequestPointer iInitialRequest);
         void configure(ConnectionRequestPointer iConnectionRequest);
         void load();
         void load(const QMap<QString, StationPointer>& iStations);
@@ -68,7 +65,6 @@ namespace iRail
 
         // Initialization
         void init_ui();
-        void init_children();
 
         // UI members
         QPushButton *mUIFromButton, *mUIToButton;

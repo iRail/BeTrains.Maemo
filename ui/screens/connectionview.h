@@ -24,8 +24,6 @@ namespace iRail
     Q_OBJECT
     public:
         ConnectionView(QWidget *iParent);
-        ~ConnectionView();
-        void showUI(ConnectionRequestPointer iConnectionRequest);
         void load(ConnectionRequestPointer iConnectionRequest);
         void load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
 
@@ -53,7 +51,6 @@ namespace iRail
 
         // Initialization
         void init_ui();
-        void init_children();
 
         // UI members
         QListView *mView;

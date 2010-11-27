@@ -30,7 +30,6 @@ namespace iRail
     Q_OBJECT
     public:
         MainView(QWidget *iParent);
-        ~MainView();
 
         // Controller actions
     public slots:
@@ -59,7 +58,6 @@ namespace iRail
 
         // Initialization
         void init_ui();
-        void init_children();
 
         // Auxiliary
         void populateModel();

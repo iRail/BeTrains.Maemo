@@ -25,31 +25,6 @@ RequestView::RequestView(QWidget* iParent) : GenericView(iParent)
 
     // Initialisation
     init_ui();
-    init_children();
-    this->hide();
-}
-
-RequestView::~RequestView()
-{
-    qDebug() << "~ " << Q_FUNC_INFO;
-
-}
-
-void RequestView::showUI()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load();
-    GenericView::showUI();
-}
-
-void RequestView::showUI(ConnectionRequestPointer iInitialRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load();
-    configure(iInitialRequest);
-    this->show();
 }
 
 void RequestView::configure(ConnectionRequestPointer iConnectionRequest)
@@ -309,12 +284,6 @@ void RequestView::init_ui()
     // Submit by return
     connect(mUIFromLine, SIGNAL(returnPressed()), this, SLOT(do_btnSearch_clicked()));
     connect(mUIToLine, SIGNAL(returnPressed()), this, SLOT(do_btnSearch_clicked()));
-
-}
-
-void RequestView::init_children()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
 
 }
 

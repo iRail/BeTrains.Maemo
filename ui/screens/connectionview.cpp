@@ -25,23 +25,8 @@ ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    init_ui();
-    init_children();
     this->hide();
-}
-
-ConnectionView::~ConnectionView()
-{
-    qDebug() << "~ " << Q_FUNC_INFO;
-
-}
-
-void ConnectionView::showUI(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load(iConnectionRequest);
-    GenericView::showUI();
+    init_ui();
 }
 
 void ConnectionView::load(ConnectionRequestPointer iConnectionRequest)
@@ -129,11 +114,6 @@ void ConnectionView::init_ui()
     mUILayout->addWidget(tView);
 }
 
-void ConnectionView::init_children()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-}
 
 //
 // Auxiliary

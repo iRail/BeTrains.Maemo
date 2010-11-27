@@ -35,7 +35,8 @@ void LiveboardController::showView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->showUI();
+    mView->show();
+    mView->load();
 }
 
 

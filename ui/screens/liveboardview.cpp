@@ -24,21 +24,6 @@ LiveboardView::LiveboardView(QWidget* iParent) : GenericView(iParent)
     // Initialisation
     this->hide();
     init_ui();
-    init_children();
-}
-
-LiveboardView::~LiveboardView()
-{
-    qDebug() << "~ " << Q_FUNC_INFO;
-
-}
-
-void LiveboardView::showUI()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load();
-    GenericView::showUI();
 }
 
 void LiveboardView::load()
@@ -226,12 +211,6 @@ void LiveboardView::init_ui()
     mViewDummy->setFont(font);
     mUIScrollLayout->addWidget(mViewDummy);
     populateModel(QList<Liveboard::Departure>());
-
-}
-
-void LiveboardView::init_children()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
 
 }
 

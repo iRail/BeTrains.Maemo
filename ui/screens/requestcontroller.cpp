@@ -35,14 +35,17 @@ void RequestController::showView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->showUI();
+    mView->show();
+    mView->load();
 }
 
 void RequestController::showView(ConnectionRequestPointer iInitialRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->showUI(iInitialRequest);
+    mView->show();
+    mView->load();
+    mView->configure(iInitialRequest);
 }
 
 

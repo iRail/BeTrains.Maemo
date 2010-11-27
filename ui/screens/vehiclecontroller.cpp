@@ -33,7 +33,8 @@ void VehicleController::showView(ConnectionPointer iConnection)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->showUI(iConnection);
+    mView->show();
+    mView->load(iConnection);
 }
 
 

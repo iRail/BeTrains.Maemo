@@ -37,7 +37,7 @@ void MainController::showView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->showUI();
+    mView->show();
 }
 
 

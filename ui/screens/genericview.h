@@ -21,7 +21,6 @@ namespace iRail
     public:
         GenericView(QWidget *iParent);
         ~GenericView();
-        virtual void showUI();
 
         // Controller actions
     public slots:

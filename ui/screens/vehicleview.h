@@ -25,8 +25,8 @@ namespace iRail
     public:
         VehicleView(QWidget *iParent);
         ~VehicleView();
-        void showUI(ConnectionPointer iConnection);
-        void load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
+        void load(ConnectionPointer iConnection);
+        void load(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
         // Temporary data
         QMap<QString, VehiclePointer>* tVehicles;
@@ -34,8 +34,6 @@ namespace iRail
 
         // UI events
     private slots:
-        void _showConnectionDetail(ConnectionPointer iConnection);
-        void _showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
         // Controller actions
     public slots:
@@ -55,7 +53,6 @@ namespace iRail
     private:
         void init_ui();
         void update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
-        void init_children();
         void init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle);
 
         // UI members

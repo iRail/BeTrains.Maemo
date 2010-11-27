@@ -36,7 +36,8 @@ void ConnectionController::showView(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->showUI(iConnectionRequest);
+    mView->show();
+    mView->load(iConnectionRequest);
 }
 
 

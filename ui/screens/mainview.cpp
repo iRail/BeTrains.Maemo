@@ -23,17 +23,9 @@ MainView::MainView(QWidget* iParent) : GenericView(iParent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    this->hide();
+    hide();
     init_ui();
-    init_children();
 }
-
-MainView::~MainView()
-{
-    qDebug() << "~ " << Q_FUNC_INFO;
-
-}
-
 
 //
 // Initialization
@@ -100,11 +92,6 @@ void MainView::init_ui()
     // TODO: load history from file
     populateModel();
 
-}
-
-void MainView::init_children()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
 }
 
 

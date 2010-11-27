@@ -32,7 +32,6 @@ VehicleView::VehicleView(QWidget* iParent) : GenericView(iParent)
     // Initialisation
     this->hide();
     init_ui();
-    init_children();
 }
 
 VehicleView::~VehicleView()
@@ -41,30 +40,7 @@ VehicleView::~VehicleView()
 
 }
 
-void VehicleView::showUI(ConnectionPointer iConnection)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    _showConnectionDetail(iConnection);
-    GenericView::showUI();
-}
-
-void VehicleView::load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    // Alter the UI
-    update_ui(iConnection, iVehicles);
-}
-
-
-
-
-//
-// UI events
-//
-
-void VehicleView::_showConnectionDetail(ConnectionPointer iConnection)
+void VehicleView::load(ConnectionPointer iConnection)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     startLoader();
@@ -74,15 +50,15 @@ void VehicleView::_showConnectionDetail(ConnectionPointer iConnection)
     emit downloadVehicle(iConnection->lines().at(0).vehicle);
 }
 
-void VehicleView::_showConnectionDetail(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
+void VehicleView::load(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     stopLoader();
-    mStations = iStations;  // TODO: via load()?
+    mStations = iStations;
 
     // Show the results
-    load(iConnection, iVehicles);
+    update_ui(iConnection, iVehicles);
 }
 
 
@@ -94,7 +70,7 @@ void VehicleView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _showConnectionDetail(*iStations, tConnection, *tVehicles);
+    load(*iStations, tConnection, *tVehicles);
     delete iStations;
     delete tVehicles;
     tConnection.clear();
@@ -220,10 +196,4 @@ void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer&
 
     // Add some space
     mUIScrollLayout->addSpacing(42);
-}
-
-void VehicleView::init_children()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
 }
