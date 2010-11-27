@@ -15,7 +15,6 @@ SOURCES += main.cpp \
     ui.cpp \
     ui/screens/maincontroller.cpp \
     ui/dialogs/stationchooser.cpp \
-    ui/dialogs/optionalprogressdialog.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
     ui/auxiliary/delegates/connectionrequestdelegate.cpp \
     ui/auxiliary/delegates/connectionpoidelegate.cpp \
@@ -38,7 +37,6 @@ HEADERS += \
     ui/global.h \
     ui/screens/maincontroller.h \
     ui/dialogs/stationchooser.h \
-    ui/dialogs/optionalprogressdialog.h \
     ui/auxiliary/delegates/connectiondelegate.h \
     ui/auxiliary/delegates/connectionrequestdelegate.h \
     ui/auxiliary/delegates/connectionpoidelegate.h \

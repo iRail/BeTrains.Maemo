@@ -15,7 +15,6 @@
 #include <QPushButton>
 #include "api/station.h"
 #include "ui/global.h"
-#include "optionalprogressdialog.h"
 #include "cachedapi.h"
 
 namespace iRail
