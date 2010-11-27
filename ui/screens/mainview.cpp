@@ -20,9 +20,8 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainView::MainView(QWidget* iParent) : QScrollArea(iParent)
+MainView::MainView(QWidget* iParent) : QWidget(iParent)
 {
-    // TODO: make the scroll area child of something so we can extend the generic view
     qDebug() << "+ " << Q_FUNC_INFO;
 
     if (iParent != 0)
@@ -62,27 +61,32 @@ void MainView::init_ui()
     this->setWindowTitle(QString("BeTrains"));
     this->setAttribute(Qt::WA_Maemo5StackedWindow);
 
+    // Scroll area
+    QVBoxLayout* mUILayout = new QVBoxLayout(this);
+    mUILayout->setMargin(0);
+    QScrollArea* mUIScrollArea = new QScrollArea(this);
+    mUILayout->addWidget(mUIScrollArea);
+
     // Parent widget
     QWidget *tWidget = new QWidget();
-    setWidget(tWidget);
-    setWidgetResizable(true);
+    mUIScrollArea->setWidget(tWidget);
+    mUIScrollArea->setWidgetResizable(true);
 
     // Main layout
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setAlignment(Qt::AlignTop);
-    tWidget->setLayout(layout);
+    QVBoxLayout *mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
+    tWidget->setLayout(mUIScrollLayout);
 
-    // Top buttonsmScreenLiveboard
-    QHBoxLayout *blayout = new QHBoxLayout;
+    // Top buttons
+    QHBoxLayout *mUIButtonLayout = new QHBoxLayout;
     mUIButtonSearch = new QPushButton(tr("Plan a journey"));
     mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
     QPushButton *mUIButtonLiveboard = new QPushButton(tr("View departures"));
     mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
-    blayout->addWidget(mUIButtonSearch);
-    blayout->addWidget(mUIButtonLiveboard);
+    mUIButtonLayout->addWidget(mUIButtonSearch);
+    mUIButtonLayout->addWidget(mUIButtonLiveboard);
     connect(mUIButtonSearch, SIGNAL(clicked()), this, SIGNAL(launchRequest()));
     connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SIGNAL(launchLiveboard()));
-    layout->addLayout(blayout);
+    mUIScrollLayout->addLayout(mUIButtonLayout);
 
     // Populate the history list model
     mModel = new QStandardItemModel(0, 1);
@@ -96,7 +100,7 @@ void MainView::init_ui()
     mView->setItemDelegate(new ConnectionRequestDelegate());
     mView->setResizeMode(QListView::Adjust);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(load_history(QModelIndex)));
-    layout->addWidget(mView);
+    mUIScrollLayout->addWidget(mView);
     // TODO: configure the QListView to be expanding within the QScrollArea
 
     // Create the history listview dummy
@@ -107,7 +111,7 @@ void MainView::init_ui()
     QFont font;
     font.setPointSize(24);
     mViewDummy->setFont(font);
-    layout->addWidget(mViewDummy);
+    mUIScrollLayout->addWidget(mViewDummy);
     // TODO: load history from file
     populateModel();
 

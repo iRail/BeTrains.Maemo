@@ -24,7 +24,7 @@
 
 namespace iRail
 {
-    class MainView : public QScrollArea
+    class MainView : public QWidget
     {
 
     Q_OBJECT
