@@ -81,9 +81,10 @@ void StationChooser::init_children()
 // Basic IO
 //
 
-StationPointer StationChooser::getSelection()
+QString StationChooser::getSelection()
 {
-    return mView->currentIndex().data(StationRole).value<StationPointer>();
+    StationPointer tStation = mView->currentIndex().data(StationRole).value<StationPointer>();
+    return tStation->id();
 }
 
 //

@@ -176,8 +176,8 @@ void RequestView::stations_load()
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
-        StationPointer tStation = tChooser.getSelection();
-        mTarget->setText(tStation->name());
+        QString tStationId = tChooser.getSelection();
+        mTarget->setText(mStations[tStationId]->name());
     }
 }
 

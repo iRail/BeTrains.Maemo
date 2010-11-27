@@ -118,10 +118,8 @@ void LiveboardView::do_stations()
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
-        // TODO: chooser returns stationpointer??
-        StationPointer tStation = tChooser.getSelection();
-        mUIStationEdit->setText(tStation->name());
-        tStationId = tStation->id();
+        tStationId = tChooser.getSelection();
+        mUIStationEdit->setText(mStations[tStationId]->name());
     }
 }
 

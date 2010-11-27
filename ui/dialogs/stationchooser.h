@@ -24,7 +24,7 @@ namespace iRail
     Q_OBJECT
     public:
         explicit StationChooser(const QMap<QString, StationPointer>& iStations, QWidget *iParent);
-        StationPointer getSelection();
+        QString getSelection();
         ~StationChooser();
 
     private:
