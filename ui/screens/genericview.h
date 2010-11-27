@@ -8,9 +8,10 @@
 
 // Inclused
 #include <QDebug>
+#include "ui/auxiliary/loaderwidget.h"
 #include <QString>
 #include <QWidget>
-#include "ui/auxiliary/loaderwidget.h"
+#include <QGraphicsView>
 
 namespace iRail
 {
@@ -35,6 +36,7 @@ namespace iRail
     private:
         // UI members
         LoaderWidget* mLoader;
+        QGraphicsView* mView;
     };
 }
 

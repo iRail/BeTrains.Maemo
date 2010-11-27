@@ -33,7 +33,8 @@
 #include <QtGui/QGraphicsRectItem>
 
 
-#include "ui/auxiliary/applicationitem.h"
+#include "ui/auxiliary/animationwidget.h"
+#include "ui/auxiliary/animationrectitem.h"
 
 /*!
  * \class LoaderWidget
@@ -41,14 +42,13 @@
  * \brief A generic loader object to be displayed
  * whenever waiting for an event.
  */
-class LoaderWidget : public ApplicationItem
+class LoaderWidget : public AnimationWidget
 {
     Q_OBJECT
 
 public:
     LoaderWidget(QGraphicsWidget *parent = 0);
     ~LoaderWidget();
-    QGraphicsRectItem *getBackground();
 
 private:
     void setEntryAnimation(void);
@@ -59,6 +59,7 @@ private:
     QPropertyAnimation *_animRotate;
     QPropertyAnimation *_animPosition;
     QPropertyAnimation *_animOpacity;
+    QPropertyAnimation *_animBackgroundOpacity;
 
 signals:
     void finished(void);
@@ -68,8 +69,8 @@ public slots:
     void startExitAnimation(void);
 
 private:
-    QGraphicsRectItem *_background;
-    ApplicationItem *_image;
+    AnimationRectItem *_background;
+    AnimationWidget *_image;
 };
 
 #endif // LOADER_H

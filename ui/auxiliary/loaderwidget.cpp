@@ -21,18 +21,19 @@
  */
 
 #include "loaderwidget.h"
+#include "ui/auxiliary/graphicsrectobject.h"
 
 /*!
  * \brief Loader constructor.
  */
 LoaderWidget::LoaderWidget(QGraphicsWidget *parent)
-        : ApplicationItem(parent)
+        : AnimationWidget(parent)
 {
-    _background = new QGraphicsRectItem(QRect(0, 0, 800, 420), this);
+    _background = new AnimationRectItem(QRect(0, 0, 800, 420), this);
     _background->setBrush(Qt::black);
     _background->setOpacity(0.0);
 
-    _image = new ApplicationItem(this);
+    _image = new AnimationWidget(this);
     _image->setZValue(1.0);
     // This is necessary to set loader image center used by rotate function
     _image->setTransformOriginPoint(QPointF(18, 18));
@@ -108,11 +109,21 @@ void LoaderWidget::setEntryAnimation(void)
     _animOpacity->setDuration(500);
     _animOpacity->setEasingCurve(QEasingCurve::Linear);
 
+    /* Background opacity */
+    _animBackgroundOpacity = new QPropertyAnimation();
+    _animBackgroundOpacity->setTargetObject(_background);
+    _animBackgroundOpacity->setPropertyName("opacity");
+    _animBackgroundOpacity->setStartValue(0.0);
+    _animBackgroundOpacity->setEndValue(0.6);
+    _animBackgroundOpacity->setDuration(500);
+    _animBackgroundOpacity->setEasingCurve(QEasingCurve::Linear);
+
     /* Adding the animations to the group */
     _entryAnimation = new QParallelAnimationGroup(this);
     _entryAnimation->addAnimation(_animRotate);
     _entryAnimation->addAnimation(_animPosition);
     _entryAnimation->addAnimation(_animOpacity);
+    _entryAnimation->addAnimation(_animBackgroundOpacity);
 }
 
 /*!
@@ -123,7 +134,6 @@ void LoaderWidget::startExitAnimation(void)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    _entryAnimation->stop();
     setExitAnimation();
 
     /* When the Exit animation stops,
@@ -131,9 +141,9 @@ void LoaderWidget::startExitAnimation(void)
     connect(_exitAnimation, SIGNAL(finished()),
             _entryAnimation, SLOT(stop()));
 
-    /* When the entry animation stops,
+    /* When the Exit animation stops,
      * a finished() signal is emitted. */
-    connect(_entryAnimation, SIGNAL(finished()),
+    connect(_exitAnimation, SIGNAL(finished()),
             this, SIGNAL(finished()));
 
     _exitAnimation->start();
@@ -144,6 +154,8 @@ void LoaderWidget::startExitAnimation(void)
  */
 void LoaderWidget::setExitAnimation(void)
 {
+    /* Position */
+    _animPosition->stop();
     _animPosition->setTargetObject(_image);
     _animPosition->setPropertyName("pos");
     _animPosition->setStartValue(QPointF(400, 325));
@@ -151,6 +163,8 @@ void LoaderWidget::setExitAnimation(void)
     _animPosition->setDuration(500);
     _animPosition->setEasingCurve(QEasingCurve::Linear);
 
+    /* Opacity */
+    _animOpacity->stop();
     _animOpacity->setTargetObject(_image);
     _animOpacity->setPropertyName("opacity");
     _animOpacity->setStartValue(1.0);
@@ -158,17 +172,19 @@ void LoaderWidget::setExitAnimation(void)
     _animOpacity->setDuration(500);
     _animOpacity->setEasingCurve(QEasingCurve::Linear);
 
+    /* Background opacity */
+    _animBackgroundOpacity->stop();
+    _animBackgroundOpacity->setTargetObject(_background);
+    _animBackgroundOpacity->setPropertyName("opacity");
+    _animBackgroundOpacity->setStartValue(0.6);
+    _animBackgroundOpacity->setEndValue(0.0);
+    _animBackgroundOpacity->setDuration(500);
+    _animBackgroundOpacity->setEasingCurve(QEasingCurve::Linear);
+
     _exitAnimation = new QParallelAnimationGroup(this);
     _exitAnimation->addAnimation(_animPosition);
     _exitAnimation->addAnimation(_animOpacity);
+    _exitAnimation->addAnimation(_animBackgroundOpacity);
 }
 
-/*!
- * \brief Gets loader background rectangle.
- * \return _background returns loader background rectangle.
- */
-QGraphicsRectItem *LoaderWidget::getBackground()
-{
-    return _background;
-}
 

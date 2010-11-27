@@ -20,19 +20,42 @@
  *
  */
 
-#include "applicationitem.h"
+#ifndef APPLICATIONWIDGET_H
+#define APPLICATIONWIDGET_H
+
+#include <QtCore/QObject>
+#include <QtGui/QGraphicsWidget>
 
 /*!
-    \brief ApplicationItem contructor.
+ * \class ApplicationItem
+ *
+ * \brief The ApplicationItem class represents the graphics
+ * items used in an scene. All application items shouls inherit
+ * this class. There are properties pre-defined to be used by
+ * animation framework.
+ */
+class AnimationWidget : public QGraphicsWidget
+{
+    Q_OBJECT
 
-    Initializes the ApplicationItem.
-*/
-ApplicationItem::ApplicationItem(QGraphicsWidget *parent)
-        : QGraphicsWidget(parent)
-{}
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos);
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity);
+    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
 
-/*!
-    \brief ApplicationItem destructor.
-*/
-ApplicationItem::~ApplicationItem()
-{}
+public:
+    AnimationWidget(QGraphicsWidget *parent = 0) : QGraphicsWidget(parent)
+    {
+
+    }
+
+    ~AnimationWidget()
+    {
+
+    }
+
+private:
+    int _width;
+    int _height;
+};
+
+#endif //APPLICATIONWIDGET_H

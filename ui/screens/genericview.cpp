@@ -6,7 +6,6 @@
 #include "genericview.h"
 #include <QStringBuilder>
 #include <QtMaemo5/QMaemo5InformationBox>
-#include <QGraphicsView>
 
 // Namespaces
 using namespace iRail;
@@ -24,6 +23,8 @@ GenericView::GenericView(QWidget* iParent) : QWidget(iParent)
     setAttribute(Qt::WA_Maemo5StackedWindow);
 
     mLoader = 0;
+    mView = 0;
+
     this->hide();
 }
 
@@ -49,9 +50,13 @@ void GenericView::_deleteLoader()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     Q_ASSERT(mLoader);
+    Q_ASSERT(mView);
 
     delete mLoader;
     mLoader = 0;
+    delete mView;
+    mView = 0;
+
     this->setEnabled(true);
 }
 
@@ -76,15 +81,15 @@ void GenericView::startLoader()
     connect(mLoader, SIGNAL(finished()), this, SLOT(_deleteLoader()));
 
     mLoader->setZValue(1.0);
-    QGraphicsRectItem *bg = mLoader->getBackground();
-    bg->setOpacity(0.6);
+    //QGraphicsRectItem *bg = mLoader->getBackground();
+    //bg->setOpacity(0.6);
 
     QGraphicsScene* tScene = new QGraphicsScene();
-    QGraphicsView* tView = new QGraphicsView(tScene, this);
-    tView->setFixedSize(800, 420);
-    tView->setStyleSheet("background: transparent; border: none");
+    mView = new QGraphicsView(tScene, this);
+    mView->setFixedSize(800, 420);
+    mView->setStyleSheet("background: transparent; border: none");
     tScene->addItem(mLoader);
-    tView->show();
+    mView->show();
 
     mLoader->startEntryAnimation();
 }

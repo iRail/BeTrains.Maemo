@@ -20,11 +20,11 @@
  *
  */
 
-#ifndef APPLICATIONITEM_H
-#define APPLICATIONITEM_H
+#ifndef APPLICATIONRECTITEM_H
+#define APPLICATIONRECTITEM_H
 
 #include <QtCore/QObject>
-#include <QtGui/QGraphicsWidget>
+#include "graphicsrectobject.h"
 
 /*!
  * \class ApplicationItem
@@ -34,21 +34,21 @@
  * this class. There are properties pre-defined to be used by
  * animation framework.
  */
-class ApplicationItem : public QGraphicsWidget
+class AnimationRectItem : public GraphicsRectObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QPointF pos READ pos WRITE setPos);
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity);
-    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
 
 public:
-    ApplicationItem(QGraphicsWidget *parent = 0);
-    ~ApplicationItem();
+    AnimationRectItem(const QRectF & rect, QGraphicsItem * parent = 0) : GraphicsRectObject(rect, parent)
+    {
 
-private:
-    int _width;
-    int _height;
+    }
+    ~AnimationRectItem()
+    {
+
+    }
 };
 
-#endif //APPLICATIONITEM_H
+#endif //APPLICATIONRECTITEM_H

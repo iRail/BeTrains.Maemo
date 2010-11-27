@@ -83,12 +83,14 @@ void RequestView::_showConnectionRequest()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    startLoader();
     emit downloadStations();
 }
 
 void RequestView::_showConnectionRequest(const QMap<QString, StationPointer>& iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
 
     mStations = iStations;
     mUIFromButton->setEnabled(true);
