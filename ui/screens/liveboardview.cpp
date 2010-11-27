@@ -56,6 +56,7 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
 void LiveboardView::_showLiveboardRequest()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    startLoader();
 
     emit downloadStations();
 }
@@ -63,6 +64,7 @@ void LiveboardView::_showLiveboardRequest()
 void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
 
     mStations = iStations;
     mUIStationButton->setEnabled(true);
@@ -72,6 +74,7 @@ void LiveboardView::_showLiveboardRequest(const QMap<QString, StationPointer>& i
 void LiveboardView::_showLiveboardResult(QString iStationId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    startLoader();
 
     emit downloadLiveboard(iStationId);
 }
@@ -79,6 +82,7 @@ void LiveboardView::_showLiveboardResult(QString iStationId)
 void LiveboardView::_showLiveboardResult(LiveboardPointer iLiveboard)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
 
     // Connection request widget
     load(iLiveboard);

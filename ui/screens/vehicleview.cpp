@@ -67,6 +67,7 @@ void VehicleView::load(ConnectionPointer iConnection, const QMap<QString, Vehicl
 void VehicleView::_showConnectionDetail(ConnectionPointer iConnection)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    startLoader();
 
     tConnection = iConnection;
     tVehicles = new QMap<QString, VehiclePointer>();
@@ -77,6 +78,7 @@ void VehicleView::_showConnectionDetail(const QMap<QString, StationPointer>& iSt
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    stopLoader();
     mStations = iStations;  // TODO: via load()?
 
     // Show the results

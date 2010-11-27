@@ -60,6 +60,7 @@ void ConnectionView::_showConnectionResult(ConnectionRequestPointer iConnectionR
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    startLoader();
     emit downloadConnections(iConnectionRequest);
 }
 
@@ -67,6 +68,7 @@ void ConnectionView::_showConnectionResult(const QMap<QString, StationPointer>& 
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    stopLoader();
     mStations = iStations;  // TODO: also in load?
 
     // Show the results
