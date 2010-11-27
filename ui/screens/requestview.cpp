@@ -10,7 +10,6 @@
 #include <QPushButton>
 #include <QFont>
 #include "ui/dialogs/stationchooser.h"
-#include <QtMaemo5/QMaemo5InformationBox>
 
 // Namespaces
 using namespace iRail;
@@ -115,7 +114,7 @@ void RequestView::search()
 
     if (mUIFromLine->text().length() == 0 || mUIToLine->text().length() == 0)
     {
-        QMaemo5InformationBox::information(this, tr("Please fill in both locations."), QMaemo5InformationBox::DefaultTimeout);
+        showError(tr("Please fill in both locations."));
     }
     else
     {
