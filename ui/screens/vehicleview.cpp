@@ -35,12 +35,6 @@ VehicleView::VehicleView(QWidget* iParent) : QWidget(iParent)
         setAttribute(Qt::WA_Maemo5StackedWindow);
     }
 
-    mUIMasterLayout = new QVBoxLayout(this);
-    mUIMasterLayout->setMargin(0);
-
-    mUIMasterWidget = new QScrollArea(this);
-    mUIMasterLayout->addWidget(mUIMasterWidget);
-
     init_ui();
     init_children();
 
@@ -135,14 +129,20 @@ void VehicleView::init_ui()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    // Scroll area
+    QVBoxLayout* mUILayout = new QVBoxLayout(this);
+    mUILayout->setMargin(0);
+    QScrollArea* mUIScrollArea = new QScrollArea(this);
+    mUILayout->addWidget(mUIScrollArea);
+
     // Parent widget
     QWidget *tWidget = new QWidget();
-    mUIMasterWidget->setWidget(tWidget);
-    mUIMasterWidget->setWidgetResizable(true);
+    mUIScrollArea->setWidget(tWidget);
+    mUIScrollArea->setWidgetResizable(true);
 
     // Main layout
-    mUILayout = new QVBoxLayout(mUIMasterWidget);
-    tWidget->setLayout(mUILayout);
+    mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
+    tWidget->setLayout(mUIScrollLayout);
 }
 
 void VehicleView::update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
@@ -154,9 +154,9 @@ void VehicleView::update_ui(ConnectionPointer iConnection, const QMap<QString, V
 
     // Remove all items
     QLayoutItem* tItem;
-    while (mUILayout->count())
+    while (mUIScrollLayout->count())
     {
-        tItem = mUILayout->takeAt(0);
+        tItem = mUIScrollLayout->takeAt(0);
         if (tItem->widget())
             tItem->widget()->hide();
         delete tItem;
@@ -169,7 +169,7 @@ void VehicleView::update_ui(ConnectionPointer iConnection, const QMap<QString, V
     }
 
     // Add a spacer (setAlignment(Qt::AlignTop) doesn't seem to work)
-    mUILayout->addStretch();
+    mUIScrollLayout->addStretch();
 }
 
 void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle)
@@ -183,7 +183,7 @@ void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer&
     QLabel* tPOILabel = new QLabel(mStations[iLine.departure.station]->name() % tr(" to ") % mStations[iLine.arrival.station]->name());
     tPOILabel->setFont(tFont);
     tPOILabel->setAlignment(Qt::AlignCenter);
-    mUILayout->addWidget(tPOILabel);
+    mUIScrollLayout->addWidget(tPOILabel);
 
     // Populate the stops list model
     QStandardItemModel* tModel = new QStandardItemModel(0, 1);
@@ -195,7 +195,7 @@ void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer&
     tView->setItemDelegate(new VehicleStopDelegate(mStations));
     tView->setSelectionMode(QAbstractItemView::NoSelection);
     tView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    mUILayout->addWidget(tView);
+    mUIScrollLayout->addWidget(tView);
 
     // Add the stops
     bool tWithinEndpoints = false;
@@ -228,7 +228,7 @@ void VehicleView::init_line(const Connection::Line& iLine, const VehiclePointer&
     tView->setFixedHeight(70*tModel->rowCount());   // HACK
 
     // Add some space
-    mUILayout->addSpacing(42);
+    mUIScrollLayout->addSpacing(42);
 }
 
 void VehicleView::init_children()

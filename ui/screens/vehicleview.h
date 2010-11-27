@@ -61,9 +61,7 @@ namespace iRail
 
         // UI members
     private:
-        QVBoxLayout *mUIMasterLayout;
-        QVBoxLayout* mUILayout;
-        QScrollArea* mUIMasterWidget;
+        QVBoxLayout* mUIScrollLayout;
     };
 }
 
