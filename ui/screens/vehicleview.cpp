@@ -46,7 +46,7 @@ void VehicleView::showUI(ConnectionPointer iConnection)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionDetail(iConnection);
-    this->show();
+    GenericView::showUI();
 }
 
 void VehicleView::load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)

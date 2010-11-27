@@ -8,7 +8,6 @@
 
 // Inclused
 #include <QDebug>
-#include <QObject>
 #include "genericview.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
@@ -18,6 +17,7 @@
 #include <QLabel>
 #include <QListView>
 #include <QStandardItemModel>
+#include <QPushButton>
 
 namespace iRail
 {
@@ -31,14 +31,7 @@ namespace iRail
         void showUI();
         void load(LiveboardPointer iLiveboard);
 
-        // Auxiliary types
-        enum MainAction
-        {
-            LIVEBOARDREQUEST = 0,
-            LIVEBOARDRESULT
-        };
-        MainAction mAction;
-        QMap<QString, StationPointer>* tStations;
+        // Temporary data
         LiveboardPointer tLiveboard;
 
         // UI events
@@ -46,7 +39,7 @@ namespace iRail
         void _showLiveboardRequest();
         void _showLiveboardRequest(const QMap<QString, StationPointer>& iStations);
         void _showLiveboardResult(QString iStationId);
-        void _showLiveboardResult(const QMap<QString, StationPointer>& iStations, LiveboardPointer iLiveboard);
+        void _showLiveboardResult(LiveboardPointer iLiveboard);
         void do_search();
         void do_stations();
         void do_detail(QModelIndex iIndex);
@@ -66,7 +59,7 @@ namespace iRail
 
     private:
         // Member data
-        const QMap<QString, StationPointer> mStations;
+        QMap<QString, StationPointer> mStations;
         QString tStationId;
 
         // UI Members
@@ -74,6 +67,7 @@ namespace iRail
         QLabel *mViewDummy;
         QListView *mView;
         QStandardItemModel *mModel;
+        QPushButton *mUIStationButton;
 
         // Initialization
         void init_ui();

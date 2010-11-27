@@ -41,7 +41,7 @@ void RequestView::showUI()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionRequest();
-    this->show();
+    GenericView::showUI();
 }
 
 void RequestView::showUI(ConnectionRequestPointer iInitialRequest)

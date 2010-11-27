@@ -20,11 +20,8 @@ GenericView::GenericView(QWidget* iParent) : QWidget(iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    if (iParent != 0)
-    {
-        setWindowFlags(windowFlags() | Qt::Window);
-        setAttribute(Qt::WA_Maemo5StackedWindow);
-    }
+    setWindowFlags(windowFlags() | Qt::Window);
+    setAttribute(Qt::WA_Maemo5StackedWindow);
 
     mLoader = 0;
     this->hide();

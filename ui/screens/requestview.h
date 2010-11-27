@@ -8,24 +8,23 @@
 
 // Inclused
 #include <QDebug>
-#include "ui/global.h"
 #include "api/connection.h"
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
-#include <QObject>
+#include "ui/global.h"
+#include "genericview.h"
 #include <QScrollArea>
 #include <QListView>
 #include <QStandardItem>
 #include <QModelIndex>
 #include <QLabel>
-#include <QtMaemo5/QMaemo5DatePickSelector>
-#include <QtMaemo5/QMaemo5TimePickSelector>
-#include <QtMaemo5/QMaemo5ValueButton>
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QButtonGroup>
-#include "genericview.h"
+#include <QtMaemo5/QMaemo5DatePickSelector>
+#include <QtMaemo5/QMaemo5TimePickSelector>
+#include <QtMaemo5/QMaemo5ValueButton>
 
 namespace iRail
 {

@@ -8,19 +8,19 @@
 
 // Inclused
 #include <QDebug>
-#include "ui/global.h"
 #include "api/connection.h"
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
+#include "genericview.h"
+#include "ui/global.h"
 #include <QObject>
 #include <QScrollArea>
 #include <QListView>
 #include <QStandardItem>
 #include <QModelIndex>
 #include <QLabel>
-#include "ui/dialogs/optionalprogressdialog.h"
-#include "genericview.h"
+#include <QPushButton>
 
 namespace iRail
 {
@@ -31,7 +31,6 @@ namespace iRail
     public:
         MainView(QWidget *iParent);
         ~MainView();
-        void showUI();
 
         // Controller actions
     public slots:

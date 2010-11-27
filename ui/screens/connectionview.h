@@ -3,18 +3,18 @@
 //
 
 // Include guard
-#ifndef ConnectionView_H
-#define ConnectionView_H
+#ifndef CONNECTIONVIEW_H
+#define CONNECTIONVIEW_H
 
 // Inclused
 #include <QDebug>
 #include "api/connection.h"
 #include "api/connectionrequest.h"
+#include "genericview.h"
 #include <QVBoxLayout>
 #include <QModelIndex>
 #include <QListView>
 #include <QStandardItemModel>
-#include "genericview.h"
 
 namespace iRail
 {
@@ -28,7 +28,7 @@ namespace iRail
         void showUI(ConnectionRequestPointer iConnectionRequest);
         void load(const QList<ConnectionPointer>& iConnections);
 
-        // Auxiliary types
+        // Temporary data
         QList<ConnectionPointer>* tConnections;
 
         // UI events
@@ -67,4 +67,4 @@ namespace iRail
     };
 }
 
-#endif // ConnectionView_H
+#endif // CONNECTIONVIEW_H

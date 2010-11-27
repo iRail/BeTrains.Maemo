@@ -12,9 +12,9 @@
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
+#include "genericview.h"
 #include <QVBoxLayout>
 #include <QScrollArea>
-#include "genericview.h"
 
 namespace iRail
 {
@@ -28,8 +28,7 @@ namespace iRail
         void showUI(ConnectionPointer iConnection);
         void load(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
-        // Auxiliary types
-        QMap<QString, StationPointer>* tStations;
+        // Temporary data
         QMap<QString, VehiclePointer>* tVehicles;
         ConnectionPointer tConnection;
 

@@ -34,13 +34,6 @@ MainView::~MainView()
 
 }
 
-void MainView::showUI()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    this->show();
-}
-
 
 //
 // Initialization
@@ -136,6 +129,7 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    delete iStations;
     qWarning() << "! " << "Handler not currently used";
 }
 

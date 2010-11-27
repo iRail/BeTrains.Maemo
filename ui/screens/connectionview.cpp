@@ -41,7 +41,7 @@ void ConnectionView::showUI(ConnectionRequestPointer iConnectionRequest)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     _showConnectionResult(iConnectionRequest);
-    this->show();
+    GenericView::showUI();
 }
 
 void ConnectionView::load(const QList<ConnectionPointer>& iConnections)
