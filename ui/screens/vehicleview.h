@@ -29,8 +29,8 @@ namespace iRail
         void load(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
 
         // Temporary data
-        QMap<QString, VehiclePointer>* tVehicles;
         ConnectionPointer tConnection;
+        QMap<QString, VehiclePointer>* tVehicles;
 
         // UI events
     private slots:
@@ -38,12 +38,12 @@ namespace iRail
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
-        void setVehicle(VehiclePointer* iVehicle);
+        void setVehicles(QMap<QString, VehiclePointer>* iVehicles);
 
         // Controller signals
     signals:
         void downloadStations();
-        void downloadVehicle(QString iVehicleId);
+        void downloadVehicles(QList<QString> iVehicleIds);
 
     private:
         // Member data

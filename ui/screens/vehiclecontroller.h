@@ -29,7 +29,7 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
-        void _downloadVehicle(QString iVehicleId);
+        void _downloadVehicles(QList<QString> iVehicleIds);
 
         // Internal slots
     private slots:
@@ -40,6 +40,10 @@ namespace iRail
         // Member data
         CachedAPI* mAPI;
         VehicleView* mView;
+
+        // Temporary data
+        QList<QString> tVehicleIds;
+        QMap<QString, VehiclePointer>* tVehicles;
     };
 }
 

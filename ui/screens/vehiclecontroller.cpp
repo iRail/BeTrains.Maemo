@@ -19,7 +19,7 @@ VehicleController::VehicleController(CachedAPI* iAPI, QWidget* iParent) : mAPI(i
 
     mView = new VehicleView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
+    connect(mView, SIGNAL(downloadVehicles(QList<QString>)), this, SLOT(_downloadVehicles(QList<QString>)));
 }
 
 VehicleController::~VehicleController()
@@ -50,12 +50,17 @@ void VehicleController::_downloadStations()
     mAPI->requestStations();
 }
 
-void VehicleController::_downloadVehicle(QString iVehicleId)
+void VehicleController::_downloadVehicles(QList<QString> iVehicleIds)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    tVehicleIds = iVehicleIds;
+    tVehicles = new QMap<QString, VehiclePointer>();
     connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
-    mAPI->requestVehicle(iVehicleId);
+    if (iVehicleIds.count() > 0)
+        mAPI->requestVehicle(iVehicleIds.at(0));
+    else
+        mView->setVehicles(new QMap<QString, VehiclePointer>());
 }
 
 
@@ -78,9 +83,22 @@ void VehicleController::gotVehicle(VehiclePointer* iVehicle)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     if (iVehicle != 0)
-        mView->setVehicle(iVehicle);
+    {
+        tVehicles->insert((*iVehicle)->id(), *iVehicle);
+        if (tVehicleIds.count() > tVehicles->count())
+            mAPI->requestVehicle(tVehicleIds.at(tVehicles->size()));
+        else
+        {
+            disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
+            mView->setVehicles(tVehicles);
+        }
+    }
     else
+    {
+        disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+    }
+
+
 }

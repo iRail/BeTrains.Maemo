@@ -46,8 +46,12 @@ void VehicleView::load(ConnectionPointer iConnection)
     startLoader();
 
     tConnection = iConnection;
-    tVehicles = new QMap<QString, VehiclePointer>();
-    emit downloadVehicle(iConnection->lines().at(0).vehicle);
+    QList<QString> tVehiclesIds;
+    for (int i = 0; i < iConnection->lines().size(); i++)
+    {
+        tVehiclesIds << iConnection->lines().at(i).vehicle;
+    }
+    emit downloadVehicles(tVehiclesIds);
 }
 
 void VehicleView::load(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles)
@@ -76,15 +80,12 @@ void VehicleView::setStations(QMap<QString, StationPointer>* iStations)
     tConnection.clear();
 }
 
-void VehicleView::setVehicle(VehiclePointer* iVehicle)
+void VehicleView::setVehicles(QMap<QString, VehiclePointer>* iVehicles)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    tVehicles->insert((*iVehicle)->id(), *iVehicle);
-    if (tConnection->lines().count() > tVehicles->count())
-        emit downloadVehicle(tConnection->lines().at(tVehicles->size()).vehicle);
-    else
-        emit downloadStations();
+    tVehicles = iVehicles;
+    emit downloadStations();
 }
 
 
