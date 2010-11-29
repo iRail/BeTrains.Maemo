@@ -137,6 +137,7 @@ void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     load(*iLiveboard);
+    delete iLiveboard;
 }
 //
 // Initialization

@@ -71,6 +71,8 @@ LoaderWidget::~LoaderWidget()
 void LoaderWidget::startEntryAnimation(void)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    if (_entryAnimation && _entryAnimation->state() == QPropertyAnimation::Running)
+        return;
 
     setEntryAnimation();
     _entryAnimation->start();
@@ -133,6 +135,8 @@ void LoaderWidget::setEntryAnimation(void)
 void LoaderWidget::startExitAnimation(void)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    if (_exitAnimation && _exitAnimation->state() == QPropertyAnimation::Running)
+        return;
 
     setExitAnimation();
 

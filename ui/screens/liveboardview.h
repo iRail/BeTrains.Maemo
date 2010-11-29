@@ -64,6 +64,7 @@ namespace iRail
         QLineEdit *mUIStationEdit;
         QLabel *mViewDummy;
         QListView *mView;
+        QVBoxLayout *mViewLayout;
         QStandardItemModel *mModel;
         QPushButton *mUIStationButton;
 
