@@ -162,7 +162,7 @@ void LiveboardView::init_ui()
     mUIScrollArea->setWidgetResizable(true);
 
     // Main layout
-    QVBoxLayout *mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
+    mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
     tWidget->setLayout(mUIScrollLayout);
 
 
@@ -214,6 +214,11 @@ void LiveboardView::init_ui()
     font.setPointSize(24);
     mViewDummy->setFont(font);
     mUIScrollLayout->addWidget(mViewDummy);
+
+    // Create the history listview spacer
+    mViewSpacer = new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
+    mUIScrollLayout->addSpacerItem(mViewSpacer);
+
     populateModel(QList<Liveboard::Departure>());
 
 }
@@ -233,6 +238,7 @@ void LiveboardView::populateModel(const QList<Liveboard::Departure>& iDepartures
         mViewDummy->setText(tr("No departures to be shown."));
         mViewDummy->setVisible(true);
         mView->setVisible(false);
+        mUIScrollLayout->removeItem(mViewSpacer);       // HACK (without fixedheight we could use sizepolicy)
     }
     else
     {
@@ -248,7 +254,9 @@ void LiveboardView::populateModel(const QList<Liveboard::Departure>& iDepartures
         mViewDummy->setVisible(false);
         mView->setVisible(true);
         mView->setModel(mModel);
-        mView->setFixedHeight(70*mModel->rowCount());   // HACK
+        mView->setFixedHeight(70 * mModel->rowCount());   // HACK (sizehint not respected)
+        mUIScrollLayout->removeItem(mViewSpacer);         // HACK (without fixedheight we could use sizepolicy)
+        mUIScrollLayout->addSpacerItem(mViewSpacer);
     }
 
     // Fix the scroll location

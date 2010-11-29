@@ -50,7 +50,7 @@ void MainView::init_ui()
     mUIScrollArea->setWidgetResizable(true);
 
     // Main layout
-    QVBoxLayout *mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
+    mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
     tWidget->setLayout(mUIScrollLayout);
 
     // Top buttons
@@ -89,6 +89,11 @@ void MainView::init_ui()
     font.setPointSize(24);
     mViewDummy->setFont(font);
     mUIScrollLayout->addWidget(mViewDummy);
+
+    // Create the history listview spacer
+    mViewSpacer = new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
+    mUIScrollLayout->addSpacerItem(mViewSpacer);
+
     // TODO: load history from file
     populateModel();
 
@@ -144,11 +149,14 @@ void MainView::populateModel()
         mViewDummy->setVisible(false);
         mView->setVisible(true);
         mView->setModel(mModel);
-        mView->setFixedHeight(70*mModel->rowCount());   // HACK
+        mView->setFixedHeight(70*mModel->rowCount());       // HACK
+        mUIScrollLayout->removeItem(mViewSpacer);           // HACK (without fixedheight we could use sizepolicy)
+        mUIScrollLayout->addSpacerItem(mViewSpacer);
     }
     else
     {
         mViewDummy->setVisible(true);
         mView->setVisible(false);
+        mUIScrollLayout->removeItem(mViewSpacer);           // HACK (without fixedheight we could use sizepolicy)
     }
 }

@@ -136,7 +136,7 @@ void VehicleView::update_ui(ConnectionPointer iConnection, const QMap<QString, V
         init_line(tLine, iVehicles[tLine.vehicle]);
     }
 
-    // Add a spacer (setAlignment(Qt::AlignTop) doesn't seem to work)
+    // HACK (without fixedheight we could use sizepolicy)
     mUIScrollLayout->addStretch();
 }
 

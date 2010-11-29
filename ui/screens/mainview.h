@@ -21,6 +21,7 @@
 #include <QModelIndex>
 #include <QLabel>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 namespace iRail
 {
@@ -51,8 +52,10 @@ namespace iRail
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
 
         // UI members
+        QVBoxLayout *mUIScrollLayout;
         QLabel *mViewDummy;
         QListView *mView;
+        QSpacerItem* mViewSpacer;
         QStandardItemModel *mModel;
         QPushButton* mUIButtonSearch;
 

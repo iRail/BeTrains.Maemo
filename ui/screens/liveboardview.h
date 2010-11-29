@@ -60,10 +60,12 @@ namespace iRail
         LiveboardPointer tLiveboard;
 
         // UI Members
+        QVBoxLayout *mUIScrollLayout;
         QScrollArea* mUIScrollArea;
         QLineEdit *mUIStationEdit;
         QLabel *mViewDummy;
         QListView *mView;
+        QSpacerItem* mViewSpacer;
         QVBoxLayout *mViewLayout;
         QStandardItemModel *mModel;
         QPushButton *mUIStationButton;
