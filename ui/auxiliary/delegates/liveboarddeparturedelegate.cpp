@@ -37,6 +37,14 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     QRect rect = iOption.rect;
     rect.adjust(20, 8, -20, -8);
 
+    // Divide drawing area in columns
+    QRect rect_c1 = rect.adjusted(0, 0, -670, 0);
+    qDebug() << rect_c1;
+    QRect rect_c2 = rect_c1.adjusted(rect_c1.width(), 0, rect_c1.width(), 0);
+    qDebug() << rect_c2;
+    QRect rect_c3 = rect_c2.adjusted(rect_c2.width(), 0, rect_c2.width()+500, 0);
+    qDebug() << rect_c3;
+
     // Main font
     QFont font = iOption.font;
 
@@ -53,16 +61,16 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
 
     // Hour
     QString tHours = tLiveboardDeparture.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
-    iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tHours);
+    iPainter->drawText(rect_c1, Qt::AlignTop | Qt::AlignHCenter, tHours);
 
     // "to" text
     iPainter->setPen(iOption.palette.mid().color());
-    iPainter->drawText(rect.adjusted(80, 0, 0, 0), Qt::AlignTop | Qt::AlignLeft, tr("to"));
+    iPainter->drawText(rect_c2, Qt::AlignTop | Qt::AlignHCenter, tr("to"));
 
     // Station
     iPainter->setPen(iOption.palette.foreground().color());
     QString tStation = mStations[tLiveboardDeparture.station]->name();
-    iPainter->drawText(rect.adjusted(125, 0, 0, 0), Qt::AlignTop | Qt::AlignLeft, tStation);
+    iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignLeft, tStation);
 
     // Platform
     QString tPlatform = tr("Platform") % " " % QString::number(tLiveboardDeparture.platform);
@@ -71,10 +79,17 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     // Delay
     if (tLiveboardDeparture.delay != 0)
     {
-        QString tDelay = tr("%n minute(s) delay", "", tLiveboardDeparture.delay / 60);
         iPainter->setPen(Qt::red);
         iPainter->setFont(font_small);
-        iPainter->drawText(rect.adjusted(125, 0, 0, 0), Qt::AlignBottom | Qt::AlignLeft, tDelay);
+
+        // Delay time
+        QString tDelay = tr("%n minute(s) delay", "", tLiveboardDeparture.delay / 60);
+        iPainter->drawText(rect_c3, Qt::AlignBottom | Qt::AlignLeft, tDelay);
+
+        // New hour
+        QString tHours = tLiveboardDeparture.datetime.addSecs(tLiveboardDeparture.delay).toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
+        iPainter->drawText(rect_c1, Qt::AlignBottom | Qt::AlignHCenter, tHours);
+
     }
 
     iPainter->restore();
