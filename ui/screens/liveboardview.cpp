@@ -69,20 +69,6 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
 // UI events
 //
 
-void LiveboardView::do_btnSearch_clicked()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    if (mUIStationEdit->text().length() == 0)
-    {
-        QMaemo5InformationBox::information(this, tr("Please fill in the station."), QMaemo5InformationBox::DefaultTimeout);
-    }
-    else
-    {
-        emit load(tStationId);
-    }
-}
-
 void LiveboardView::clear()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -101,6 +87,7 @@ void LiveboardView::do_btnStations_clicked()
     {
         tStationId = tChooser.getSelection();
         mUIStationEdit->setText(mStations[tStationId]->name());
+        emit load(tStationId);
     }
 }
 
@@ -180,11 +167,6 @@ void LiveboardView::init_ui()
     mUIStationEdit = new QLineEdit;
     mUIStationEdit->setEnabled(false);
     mUIStation->addWidget(mUIStationEdit);
-
-    // Search button
-    QPushButton *mUISearchButton = new QPushButton(QString(tr("Search")));
-    mUIStation->addWidget(mUISearchButton);
-    connect(mUISearchButton, SIGNAL(clicked()), this, SLOT(do_btnSearch_clicked()));
 
     mUIScrollLayout->addLayout(mUIStation);
 
