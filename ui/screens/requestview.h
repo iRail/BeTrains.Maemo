@@ -46,6 +46,7 @@ namespace iRail
         void do_btnClear_clicked();
         void do_btnTo_clicked();
         void do_btnFrom_clicked();
+        void do_btnSwap_clicked();
 
         // Controller actions
     public slots:

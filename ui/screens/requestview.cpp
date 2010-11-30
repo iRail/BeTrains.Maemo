@@ -152,6 +152,13 @@ void RequestView::do_btnTo_clicked()
     }
 }
 
+void RequestView::do_btnSwap_clicked()
+{
+    QString tFrom = mUIFromLine->text();
+    mUIFromLine->setText(mUIToLine->text());
+    mUIToLine->setText(tFrom);
+}
+
 
 //
 // Controller actions
@@ -184,6 +191,9 @@ void RequestView::init_ui()
 
     // FROM AND TO //
 
+    QVBoxLayout* mUIFromTo = new QVBoxLayout();
+    QHBoxLayout* mUIFromToSwap = new QHBoxLayout();
+
     // Origin station
     QHBoxLayout *mUIFrom = new QHBoxLayout();
     mUIFromButton = new QPushButton(QString(tr("Origin")));
@@ -192,7 +202,7 @@ void RequestView::init_ui()
     mUIFrom->addWidget(mUIFromButton);
     mUIFrom->addWidget(mUIFromLine);
     connect(mUIFromButton, SIGNAL(clicked()), this, SLOT(do_btnFrom_clicked()));
-    mUILayout->addLayout(mUIFrom);
+    mUIFromTo->addLayout(mUIFrom);
 
     // Destination station
     QHBoxLayout *mUITo = new QHBoxLayout();
@@ -202,7 +212,16 @@ void RequestView::init_ui()
     mUITo->addWidget(mUIToButton);
     mUITo->addWidget(mUIToLine);
     connect(mUIToButton, SIGNAL(clicked()), this, SLOT(do_btnTo_clicked()));
-    mUILayout->addLayout(mUITo);
+    mUIFromTo->addLayout(mUITo);
+
+    // Swap button
+    QPushButton *mUISwap = new QPushButton();
+    mUISwap->setIcon(QIcon(":ui/assets/swap.png"));
+    connect(mUISwap, SIGNAL(clicked()), this, SLOT(do_btnSwap_clicked()));
+    mUIFromToSwap->addLayout(mUIFromTo);
+    mUIFromToSwap->addWidget(mUISwap);
+    mUILayout->addLayout(mUIFromToSwap);
+
 
 
     // TIME SELECTION //
