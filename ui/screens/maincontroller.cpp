@@ -49,7 +49,7 @@ void MainController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
+    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     mAPI->requestStations();
 }
 
@@ -90,11 +90,11 @@ void MainController::_setInitialRequest(ConnectionRequestPointer iInitialRequest
 // Internal slots
 //
 
-void MainController::gotStations(QMap<QString, StationPointer>* iStations)
+void MainController::gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
+    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
         mView->setStations(iStations);
     else

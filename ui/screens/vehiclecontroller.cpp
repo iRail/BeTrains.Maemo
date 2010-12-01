@@ -46,7 +46,7 @@ void VehicleController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
+    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     mAPI->requestStations();
 }
 
@@ -54,7 +54,7 @@ void VehicleController::_downloadVehicle(QString iVehicleId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
+    connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
     mAPI->requestVehicle(iVehicleId);
 }
 
@@ -63,22 +63,22 @@ void VehicleController::_downloadVehicle(QString iVehicleId)
 // Internal slots
 //
 
-void VehicleController::gotStations(QMap<QString, StationPointer>* iStations)
+void VehicleController::gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
+    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
         mView->setStations(iStations);
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
-void VehicleController::gotVehicle(VehiclePointer* iVehicle)
+void VehicleController::gotVehicle(VehiclePointer* iVehicle, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
+    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
     if (iVehicle != 0)
         mView->setVehicle(iVehicle);
     else

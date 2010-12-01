@@ -49,7 +49,7 @@ void ConnectionController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
+    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     mAPI->requestStations();
 }
 
@@ -57,7 +57,7 @@ void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnec
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
+    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
     mAPI->requestConnections(iConnectionRequest);
 }
 
@@ -78,22 +78,22 @@ void ConnectionController::_launchVehicle(Connection::Line iConnectionLine)
 // Internal slots
 //
 
-void ConnectionController::gotStations(QMap<QString, StationPointer>* iStations)
+void ConnectionController::gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*)), this, SLOT(gotStations(QMap<QString, StationPointer>*)));
+    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
         mView->setStations(iStations);
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
 
-void ConnectionController::gotConnections(QList<ConnectionPointer>* iConnections)
+void ConnectionController::gotConnections(QList<ConnectionPointer>* iConnections, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*)), this, SLOT(gotConnections(QList<ConnectionPointer>*)));
+    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
     if (iConnections != 0)
         mView->setConnections(iConnections);
     else

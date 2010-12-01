@@ -35,7 +35,7 @@ namespace iRail
 
         // Internal slots
     private slots:
-        void gotStations(QMap<QString, StationPointer>* iStations);
+        void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
 
     private:
         // Member data
