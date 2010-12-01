@@ -3,7 +3,7 @@
 //
 
 // Includes
-#include "ui.h"
+#include "application.h"
 #include "api/storage/memorystorage.h"
 #include <QDesktopServices>
 #include <QDir>
@@ -18,10 +18,23 @@ using namespace iRail;
 // Construction and destruction
 //
 
-UI::UI() : mAPI("Maemo", "0.1", &mStorage)
+Application::Application(int & argc, char ** argv) : QApplication(argc, argv), mAPI("Maemo", "0.1", &mStorage)
 {
+    // Configure the application
+    setOrganizationName("iRail");
+    setOrganizationDomain("irail.be");
+    setApplicationName("BeTrains");
+
+    // Translate the user interface
+    Q_INIT_RESOURCE(translations);
+    QTranslator tTranslator;
+    tTranslator.load(settings().value("application/language", QLocale::system().name()).toString(), ":/translations");
+    installTranslator(&tTranslator);
+
     // Setup the main widget
     mController = new MainController(&mAPI);
+    QTimer::singleShot(0, this, SLOT(run()));
+    QObject::connect(this, SIGNAL(lastWindowClosed()), this, SLOT(close()));
 
     // Create directory structure
     mDataLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
@@ -47,7 +60,7 @@ UI::UI() : mAPI("Maemo", "0.1", &mStorage)
         qWarning() << "! " << "Could not read storage data";
 }
 
-UI::~UI()
+Application::~Application()
 {
     delete mController;
 }
@@ -57,18 +70,18 @@ UI::~UI()
 // Singleton objects
 //
 
-QSettings& UI::settings()
+QSettings& Application::settings()
 {
     static QSettings mSettings;
     return mSettings;
 }
 
-void UI::run()
+void Application::run()
 {
     mController->showView();
 }
 
-void UI::close()
+void Application::close()
 {
     // Save data
     QString tLocation = mDataLocation % "/storage.dat";

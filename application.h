@@ -3,26 +3,28 @@
 //
 
 // Include guard
-#ifndef UI_H
-#define UI_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 // Includes
 #include <QObject>
 #include <QSettings>
+#include <QApplication>
+#include <QTranslator>
+#include <QTimer>
 #include "cachedapi.h"
 #include "api/storage/serializedstorage.h"
 #include "ui/screens/maincontroller.h"
 
 namespace iRail
 {
-// TODO: make this the application (extend QApplication)
-    class UI : public QObject
+    class Application : public QApplication
     {
     Q_OBJECT
     public:
         // Construction and destruction
-        UI();
-        ~UI();
+        Application(int & argc, char ** argv);
+        ~Application();
 
         // Singleton objects
         static QSettings &settings();
@@ -43,4 +45,4 @@ namespace iRail
 }
 
 
-#endif // UI_H
+#endif // APPLICATION_H

@@ -12,7 +12,6 @@ QT       += gui maemo5
 RESOURCES += ui.qrc \
     translations.qrc
 SOURCES += main.cpp \
-    ui.cpp \
     ui/screens/maincontroller.cpp \
     ui/dialogs/stationchooser.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
@@ -30,9 +29,9 @@ SOURCES += main.cpp \
     ui/screens/requestcontroller.cpp \
     ui/screens/requestview.cpp \
     ui/auxiliary/loaderwidget.cpp \
-    ui/screens/genericview.cpp
+    ui/screens/genericview.cpp \
+    application.cpp
 HEADERS += \
-    ui.h \
     ui/global.h \
     ui/screens/maincontroller.h \
     ui/dialogs/stationchooser.h \
@@ -54,7 +53,8 @@ HEADERS += \
     ui/screens/genericview.h \
     ui/auxiliary/animationwidget.h \
     ui/auxiliary/animationrectitem.h \
-    ui/auxiliary/graphicsrectobject.h
+    ui/auxiliary/graphicsrectobject.h \
+    application.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 
