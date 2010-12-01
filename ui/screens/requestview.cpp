@@ -217,6 +217,7 @@ void RequestView::init_ui()
     QPushButton *mUISwap = new QPushButton();
     mUISwap->setIcon(QIcon(":ui/assets/swap.png"));
     connect(mUISwap, SIGNAL(clicked()), this, SLOT(do_btnSwap_clicked()));
+    mUISwap->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
     mUIFromToSwap->addLayout(mUIFromTo);
     mUIFromToSwap->addWidget(mUISwap);
     mUILayout->addLayout(mUIFromToSwap);
