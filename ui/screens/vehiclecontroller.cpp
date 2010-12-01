@@ -19,7 +19,7 @@ VehicleController::VehicleController(CachedAPI* iAPI, QWidget* iParent) : mAPI(i
 
     mView = new VehicleView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadVehicles(QList<QString>)), this, SLOT(_downloadVehicles(QList<QString>)));
+    connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
 }
 
 VehicleController::~VehicleController()
@@ -29,12 +29,12 @@ VehicleController::~VehicleController()
     delete mView;
 }
 
-void VehicleController::showView(ConnectionPointer iConnection)
+void VehicleController::showView(Connection::Line iConnectionLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mView->show();
-    mView->load(iConnection);
+    mView->load(iConnectionLine);
 }
 
 
@@ -50,17 +50,12 @@ void VehicleController::_downloadStations()
     mAPI->requestStations();
 }
 
-void VehicleController::_downloadVehicles(QList<QString> iVehicleIds)
+void VehicleController::_downloadVehicle(QString iVehicleId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    tVehicleIds = iVehicleIds;
-    tVehicles = new QMap<QString, VehiclePointer>();
     connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
-    if (iVehicleIds.count() > 0)
-        mAPI->requestVehicle(iVehicleIds.at(0));
-    else
-        mView->setVehicles(new QMap<QString, VehiclePointer>());
+    mAPI->requestVehicle(iVehicleId);
 }
 
 
@@ -83,22 +78,9 @@ void VehicleController::gotVehicle(VehiclePointer* iVehicle)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
     if (iVehicle != 0)
-    {
-        tVehicles->insert((*iVehicle)->id(), *iVehicle);
-        if (tVehicleIds.count() > tVehicles->count())
-            mAPI->requestVehicle(tVehicleIds.at(tVehicles->size()));
-        else
-        {
-            disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
-            mView->setVehicles(tVehicles);
-        }
-    }
+        mView->setVehicle(iVehicle);
     else
-    {
-        disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*)), this, SLOT(gotVehicle(VehiclePointer*)));
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
-    }
-
-
 }

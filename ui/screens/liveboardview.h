@@ -55,9 +55,6 @@ namespace iRail
         QMap<QString, StationPointer> mStations;
         QString tStationId;
 
-        // Temporary data
-        LiveboardPointer tLiveboard;
-
         // UI Members
         QVBoxLayout *mUIScrollLayout;
         QScrollArea* mUIScrollArea;

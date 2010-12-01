@@ -18,7 +18,7 @@ void ConnectionRequestDelegate::paint(QPainter *iPainter, const QStyleOptionView
 
     if (! qVariantCanConvert<ConnectionRequestPointer>(iIndex.data(ConnectionRequestRole)))
     {
-        // Warn
+        qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
     }
     ConnectionRequestPointer tConnectionRequest = qVariantValue<ConnectionRequestPointer>(iIndex.data(ConnectionRequestRole));

@@ -13,7 +13,7 @@
 #include "genericview.h"
 #include <QVBoxLayout>
 #include <QModelIndex>
-#include <QListView>
+#include <QTreeView>
 #include <QStandardItemModel>
 
 namespace iRail
@@ -43,7 +43,7 @@ namespace iRail
     signals:
         void downloadStations();
         void downloadConnections(ConnectionRequestPointer iConnectionRequest);
-        void launchVehicle(ConnectionPointer iConnection);
+        void launchVehicle(Connection::Line iConnectionLine);
 
     private:
         // Member data
@@ -53,7 +53,7 @@ namespace iRail
         void init_ui();
 
         // UI members
-        QListView *mView;
+        QTreeView *mView;
         QStandardItemModel *mModel;
 
         // Auxiliary

@@ -20,7 +20,7 @@ ConnectionController::ConnectionController(CachedAPI* iAPI, QWidget* iParent) : 
     mView = new ConnectionView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
     connect(mView, SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
-    connect(mView, SIGNAL(launchVehicle(ConnectionPointer)), this, SLOT(_launchVehicle(ConnectionPointer)));
+    connect(mView, SIGNAL(launchVehicle(Connection::Line)), this, SLOT(_launchVehicle(Connection::Line)));
 
     mScreenVehicle = 0;
 }
@@ -61,7 +61,7 @@ void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnec
     mAPI->requestConnections(iConnectionRequest);
 }
 
-void ConnectionController::_launchVehicle(ConnectionPointer iConnection)
+void ConnectionController::_launchVehicle(Connection::Line iConnectionLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -70,7 +70,7 @@ void ConnectionController::_launchVehicle(ConnectionPointer iConnection)
         mScreenVehicle = new VehicleController(mAPI, mView);
     }
 
-    mScreenVehicle->showView(iConnection);
+    mScreenVehicle->showView(iConnectionLine);
 }
 
 

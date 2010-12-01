@@ -14,6 +14,7 @@
 #include <QStyleOptionViewItem>
 #include <QStyledItemDelegate>
 #include "api/station.h"
+#include "api/connection.h"
 
 namespace iRail
 {
@@ -28,6 +29,8 @@ namespace iRail
         }
 
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        void paint(QPainter *painter, const QStyleOptionViewItem &option, ConnectionPointer connection) const;
+        void paint(QPainter *painter, const QStyleOptionViewItem &option, Connection::Line line) const;
 
     private:
         // Member data

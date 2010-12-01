@@ -15,6 +15,8 @@
 #include "genericview.h"
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include <QListView>
+#include <QStandardItemModel>
 
 namespace iRail
 {
@@ -25,12 +27,12 @@ namespace iRail
     public:
         VehicleView(QWidget *iParent);
         ~VehicleView();
-        void load(ConnectionPointer iConnection);
-        void load(const QMap<QString, StationPointer>& iStations, ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
+        void load(Connection::Line iConnectionLine);
+        void load(const QMap<QString, StationPointer>& iStations, Connection::Line iLine, VehiclePointer iVehicle);
 
         // Temporary data
-        ConnectionPointer tConnection;
-        QMap<QString, VehiclePointer>* tVehicles;
+        Connection::Line tLine;
+        VehiclePointer tVehicle;
 
         // UI events
     private slots:
@@ -38,12 +40,12 @@ namespace iRail
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
-        void setVehicles(QMap<QString, VehiclePointer>* iVehicles);
+        void setVehicle(VehiclePointer* iVehicles);
 
         // Controller signals
     signals:
         void downloadStations();
-        void downloadVehicles(QList<QString> iVehicleIds);
+        void downloadVehicle(QString iVehicleId);
 
     private:
         // Member data
@@ -52,13 +54,14 @@ namespace iRail
         // Initialization
     private:
         void init_ui();
-        void update_ui(ConnectionPointer iConnection, const QMap<QString, VehiclePointer>& iVehicles);
-        void init_line(const Connection::Line& iLine, const VehiclePointer& iVehicle);
+        void populateModel(Connection::Line iLine, VehiclePointer iVehicle);
 
         // UI members
     private:
         QScrollArea* mUIScrollArea;
         QVBoxLayout* mUIScrollLayout;
+        QListView* mView;
+        QStandardItemModel* mModel;
     };
 }
 

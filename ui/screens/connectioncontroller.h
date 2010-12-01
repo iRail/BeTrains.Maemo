@@ -31,7 +31,7 @@ namespace iRail
     private slots:
         void _downloadStations();
         void _downloadConnections(ConnectionRequestPointer iConnectionRequest);
-        void _launchVehicle(ConnectionPointer iConnection);
+        void _launchVehicle(Connection::Line iConnectionLine);
 
         // Internal slots
     private slots:

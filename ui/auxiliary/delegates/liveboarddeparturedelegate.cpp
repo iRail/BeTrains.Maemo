@@ -20,7 +20,7 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
 
     if (! qVariantCanConvert<Liveboard::Departure>(iIndex.data(LiveboardDepartureRole)))
     {
-        // Warn
+        qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
     }
 

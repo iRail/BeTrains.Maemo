@@ -11,6 +11,7 @@
 #include <QFont>
 #include "ui/global.h"
 #include "ui/auxiliary/delegates/connectiondelegate.h"
+#include <QHeaderView>
 
 // Namespaces
 using namespace iRail;
@@ -57,8 +58,26 @@ void ConnectionView::do_lstConnections_doubleClicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    ConnectionPointer tConnection = iIndex.data(ConnectionRole).value<ConnectionPointer>();
-    emit launchVehicle(tConnection);
+    if (qVariantCanConvert<ConnectionPointer>(iIndex.data(ConnectionRole)))
+    {
+        ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
+
+        if (tConnection->lines().count() > 1)
+        {
+            mView->expand(iIndex);
+        }
+        else
+        {
+            Connection::Line tConnectionLine = tConnection->lines()[0];
+            emit launchVehicle(tConnectionLine);
+        }
+    }
+    else if (qVariantCanConvert<Connection::Line>(iIndex.data(ConnectionLineRole)))
+    {
+        Connection::Line tConnectionLine = qVariantValue<Connection::Line>(iIndex.data(ConnectionLineRole));
+        emit launchVehicle(tConnectionLine);
+    }
+
 }
 
 
@@ -104,7 +123,8 @@ void ConnectionView::init_ui()
     mModel = new QStandardItemModel(0, 1);
 
     // Create the history listview
-    QListView *tView = new QListView();
+    QTreeView *tView = new QTreeView();
+    tView->header()->hide();
     tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tView->setModel(mModel);
     tView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -129,9 +149,20 @@ void ConnectionView::populateModel(const QList<ConnectionPointer>& iConnections)
         for (int i = 0; i < iConnections.size(); i++)
         {
             ConnectionPointer tConnection = iConnections.at(i);
-            QStandardItem *tItem = new QStandardItem();
-            tItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
-            mModel->appendRow(tItem);
+            QStandardItem *tConnectionItem = new QStandardItem();
+            tConnectionItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
+
+            if (tConnection->lines().count() > 1)
+            {
+                foreach (Connection::Line tLine, tConnection->lines())
+                {
+                    QStandardItem *tLineItem = new QStandardItem();
+                    tLineItem->setData(QVariant::fromValue(tLine), ConnectionLineRole);
+                    tConnectionItem->appendRow(tLineItem);
+                }
+            }
+
+            mModel->appendRow(tConnectionItem);
         }
     }
     else

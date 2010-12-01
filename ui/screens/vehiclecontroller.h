@@ -24,12 +24,12 @@ namespace iRail
     public:
         explicit VehicleController(CachedAPI* iAPI, QWidget *parent = 0);
         ~VehicleController();
-        void showView(ConnectionPointer iConnection);
+        void showView(Connection::Line iConnectionLine);
 
         // View slots
     private slots:
         void _downloadStations();
-        void _downloadVehicles(QList<QString> iVehicleIds);
+        void _downloadVehicle(QString iVehicleId);
 
         // Internal slots
     private slots:
@@ -40,10 +40,6 @@ namespace iRail
         // Member data
         CachedAPI* mAPI;
         VehicleView* mView;
-
-        // Temporary data
-        QList<QString> tVehicleIds;
-        QMap<QString, VehiclePointer>* tVehicles;
     };
 }
 

@@ -18,7 +18,7 @@ void VehicleStopDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &
 
     if (! qVariantCanConvert<Vehicle::Stop>(iIndex.data(VehicleStopRole)))
     {
-        // Warn
+        qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
     }
     Vehicle::Stop tStop = qVariantValue<Vehicle::Stop>(iIndex.data(VehicleStopRole));
