@@ -22,12 +22,12 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     if (qVariantCanConvert<ConnectionPointer>(iIndex.data(ConnectionRole)))
     {
         ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
-        paint(iPainter, iOption, tConnection);
+        paint(iPainter, iOption, iIndex, tConnection);
     }
     else if (qVariantCanConvert<Connection::Line>(iIndex.data(ConnectionLineRole)))
     {
         Connection::Line tConnectionLine = qVariantValue<Connection::Line>(iIndex.data(ConnectionLineRole));
-        paint(iPainter, iOption, tConnectionLine);
+        paint(iPainter, iOption, iIndex, tConnectionLine);
     }
     else
     {
@@ -38,7 +38,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 }
 
 
-void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, ConnectionPointer iConnection) const
+void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, const QModelIndex &iIndex, ConnectionPointer iConnection) const
 {
     //
     // Configure layout
@@ -57,6 +57,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     // Main font
     QFont font = iOption.font;
+    iPainter->setFont(font);
 
     // Small font
     QFont font_small = font;
@@ -99,15 +100,38 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     }
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tTransfers);
 
+    // Details or delay text
+    if (iConnection->lines().size() > 1)
+    {
+        iPainter->setFont(font_small);
+        QString tLines;
+        if (iConnection->departure().delay != 0 || iConnection->arrival().delay != 0)
+        {
+            iPainter->setPen(QColor::fromRgb(255, 165, 0));
+            tLines = tr("Some lines have delay");
+        }
+        else
+        {
+            iPainter->setPen(Qt::green);
+            tLines = tr("All lines on time");
+        }
+        iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, tLines);
+
+    }
+    else if (iConnection->departure().delay != 0 || iConnection->arrival().delay != 0)
+    {
+        iPainter->setPen(Qt::red);
+        iPainter->setFont(font_small);
+
+        QString tDelay = tr("%n minute(s) delay", "", (iConnection->departure().delay + iConnection->arrival().delay) / 60);
+        iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, tDelay);
+    }
+
     // Delay
     if (iConnection->departure().delay != 0 || iConnection->arrival().delay != 0)
     {
         iPainter->setPen(Qt::red);
         iPainter->setFont(font_small);
-
-        // Delay time
-        QString tDelay = tr("%n minute(s) delay", "", (iConnection->departure().delay + iConnection->arrival().delay) / 60);
-        iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, tDelay);
 
         // New departure hour
         if (iConnection->departure().delay  != 0)
@@ -126,7 +150,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     iPainter->restore();
 }
-void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, Connection::Line iLine) const
+void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, const QModelIndex &iIndex, Connection::Line iLine) const
 {
     //
     // Configure layout
@@ -145,6 +169,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     // Main font
     QFont font = iOption.font;
+    iPainter->setFont(font);
 
     // Small font
     QFont font_small = font;

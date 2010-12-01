@@ -124,7 +124,7 @@ void ConnectionView::init_ui()
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
-    mView->setItemDelegate(new ConnectionDelegate(mStations));
+    mView->setItemDelegate(new ConnectionDelegate(mStations, mView));
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstConnections_doubleClicked(QModelIndex)));
     mUILayout->addWidget(mView);
 }
