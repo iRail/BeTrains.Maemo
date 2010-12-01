@@ -9,7 +9,7 @@
 // Includes
 #include <QObject>
 #include "cachedapi.h"
-#include "api/storage/memorystorage.h"
+#include "api/storage/serializedstorage.h"
 #include "ui/screens/maincontroller.h"
 
 namespace iRail
@@ -23,10 +23,15 @@ namespace iRail
         ~UI();
     public slots:
         void run();
+        void close();
     private:
-        MemoryStorage mStorage;
+        // Member objects
+        SerializedStorage mStorage;
         CachedAPI mAPI;
         MainController *mController;
+
+        // Configuration data (TODO: move into some sort of configuration container)
+        QString mDataLocation;
     };
 }
 

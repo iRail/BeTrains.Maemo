@@ -3,6 +3,7 @@
 //
 
 // Includes
+#include <QObject>
 #include <QApplication>
 #include <QTimer>
 #include <QTranslator>
@@ -17,6 +18,8 @@ using namespace iRail;
 int main(int argc, char *argv[])
 {
     QApplication tApplication(argc, argv);
+    tApplication.setOrganizationName("iRail");
+    tApplication.setApplicationName("BeTrains");
 
     // Translate the user interface
     Q_INIT_RESOURCE(translations);
@@ -27,6 +30,7 @@ int main(int argc, char *argv[])
     // Set-up the user interface
     UI* tUI = new UI();
     QTimer::singleShot(0, tUI, SLOT(run()));
+    QObject::connect(&tApplication, SIGNAL(lastWindowClosed()), tUI, SLOT(close()));
 
     try
     {
