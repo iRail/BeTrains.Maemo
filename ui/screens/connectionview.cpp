@@ -61,11 +61,7 @@ void ConnectionView::do_lstConnections_doubleClicked(QModelIndex iIndex)
     {
         ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
 
-        if (tConnection->lines().count() > 1)
-        {
-            mView->expand(iIndex);
-        }
-        else
+        if (tConnection->lines().count() == 1)
         {
             Connection::Line tConnectionLine = tConnection->lines()[0];
             emit launchVehicle(tConnectionLine);
@@ -122,15 +118,15 @@ void ConnectionView::init_ui()
     mModel = new QStandardItemModel(0, 1);
 
     // Create the history listview
-    QTreeView *tView = new QTreeView();
-    tView->header()->hide();
-    tView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    tView->setModel(mModel);
-    tView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tView->setSelectionMode(QAbstractItemView::SingleSelection);
-    tView->setItemDelegate(new ConnectionDelegate(mStations));
-    connect(tView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstConnections_doubleClicked(QModelIndex)));
-    mUILayout->addWidget(tView);
+    mView = new QTreeView();
+    mView->header()->hide();
+    mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mView->setModel(mModel);
+    mView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    mView->setSelectionMode(QAbstractItemView::SingleSelection);
+    mView->setItemDelegate(new ConnectionDelegate(mStations));
+    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstConnections_doubleClicked(QModelIndex)));
+    mUILayout->addWidget(mView);
 }
 
 
