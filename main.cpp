@@ -11,20 +11,26 @@
 #include "api/exception.h"
 #include <QTextStream>
 #include <QDir>
+#include <QSettings>
 
 // Namespaces
 using namespace iRail;
 
 int main(int argc, char *argv[])
 {
+    // Initialize the application
     QApplication tApplication(argc, argv);
     tApplication.setOrganizationName("iRail");
+    tApplication.setOrganizationDomain("irail.be");
     tApplication.setApplicationName("BeTrains");
+
+    // Create a settings object
+    QSettings tSettings;
 
     // Translate the user interface
     Q_INIT_RESOURCE(translations);
     QTranslator tTranslator;
-    tTranslator.load(QLocale::system().name(), ":/translations");
+    tTranslator.load(tSettings.value("application/language", QLocale::system().name()).toString(), ":/translations");
     tApplication.installTranslator(&tTranslator);
 
     // Set-up the user interface
@@ -32,6 +38,7 @@ int main(int argc, char *argv[])
     QTimer::singleShot(0, tUI, SLOT(run()));
     QObject::connect(&tApplication, SIGNAL(lastWindowClosed()), tUI, SLOT(close()));
 
+    // Run the application
     try
     {
         return tApplication.exec();
