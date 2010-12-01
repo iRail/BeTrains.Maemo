@@ -94,7 +94,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
         tTransfers = tr("Direct");
         break;
     default:
-        tTransfers = (iConnection->lines().size() - 1) % " " % tr("transfer(s)", "", (iConnection->lines().size() - 1));
+        tTransfers = QString::number(iConnection->lines().size() - 1) % " " % tr("transfer(s)", "", (iConnection->lines().size() - 1));
         break;
     }
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tTransfers);
