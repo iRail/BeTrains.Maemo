@@ -38,12 +38,9 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     rect.adjust(20, 8, -20, -8);
 
     // Divide drawing area in columns
-    QRect rect_c1 = rect.adjusted(0, 0, -670, 0);
-    qDebug() << rect_c1;
+    QRect rect_c1 = rect.adjusted(0, 0, -660, 0);
     QRect rect_c2 = rect_c1.adjusted(rect_c1.width(), 0, rect_c1.width(), 0);
-    qDebug() << rect_c2;
     QRect rect_c3 = rect_c2.adjusted(rect_c2.width(), 0, rect_c2.width()+500, 0);
-    qDebug() << rect_c3;
 
     // Main font
     QFont font = iOption.font;
