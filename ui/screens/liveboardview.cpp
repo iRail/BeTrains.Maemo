@@ -30,6 +30,7 @@ void LiveboardView::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    clear();
     emit downloadStations();
 }
 
@@ -40,7 +41,6 @@ void LiveboardView::load(const QMap<QString, StationPointer>& iStations)
 
     mStations = iStations;
     mUIStationButton->setEnabled(true);
-    clear();
 }
 
 void LiveboardView::load(QString iStationId)
@@ -93,7 +93,7 @@ void LiveboardView::do_lstDepartures_doubleClicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    //emit finished(iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
+    emit launchVehicle(tStationId, iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
 }
 
 
@@ -107,14 +107,6 @@ void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
 
     load(*iStations);
     delete iStations;
-}
-
-void LiveboardView::setVehicle(VehiclePointer* iVehicle)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    delete iVehicle;
-    qWarning() << "! " << "Handler not currently used";
 }
 
 void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)

@@ -41,14 +41,13 @@ namespace iRail
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
-        void setVehicle(VehiclePointer* iVehicle);
         void setLiveboard(LiveboardPointer* iLiveboard);
 
         // Controller signals
     signals:
         void downloadStations();
-        void downloadVehicle(QString iVehicleId);
         void downloadLiveboard(QString iStationId);
+        void launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 
     private:
         // Member data

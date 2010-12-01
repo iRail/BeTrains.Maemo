@@ -11,6 +11,7 @@
 #include "ui/global.h"
 #include "cachedapi.h"
 #include "liveboardview.h"
+#include "vehiclecontroller.h"
 #include <QMap>
 
 
@@ -27,19 +28,21 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
-        void _downloadVehicle(QString iVehicleId);
         void _downloadLiveboard(QString iStationId);
+        void _launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
-        void gotVehicle(VehiclePointer* iVehicle, QDateTime iTimestamp);
         void gotLiveboard(LiveboardPointer* iLiveboard, QDateTime iTimestamp);
 
     private:
         // Member data
         CachedAPI* mAPI;
         LiveboardView* mView;
+
+        // Screens
+        VehicleController* mScreenVehicle;
     };
 }
 

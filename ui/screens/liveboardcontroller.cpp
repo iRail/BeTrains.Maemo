@@ -20,8 +20,10 @@ LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : mA
     mView = new LiveboardView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
     connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
-    connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
     connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
+    connect(mView, SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicle(QString,Liveboard::Departure)));
+
+    mScreenVehicle = 0;
 }
 
 LiveboardController::~LiveboardController()
@@ -56,18 +58,6 @@ void LiveboardController::_downloadStations()
         mView->showProgress();
 }
 
-void LiveboardController::_downloadVehicle(QString iVehicleId)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
-
-    bool tCached;
-    mAPI->requestVehicle(iVehicleId, tCached);
-    if (!tCached)
-        mView->showProgress();
-}
-
 void LiveboardController::_downloadLiveboard(QString iStationId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -78,6 +68,28 @@ void LiveboardController::_downloadLiveboard(QString iStationId)
     mAPI->requestLiveboard(iStationId, tCached);
     if (!tCached)
         mView->showProgress();
+}
+
+void LiveboardController::_launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    if (mScreenVehicle == 0)
+    {
+        mScreenVehicle = new VehicleController(mAPI, mView);
+    }
+
+    Connection::Line tLine;
+    tLine.departure.station = iStationId;
+    tLine.departure.platform = iLiveboardDeparture.platform;
+    tLine.departure.delay = iLiveboardDeparture.delay;
+    tLine.departure.datetime = iLiveboardDeparture.datetime;
+    tLine.arrival.station = iLiveboardDeparture.station;
+    tLine.arrival.platform = 0;
+    tLine.arrival.delay = 0;
+    tLine.vehicle = iLiveboardDeparture.vehicle;
+
+    mScreenVehicle->showView(tLine);
 }
 
 
@@ -92,17 +104,6 @@ void LiveboardController::gotStations(QMap<QString, StationPointer>* iStations, 
     disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
         mView->setStations(iStations);
-    else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
-}
-
-void LiveboardController::gotVehicle(VehiclePointer* iVehicle, QDateTime iTimestamp)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
-    if (iVehicle != 0)
-        mView->setVehicle(iVehicle);
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
 }
