@@ -52,6 +52,17 @@ UI::~UI()
     delete mController;
 }
 
+
+//
+// Singleton objects
+//
+
+QSettings& UI::settings()
+{
+    static QSettings mSettings;
+    return mSettings;
+}
+
 void UI::run()
 {
     mController->showView();

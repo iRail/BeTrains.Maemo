@@ -24,13 +24,10 @@ int main(int argc, char *argv[])
     tApplication.setOrganizationDomain("irail.be");
     tApplication.setApplicationName("BeTrains");
 
-    // Create a settings object
-    QSettings tSettings;
-
     // Translate the user interface
     Q_INIT_RESOURCE(translations);
     QTranslator tTranslator;
-    tTranslator.load(tSettings.value("application/language", QLocale::system().name()).toString(), ":/translations");
+    tTranslator.load(UI::settings().value("application/language", QLocale::system().name()).toString(), ":/translations");
     tApplication.installTranslator(&tTranslator);
 
     // Set-up the user interface
