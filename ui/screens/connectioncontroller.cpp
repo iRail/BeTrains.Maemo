@@ -50,7 +50,11 @@ void ConnectionController::_downloadStations()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
-    mAPI->requestStations();
+
+    bool tCached;
+    mAPI->requestStations(tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnectionRequest)
@@ -58,7 +62,11 @@ void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnec
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
-    mAPI->requestConnections(iConnectionRequest);
+
+    bool tCached;
+    mAPI->requestConnections(iConnectionRequest, tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 void ConnectionController::_launchVehicle(Connection::Line iConnectionLine)

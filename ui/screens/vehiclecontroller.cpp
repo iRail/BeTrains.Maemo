@@ -47,7 +47,11 @@ void VehicleController::_downloadStations()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
-    mAPI->requestStations();
+
+    bool tCached;
+    mAPI->requestStations(tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 void VehicleController::_downloadVehicle(QString iVehicleId)
@@ -55,7 +59,11 @@ void VehicleController::_downloadVehicle(QString iVehicleId)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
-    mAPI->requestVehicle(iVehicleId);
+
+    bool tCached;
+    mAPI->requestVehicle(iVehicleId, tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 

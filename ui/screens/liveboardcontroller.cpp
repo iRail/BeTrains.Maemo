@@ -49,7 +49,11 @@ void LiveboardController::_downloadStations()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
-    mAPI->requestStations();
+
+    bool tCached;
+    mAPI->requestStations(tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 void LiveboardController::_downloadVehicle(QString iVehicleId)
@@ -57,7 +61,11 @@ void LiveboardController::_downloadVehicle(QString iVehicleId)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
-    mAPI->requestVehicle(iVehicleId);
+
+    bool tCached;
+    mAPI->requestVehicle(iVehicleId, tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 void LiveboardController::_downloadLiveboard(QString iStationId)
@@ -65,7 +73,11 @@ void LiveboardController::_downloadLiveboard(QString iStationId)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
-    mAPI->requestLiveboard(iStationId);
+
+    bool tCached;
+    mAPI->requestLiveboard(iStationId, tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 

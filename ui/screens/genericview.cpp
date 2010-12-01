@@ -91,3 +91,9 @@ void GenericView::stopLoader()
     if (mLoader != 0)
         mLoader->startExitAnimation();
 }
+
+void GenericView::showProgress()
+{
+    if (mLoader == 0)
+        startLoader();
+}

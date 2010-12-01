@@ -29,7 +29,6 @@ LiveboardView::LiveboardView(QWidget* iParent) : GenericView(iParent)
 void LiveboardView::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    startLoader();
 
     emit downloadStations();
 }
@@ -47,7 +46,6 @@ void LiveboardView::load(const QMap<QString, StationPointer>& iStations)
 void LiveboardView::load(QString iStationId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    startLoader();
 
     emit downloadLiveboard(iStationId);
 }

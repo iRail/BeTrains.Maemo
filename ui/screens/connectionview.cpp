@@ -33,7 +33,6 @@ ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
 void ConnectionView::load(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    startLoader();
 
     emit downloadConnections(iConnectionRequest);
 }

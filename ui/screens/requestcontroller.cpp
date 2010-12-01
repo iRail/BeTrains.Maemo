@@ -58,7 +58,11 @@ void RequestController::_downloadStations()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
-    mAPI->requestStations();
+
+    bool tCached;
+    mAPI->requestStations(tCached);
+    if (!tCached)
+        mView->showProgress();
 }
 
 void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRequest)

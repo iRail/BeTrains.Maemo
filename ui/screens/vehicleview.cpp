@@ -41,7 +41,6 @@ VehicleView::~VehicleView()
 void VehicleView::load(Connection::Line iLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    startLoader();
 
     tLine = iLine;
     emit downloadVehicle(iLine.vehicle);

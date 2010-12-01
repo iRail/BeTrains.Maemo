@@ -27,6 +27,7 @@ namespace iRail
         void showError(const QString& iError);
         void startLoader();
         void stopLoader();
+        void showProgress();
 
         // UI events
     private slots:
