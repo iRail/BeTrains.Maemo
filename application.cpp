@@ -18,8 +18,14 @@ using namespace iRail;
 // Construction and destruction
 //
 
+Application* Application::mInstance = NULL;
+
 Application::Application(int & argc, char ** argv) : QApplication(argc, argv), mAPI("Maemo", "0.1", &mStorage)
 {
+    // Singleton assertion (well, some singleton-hybrid, to be fair)
+    Q_ASSERT(mInstance == NULL);
+    mInstance = this;
+
     // Configure the application
     setOrganizationName("iRail");
     setOrganizationDomain("irail.be");
@@ -63,6 +69,7 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
 Application::~Application()
 {
     delete mController;
+    mInstance = NULL;
 }
 
 
@@ -70,11 +77,20 @@ Application::~Application()
 // Singleton objects
 //
 
+Application *Application::instance()
+{
+    return mInstance;
+}
+
 QSettings& Application::settings()
 {
-    static QSettings mSettings;
-    return mSettings;
+    return instance()->mSettings;
 }
+
+
+//
+// UI events
+//
 
 void Application::run()
 {

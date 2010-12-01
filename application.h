@@ -27,17 +27,23 @@ namespace iRail
         ~Application();
 
         // Singleton objects
+        static Application *instance();
         static QSettings &settings();
 
+        // UI events
     public slots:
         void run();
         void close();
-    private:
+
+    private:        
+        // Singleton object
+        static Application *mInstance;
+
         // Member objects
-        SerializedStorage mStorage;
         CachedAPI mAPI;
         MainController *mController;
-        static QSettings &mSettings;
+        SerializedStorage mStorage;
+        QSettings mSettings;
 
         // Configuration data (TODO: move into some sort of configuration container)
         QString mDataLocation;
