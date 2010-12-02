@@ -13,6 +13,8 @@
 #include <QListView>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
 #include "api/station.h"
 #include "ui/global.h"
 #include "cachedapi.h"
@@ -27,6 +29,10 @@ namespace iRail
         QString getSelection();
         ~StationChooser();
 
+        // UI events
+    private slots:
+        void do_txtFilter_textEdited(QString iText);
+
     private:
         const QMap<QString, StationPointer>& mStations;
         StationPointer mStation;
@@ -36,11 +42,14 @@ namespace iRail
         void init_children();
 
         // UI members
+        QVBoxLayout *mViewLayout;
         QListView *mView;
+        QLabel *mViewDummy;
         QStandardItemModel *mModel;
+        QLineEdit* mFilter;
 
         // Auxiliary
-        void populateModel();
+        void populateModel(QString iPrefix);
     };
 }
 

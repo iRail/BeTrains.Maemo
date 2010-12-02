@@ -23,7 +23,7 @@ StationChooser::StationChooser(const QMap<QString, StationPointer>& iStations, Q
     init_children();
 
     // Populate the model
-    populateModel();
+    populateModel("");
 
     // Initial selection
     QModelIndex tInitial = mModel->index(0, 0);
@@ -34,6 +34,24 @@ StationChooser::StationChooser(const QMap<QString, StationPointer>& iStations, Q
 StationChooser::~StationChooser()
 {
     delete mModel;
+}
+
+
+//
+// UI events
+//
+
+void StationChooser::do_txtFilter_textEdited(QString iText)
+{
+    // TODO: the following code, albeit nice, causes events to be
+    //       dropped when the filter edit is hidden
+    /*
+    if (iText.length())
+        mFilter->show();
+    else
+        mFilter->hide();
+    */
+    populateModel(iText);
 }
 
 
@@ -48,6 +66,12 @@ void StationChooser::init_ui()
     resize(parentWidget()->size());
     setWindowTitle(QString(tr("Pick a station")));
 
+
+    // LISTVIEW //
+
+    // Create the listview layout
+    mViewLayout = new QVBoxLayout();
+
     // Populate the list model
     mModel = new QStandardItemModel(0, 1);
 
@@ -57,6 +81,27 @@ void StationChooser::init_ui()
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
+    mView->setResizeMode(QListView::Adjust);
+    mViewLayout->addWidget(mView);
+
+    // Create the listview dummy
+    mViewDummy = new QLabel(tr("No stations found"));
+    mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    mViewDummy->setEnabled(false);
+    QFont font;
+    font.setPointSize(24);
+    mViewDummy->setFont(font);
+    mViewLayout->addWidget(mViewDummy);
+
+    // Create the listview filter
+    mFilter = new QLineEdit();
+    connect(mFilter, SIGNAL(textEdited(QString)), SLOT(do_txtFilter_textEdited(QString)));
+    mView->setFocusProxy(mFilter);
+    mViewLayout->addWidget(mFilter);
+
+
+    // BUTTON //
 
     // Create the button
     QVBoxLayout *mUIButtonContainer = new QVBoxLayout();
@@ -68,7 +113,7 @@ void StationChooser::init_ui()
     // Create the layout
     QHBoxLayout *mUILayout = new QHBoxLayout(this);
     mUILayout->setAlignment(Qt::AlignBottom);
-    mUILayout->addWidget(mView);
+    mUILayout->addLayout(mViewLayout);
     mUILayout->addLayout(mUIButtonContainer);
 }
 
@@ -96,19 +141,36 @@ bool compareStationsByName(const StationPointer& iFirst, const StationPointer& i
     return iFirst->name().toLower() < iSecond->name().toLower();
 }
 
-void StationChooser::populateModel()
+void StationChooser::populateModel(QString iPrefix)
 {
     QList<StationPointer> tStationList = mStations.values();
     qSort(tStationList.begin(), tStationList.end(), compareStationsByName);
 
+    mModel->clear();
+
     for (int i = 0; i < tStationList.size(); i++)
     {
         StationPointer tStation = tStationList.at(i);
-        // TODO: delegate
-        QStandardItem *tItem = new QStandardItem(tStation->name());
-        tItem->setData(QVariant::fromValue(tStation), StationRole);
-        tItem->setTextAlignment(Qt::AlignCenter);
-        tItem->setEditable(false);
-        mModel->appendRow(tItem);
+        if (tStation->name().startsWith(iPrefix, Qt::CaseInsensitive))
+        {
+            StationPointer tStation = tStationList.at(i);
+            // TODO: delegate
+            QStandardItem *tItem = new QStandardItem(tStation->name());
+            tItem->setData(QVariant::fromValue(tStation), StationRole);
+            tItem->setTextAlignment(Qt::AlignCenter);
+            tItem->setEditable(false);
+            mModel->appendRow(tItem);
+        }
+    }
+
+    if (mModel->rowCount() > 0)
+    {
+        mViewDummy->setVisible(false);
+        mView->setVisible(true);
+    }
+    else
+    {
+        mViewDummy->setVisible(true);
+        mView->setVisible(false);
     }
 }

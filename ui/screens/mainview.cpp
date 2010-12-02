@@ -90,7 +90,7 @@ void MainView::init_ui()
     mViewDummy->setFont(font);
     mUIScrollLayout->addWidget(mViewDummy);
 
-    // Create the history listview spacer
+    // Create the history listview spacer (TODO: this is a hack)
     mViewSpacer = new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
     mUIScrollLayout->addSpacerItem(mViewSpacer);
 
