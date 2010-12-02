@@ -52,12 +52,10 @@ namespace iRail
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
 
         // UI members
-        QVBoxLayout *mUIScrollLayout;
         QLabel *mViewDummy;
         QListView *mView;
-        QSpacerItem* mViewSpacer;
+        QWidget *mViewHeader;
         QStandardItemModel *mModel;
-        QPushButton* mUIButtonSearch;
 
         // Initialization
         void init_ui();

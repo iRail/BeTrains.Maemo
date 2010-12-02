@@ -38,47 +38,32 @@ void MainView::init_ui()
     // Window settings
     setWindowTitle(QString("BeTrains"));
 
-    // Scroll area
-    QVBoxLayout* mUILayout = new QVBoxLayout(centralWidget());
-    mUILayout->setMargin(0);
-    QScrollArea* mUIScrollArea = new QScrollArea(centralWidget());
-    mUILayout->addWidget(mUIScrollArea);
-
-    // Scroll widget
-    QWidget *tUIScrollWidget = new QWidget();
-    mUIScrollArea->setWidget(tUIScrollWidget);
-    mUIScrollArea->setWidgetResizable(true);
-
-    // Main layout
-    mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
-    tUIScrollWidget->setLayout(mUIScrollLayout);
-
-    // Top buttons
-    QHBoxLayout *mUIButtonLayout = new QHBoxLayout;
-    mUIButtonSearch = new QPushButton(tr("Plan a journey"));
-    mUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
+    // History listview header
+    QHBoxLayout *tButtons = new QHBoxLayout;
+    QPushButton* tUIButtonSearch = new QPushButton(tr("Plan a journey"));
+    tUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
     QPushButton *mUIButtonLiveboard = new QPushButton(tr("View departures"));
     mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
-    mUIButtonLayout->addWidget(mUIButtonSearch);
-    mUIButtonLayout->addWidget(mUIButtonLiveboard);
-    connect(mUIButtonSearch, SIGNAL(clicked()), this, SIGNAL(launchRequest()));
+    tButtons->addWidget(tUIButtonSearch);
+    tButtons->addWidget(mUIButtonLiveboard);
+    connect(tUIButtonSearch, SIGNAL(clicked()), this, SIGNAL(launchRequest()));
     connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SIGNAL(launchLiveboard()));
-    mUIScrollLayout->addLayout(mUIButtonLayout);
+    mViewHeader = new QWidget();
+    mViewHeader->setLayout(tButtons);
 
     // Populate the history list model
     mModel = new QStandardItemModel(0, 1);
 
     // Create the history listview
     mView = new QListView();
+    setCentralWidget(mView);
     mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionRequestDelegate());
-    mView->setResizeMode(QListView::Adjust);
+    mView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
-    mUIScrollLayout->addWidget(mView);
-    // TODO: configure the QListView to be expanding within the QScrollArea
 
     // Create the history listview dummy
     mViewDummy = new QLabel(tr("No history or favorites"));
@@ -88,15 +73,9 @@ void MainView::init_ui()
     QFont font;
     font.setPointSize(24);
     mViewDummy->setFont(font);
-    mUIScrollLayout->addWidget(mViewDummy);
-
-    // Create the history listview spacer (TODO: this is a hack)
-    mViewSpacer = new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
-    mUIScrollLayout->addSpacerItem(mViewSpacer);
 
     // TODO: load history from file
     populateModel();
-
 }
 
 
@@ -135,6 +114,12 @@ void MainView::populateModel()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mModel->clear();
+
+    // Button header
+    mModel->appendRow(new QStandardItem());
+    mView->setIndexWidget(mModel->index(0, 0), mViewHeader);
+    mModel->item(0, 0)->setSelectable(false);
+
     if (mConnectionRequestHistory.size() > 0)
     {
         for (int i = 0; i < mConnectionRequestHistory.size(); i++)
@@ -147,16 +132,12 @@ void MainView::populateModel()
         }
 
         mViewDummy->setVisible(false);
-        mView->setVisible(true);
-        mView->setModel(mModel);
-        mView->setFixedHeight(70*mModel->rowCount());       // HACK
-        mUIScrollLayout->removeItem(mViewSpacer);           // HACK (without fixedheight we could use sizepolicy)
-        mUIScrollLayout->addSpacerItem(mViewSpacer);
     }
     else
     {
-        mViewDummy->setVisible(true);
-        mView->setVisible(false);
-        mUIScrollLayout->removeItem(mViewSpacer);           // HACK (without fixedheight we could use sizepolicy)
+        mModel->appendRow(new QStandardItem());
+        mView->setIndexWidget(mModel->index(1, 0), mViewDummy);
+        mModel->item(1, 0)->setSelectable(false);
+        mViewDummy->setMinimumHeight(mView->height() - mViewHeader->height() - 60); // HACK
     }
 }
