@@ -116,11 +116,7 @@ void VehicleView::init_ui()
     mView->setModel(mModel);
     mView->setItemDelegate(new VehicleStopDelegate(mStations));
     mView->setSelectionMode(QAbstractItemView::NoSelection);
-    mView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     mUIScrollLayout->addWidget(mView);
-
-    // HACK (without fixedheight we could use sizepolicy)
-    mUIScrollLayout->addStretch();
 }
 
 void VehicleView::populateModel(Connection::Line iLine, VehiclePointer iVehicle)
@@ -162,12 +158,6 @@ void VehicleView::populateModel(Connection::Line iLine, VehiclePointer iVehicle)
             mModel->appendRow(tItem);
         }
     }
-
-    // TODO: configure the QListView to be expanding within the QScrollArea
-    // SizePolicy doesn't work
-    // Setting the fixed height works for 2 items, but not more, as it _always_
-    // seem to return 192, and doesn't update after adding items/updating the model
-    mView->setFixedHeight(70*mModel->rowCount());   // HACK
 
     // Fix the scroll location
     mUIScrollArea->ensureVisible(0, 0, 0, 0);
