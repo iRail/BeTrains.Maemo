@@ -153,7 +153,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     iPainter->save();
 
-    // Departure
+    // Departure hour
     QString tDeparture = iLine.departure.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
     iPainter->drawText(rect_c1, Qt::AlignTop | Qt::AlignHCenter, tDeparture);
 
@@ -161,14 +161,15 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->setPen(iOption.palette.mid().color());
     iPainter->drawText(rect_c2, Qt::AlignTop | Qt::AlignHCenter, "-");
 
-    // Arrival
+    // Arrival hour
     iPainter->setPen(iOption.palette.foreground().color());
     QString tArrival = iLine.arrival.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
     iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignHCenter, tArrival);
 
     // Connection
     QString tConnectionString = mStations[iLine.departure.station]->name() % " " % tr("to") % " " % mStations[iLine.arrival.station]->name();
-    iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, tConnectionString);
+    iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, mStations[iLine.departure.station]->name());
+    iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, mStations[iLine.arrival.station]->name());
 
     // Delay
     if (iLine.departure.delay != 0 || iLine.arrival.delay != 0)
@@ -178,7 +179,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
         // Delay time
         QString tDelay = tr("%n minute(s) delay", "", (iLine.departure.delay + iLine.arrival.delay) / 60);
-        iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, tDelay);
+        iPainter->drawText(rect, Qt::AlignBottom | Qt::AlignRight, tDelay);
 
         // New departure hour
         if (iLine.departure.delay  != 0)
