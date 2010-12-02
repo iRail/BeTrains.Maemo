@@ -28,7 +28,7 @@ VehicleView::VehicleView(QWidget* iParent) : GenericView(iParent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    this->hide();
+    hide();
     init_ui();
 }
 
@@ -90,12 +90,12 @@ void VehicleView::init_ui()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
-    this->setWindowTitle(QString(tr("Connection detail")));
+    setWindowTitle(QString(tr("Connection detail")));
 
     // Scroll area
-    QVBoxLayout* mUILayout = new QVBoxLayout(this);
+    QVBoxLayout* mUILayout = new QVBoxLayout(centralWidget());
     mUILayout->setMargin(0);
-    mUIScrollArea = new QScrollArea(this);
+    mUIScrollArea = new QScrollArea(centralWidget());
     mUILayout->addWidget(mUIScrollArea);
 
     // Parent widget

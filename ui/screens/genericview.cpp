@@ -15,17 +15,22 @@ using namespace iRail;
 // Construction and destruction
 //
 
-GenericView::GenericView(QWidget* iParent) : QWidget(iParent)
+GenericView::GenericView(QWidget* iParent) : QMainWindow(iParent)
 {
-    qDebug() << "+ " << Q_FUNC_INFO;
+    qDebug() << "+ " << Q_FUNC_INFO;    
 
+    // Center widget
+    setCentralWidget(new QWidget());
+
+    // Window management
     setWindowFlags(windowFlags() | Qt::Window);
     setAttribute(Qt::WA_Maemo5StackedWindow);
 
+    // Initialize member
     mLoader = 0;
     mView = 0;
 
-    this->hide();
+    hide();
 }
 
 GenericView::~GenericView()
@@ -50,7 +55,7 @@ void GenericView::_deleteLoader()
     delete mView;
     mView = 0;
 
-    this->setEnabled(true);
+    setEnabled(true);
 }
 
 
@@ -77,7 +82,7 @@ void GenericView::startLoader()
     mLoader->setZValue(1.0);
 
     QGraphicsScene* tScene = new QGraphicsScene();
-    mView = new QGraphicsView(tScene, this);
+    mView = new QGraphicsView(tScene, centralWidget());
     mView->setFixedSize(800, 420);
     mView->setStyleSheet("background: transparent; border: none");
     tScene->addItem(mLoader);

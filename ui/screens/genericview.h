@@ -10,12 +10,12 @@
 #include <QDebug>
 #include "ui/auxiliary/loaderwidget.h"
 #include <QString>
-#include <QWidget>
+#include <QMainWindow>
 #include <QGraphicsView>
 
 namespace iRail
 {
-    class GenericView : public QWidget
+    class GenericView : public QMainWindow
     {
     Q_OBJECT
     public:

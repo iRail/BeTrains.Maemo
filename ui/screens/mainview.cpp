@@ -39,19 +39,19 @@ void MainView::init_ui()
     setWindowTitle(QString("BeTrains"));
 
     // Scroll area
-    QVBoxLayout* mUILayout = new QVBoxLayout(this);
+    QVBoxLayout* mUILayout = new QVBoxLayout(centralWidget());
     mUILayout->setMargin(0);
-    QScrollArea* mUIScrollArea = new QScrollArea(this);
+    QScrollArea* mUIScrollArea = new QScrollArea(centralWidget());
     mUILayout->addWidget(mUIScrollArea);
 
-    // Parent widget
-    QWidget *tWidget = new QWidget();
-    mUIScrollArea->setWidget(tWidget);
+    // Scroll widget
+    QWidget *tUIScrollWidget = new QWidget();
+    mUIScrollArea->setWidget(tUIScrollWidget);
     mUIScrollArea->setWidgetResizable(true);
 
     // Main layout
     mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
-    tWidget->setLayout(mUIScrollLayout);
+    tUIScrollWidget->setLayout(mUIScrollLayout);
 
     // Top buttons
     QHBoxLayout *mUIButtonLayout = new QHBoxLayout;

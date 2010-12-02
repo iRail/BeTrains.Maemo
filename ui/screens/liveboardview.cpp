@@ -22,7 +22,7 @@ LiveboardView::LiveboardView(QWidget* iParent) : GenericView(iParent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    this->hide();
+    hide();
     init_ui();
 }
 
@@ -79,7 +79,7 @@ void LiveboardView::do_btnStations_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    StationChooser tChooser(mStations, this);
+    StationChooser tChooser(mStations, centralWidget());
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
@@ -128,9 +128,9 @@ void LiveboardView::init_ui()
     setWindowTitle(tr("Departures"));
 
     // Scroll area
-    QVBoxLayout* mUILayout = new QVBoxLayout(this);
+    QVBoxLayout* mUILayout = new QVBoxLayout(centralWidget());
     mUILayout->setMargin(0);
-    mUIScrollArea = new QScrollArea(this);
+    mUIScrollArea = new QScrollArea(centralWidget());
     mUILayout->addWidget(mUIScrollArea);
 
     // Parent widget

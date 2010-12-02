@@ -18,7 +18,7 @@ using namespace iRail;
 
 
 //
-// Construction and destruction
+// Confuction and destruction
 //
 
 ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
@@ -26,7 +26,7 @@ ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    this->hide();
+    hide();
     init_ui();
 }
 
@@ -108,10 +108,10 @@ void ConnectionView::init_ui()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
-    this->setWindowTitle(QString(tr("Connections")));
+    setWindowTitle(QString(tr("Connections")));
 
     // Main layout
-    QVBoxLayout *mUILayout = new QVBoxLayout(this);
+    QVBoxLayout *mUILayout = new QVBoxLayout(centralWidget());
     mUILayout->setAlignment(Qt::AlignTop);
 
     // Populate the history list model

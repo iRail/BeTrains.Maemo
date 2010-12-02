@@ -129,7 +129,7 @@ void RequestView::do_btnFrom_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    StationChooser tChooser(mStations, this);
+    StationChooser tChooser(mStations, centralWidget());
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
@@ -142,7 +142,7 @@ void RequestView::do_btnTo_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    StationChooser tChooser(mStations, this);
+    StationChooser tChooser(mStations, centralWidget());
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
@@ -181,10 +181,10 @@ void RequestView::init_ui()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
-    this->setWindowTitle(tr("New query"));
+    setWindowTitle(tr("New query"));
 
     // Main layout
-    QVBoxLayout *mUILayout = new QVBoxLayout(this);
+    QVBoxLayout *mUILayout = new QVBoxLayout(centralWidget());
     mUILayout->setAlignment(Qt::AlignTop);
 
 
@@ -242,7 +242,7 @@ void RequestView::init_ui()
 
     // Use time?
     QVBoxLayout *mUITypeAndUse = new QVBoxLayout();
-    mUIUseTime = new QRadioButton(tr("Specify time and date"), this);
+    mUIUseTime = new QRadioButton(tr("Specify time and date"));
     mUITypeAndUse->addWidget(mUIUseTime);
     mUITypeAndUse->addLayout(mUIType);
     mUIUseTime->setChecked(false);
