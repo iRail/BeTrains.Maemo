@@ -49,12 +49,6 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     QRect rect = iOption.rect;
     rect.adjust(0, 8, -20, -8);
 
-    // Divide drawing area in columns
-    QRect rect_c1 = rect.adjusted(0, 0, -660, 0);
-    QRect rect_c2 = rect_c1.adjusted(rect_c1.width(), 0, 20, 0);
-    QRect rect_c3 = rect_c2.adjusted(rect_c2.width(), 0, rect_c1.width(), 0);
-    QRect rect_c4 = rect_c3.adjusted(rect_c3.width()+25, 0, rect_c3.width()+400, 0);
-
     // Main font
     QFont font = iOption.font;
     iPainter->setFont(font);
@@ -70,24 +64,12 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     iPainter->save();
 
-    // Departure
-    QString tDeparture = iConnection->departure().datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
-    iPainter->drawText(rect_c1, Qt::AlignTop | Qt::AlignHCenter, tDeparture);
-
-    // Arrow
-    iPainter->setPen(iOption.palette.mid().color());
-    iPainter->drawText(rect_c2, Qt::AlignTop | Qt::AlignHCenter, "-");
-
-    // Arrival
-    iPainter->setPen(iOption.palette.foreground().color());
-    QString tArrival = iConnection->arrival().datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
-    iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignHCenter, tArrival);
-
     // Connection
     QString tConnectionString = mStations[iConnection->departure().station]->name() % " " % tr("to") % " " % mStations[iConnection->arrival().station]->name();
-    iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, tConnectionString);
+    iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tConnectionString);
 
     // Transfers
+    iPainter->setFont(font_small);
     QString tTransfers;
     switch (iConnection->lines().size())
     {
@@ -95,58 +77,47 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
         tTransfers = tr("Direct");
         break;
     default:
-        tTransfers = QString::number(iConnection->lines().size() - 1) % " " % tr("transfer(s)", "", (iConnection->lines().size() - 1));
+        tTransfers = tr("via %n other(s)", "", iConnection->lines().size() - 1);
         break;
     }
-    iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tTransfers);
-
-    // Details or delay text
-    if (iConnection->lines().size() > 1)
+    bool tHasDelay = false;
+    foreach (Connection::Line tLine, iConnection->lines())
     {
-        iPainter->setFont(font_small);
-        QString tLines;
-        if (iConnection->departure().delay != 0 || iConnection->arrival().delay != 0)
+        if (tLine.arrival.delay != 0 || tLine.departure.delay != 0)
         {
-            iPainter->setPen(QColor::fromRgb(255, 165, 0));
-            tLines = tr("Some lines have delay");
-        }
-        else
-        {
-            iPainter->setPen(Qt::green);
-            tLines = tr("All lines on time");
-        }
-        iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, tLines);
-
-    }
-    else if (iConnection->departure().delay != 0 || iConnection->arrival().delay != 0)
-    {
-        iPainter->setPen(Qt::red);
-        iPainter->setFont(font_small);
-
-        QString tDelay = tr("%n minute(s) delay", "", (iConnection->departure().delay + iConnection->arrival().delay) / 60);
-        iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, tDelay);
-    }
-
-    // Delay
-    if (iConnection->departure().delay != 0 || iConnection->arrival().delay != 0)
-    {
-        iPainter->setPen(Qt::red);
-        iPainter->setFont(font_small);
-
-        // New departure hour
-        if (iConnection->departure().delay  != 0)
-        {
-            QString tHours = iConnection->departure().datetime.addSecs(iConnection->departure().delay ).toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
-            iPainter->drawText(rect_c1, Qt::AlignBottom | Qt::AlignHCenter, tHours);
-        }
-
-        // New arrival hour
-        if (iConnection->arrival().delay  != 0)
-        {
-            QString tHours = iConnection->arrival().datetime.addSecs(iConnection->arrival().delay ).toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
-            iPainter->drawText(rect_c3, Qt::AlignBottom | Qt::AlignHCenter, tHours);
+            tHasDelay = true;
+            break;
         }
     }
+    if (tHasDelay)
+        iPainter->setPen(QColor::fromRgb(255, 165, 0));
+    iPainter->drawText(rect, Qt::AlignBottom | Qt::AlignLeft, tTransfers);
+    iPainter->setPen(iOption.palette.foreground().color());
+
+    // Departure
+    iPainter->setFont(font);
+    QString tDeparture = tr("Departure at") % " " % iConnection->departure().datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
+    iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tDeparture);
+
+    // Duration
+    iPainter->setFont(font_small);
+    int tDelta = iConnection->departure().datetime.secsTo(iConnection->arrival().datetime);
+    QString tReadableSpan;
+    if (tDelta > 3600)
+    {
+        int tHours = tDelta / 3600;
+        tDelta %= 3600;
+        tReadableSpan += tr("%n hour(s)", "", tHours);
+    }
+    if (true)
+    {
+        if (tReadableSpan.length())
+            tReadableSpan += " ";
+        int tMinutes = tDelta / 60;
+        tReadableSpan += tr("%n minute(s)", "", tMinutes);
+    }
+    QString tDuration = tReadableSpan % " " % tr("en route");
+    iPainter->drawText(rect, Qt::AlignBottom | Qt::AlignRight, tDuration);
 
     iPainter->restore();
 }

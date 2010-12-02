@@ -147,14 +147,11 @@ void ConnectionView::populateModel(const QList<ConnectionPointer>& iConnections)
             QStandardItem *tConnectionItem = new QStandardItem();
             tConnectionItem->setData(QVariant::fromValue(tConnection), ConnectionRole);
 
-            if (tConnection->lines().count() > 1)
+            foreach (Connection::Line tLine, tConnection->lines())
             {
-                foreach (Connection::Line tLine, tConnection->lines())
-                {
-                    QStandardItem *tLineItem = new QStandardItem();
-                    tLineItem->setData(QVariant::fromValue(tLine), ConnectionLineRole);
-                    tConnectionItem->appendRow(tLineItem);
-                }
+                QStandardItem *tLineItem = new QStandardItem();
+                tLineItem->setData(QVariant::fromValue(tLine), ConnectionLineRole);
+                tConnectionItem->appendRow(tLineItem);
             }
 
             mModel->appendRow(tConnectionItem);
