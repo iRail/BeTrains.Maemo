@@ -99,7 +99,7 @@ void Application::run()
 
 void Application::close()
 {
-    // Save data
+    // Save the storage
     QString tLocation = mDataLocation % "/storage.dat";
     QFile tFile(tLocation);
     bool tFileOpen = tFile.open(QIODevice::WriteOnly);
@@ -111,4 +111,7 @@ void Application::close()
     }
     else
         qWarning() << "! " << "Could not write storage data";
+
+    // Synchronize the settings
+    settings().sync();
 }
