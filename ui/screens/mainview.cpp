@@ -9,6 +9,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFont>
+#include <QMenu>
+#include <QMenuBar>
 
 // Namespaces
 using namespace iRail;
@@ -25,6 +27,7 @@ MainView::MainView(QWidget* iParent) : GenericView(iParent)
     // Initialisation
     hide();
     init_ui();
+    init_menu();
 }
 
 //
@@ -76,6 +79,15 @@ void MainView::init_ui()
 
     // TODO: load history from file
     populateModel();
+}
+
+void MainView::init_menu()
+{
+    QMenu *tMenuTools = menuBar()->addMenu(tr("&Tools"));
+    QAction *tActionPreferences = tMenuTools->addAction(tr("&Preferences"));
+
+    QMenu *tMenuHelp = menuBar()->addMenu(tr("&Help"));
+    QAction *tActionAbout = tMenuHelp->addAction(tr("&About"));
 }
 
 

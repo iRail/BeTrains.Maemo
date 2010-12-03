@@ -59,6 +59,7 @@ namespace iRail
 
         // Initialization
         void init_ui();
+        void init_menu();
 
         // Auxiliary
         void populateModel();
