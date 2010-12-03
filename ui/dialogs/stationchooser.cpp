@@ -24,11 +24,6 @@ StationChooser::StationChooser(const QMap<QString, StationPointer>& iStations, Q
 
     // Populate the model
     populateModel("");
-
-    // Initial selection
-    QModelIndex tInitial = mModel->index(0, 0);
-    mView->setCurrentIndex(tInitial);
-    mStation = tInitial.data(StationRole).value<StationPointer>();
 }
 
 StationChooser::~StationChooser()
@@ -43,6 +38,8 @@ StationChooser::~StationChooser()
 
 void StationChooser::do_txtFilter_textEdited(QString iText)
 {
+    qDebug() << "+ " << Q_FUNC_INFO;
+
     // TODO: the following code, albeit nice, causes events to be
     //       dropped when the filter edit is hidden
     /*
@@ -52,6 +49,13 @@ void StationChooser::do_txtFilter_textEdited(QString iText)
         mFilter->hide();
     */
     populateModel(iText);
+}
+
+void StationChooser::do_lstStations_activated(QModelIndex iIndex)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    emit accept();
 }
 
 
@@ -66,11 +70,11 @@ void StationChooser::init_ui()
     resize(parentWidget()->size());
     setWindowTitle(QString(tr("Pick a station")));
 
+    // Create the layout
+    QVBoxLayout *mUILayout = new QVBoxLayout(this);
+
 
     // LISTVIEW //
-
-    // Create the listview layout
-    mViewLayout = new QVBoxLayout();
 
     // Populate the list model
     mModel = new QStandardItemModel(0, 1);
@@ -81,8 +85,9 @@ void StationChooser::init_ui()
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstStations_activated(QModelIndex)));
     mView->setResizeMode(QListView::Adjust);
-    mViewLayout->addWidget(mView);
+    mUILayout->addWidget(mView);
 
     // Create the listview dummy
     mViewDummy = new QLabel(tr("No stations found"));
@@ -92,29 +97,13 @@ void StationChooser::init_ui()
     QFont font;
     font.setPointSize(24);
     mViewDummy->setFont(font);
-    mViewLayout->addWidget(mViewDummy);
+    mUILayout->addWidget(mViewDummy);
 
     // Create the listview filter
     mFilter = new QLineEdit();
     connect(mFilter, SIGNAL(textEdited(QString)), SLOT(do_txtFilter_textEdited(QString)));
     mView->setFocusProxy(mFilter);
-    mViewLayout->addWidget(mFilter);
-
-
-    // BUTTON //
-
-    // Create the button
-    QVBoxLayout *mUIButtonContainer = new QVBoxLayout();
-    QPushButton *mUIButton = new QPushButton(QString(tr("Select")));
-    connect(mUIButton, SIGNAL(clicked()), this, SLOT(accept()));
-    mUIButtonContainer->addStretch();
-    mUIButtonContainer->addWidget(mUIButton);
-
-    // Create the layout
-    QHBoxLayout *mUILayout = new QHBoxLayout(this);
-    mUILayout->setAlignment(Qt::AlignBottom);
-    mUILayout->addLayout(mViewLayout);
-    mUILayout->addLayout(mUIButtonContainer);
+    mUILayout->addWidget(mFilter);
 }
 
 void StationChooser::init_children()

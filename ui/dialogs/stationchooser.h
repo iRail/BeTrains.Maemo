@@ -32,6 +32,7 @@ namespace iRail
         // UI events
     private slots:
         void do_txtFilter_textEdited(QString iText);
+        void do_lstStations_activated(QModelIndex iIndex);
 
     private:
         const QMap<QString, StationPointer>& mStations;
@@ -42,7 +43,6 @@ namespace iRail
         void init_children();
 
         // UI members
-        QVBoxLayout *mViewLayout;
         QListView *mView;
         QLabel *mViewDummy;
         QStandardItemModel *mModel;
