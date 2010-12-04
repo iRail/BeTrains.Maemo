@@ -70,8 +70,11 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignLeft, tStation);
 
     // Platform
-    QString tPlatform = tr("Platform") % " " % QString::number(tLiveboardDeparture.platform);
-    iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tPlatform);
+    if (tLiveboardDeparture.platform)
+    {
+        QString tPlatform = tr("Platform") % " " % QString::number(tLiveboardDeparture.platform);
+        iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tPlatform);
+    }
 
     // Delay
     if (tLiveboardDeparture.delay != 0)
