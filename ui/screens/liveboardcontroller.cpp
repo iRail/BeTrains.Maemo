@@ -40,6 +40,18 @@ void LiveboardController::showView()
     mView->load();
 }
 
+void LiveboardController::showView(LiveboardRequestPointer iLiveboardRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mView->show();
+    mView->load();  // This because the liveboard screen performs two tasks:
+                    // forming the request and fetching its data. This means
+                    // that using the secondary load bypasses the first
+                    // stage, hence we call it manually here.
+    mView->load(iLiveboardRequest);
+}
+
 
 //
 // View slots

@@ -24,6 +24,7 @@ namespace iRail
         explicit LiveboardController(CachedAPI* iAPI, QWidget *parent = 0);
         ~LiveboardController();
         void showView();
+        void showView(LiveboardRequestPointer iLiveboardRequest);
 
         // View slots
     private slots:

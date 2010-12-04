@@ -32,8 +32,9 @@ namespace iRail
     private slots:
         void _downloadStations();
         void _launchLiveboard();
+        void _launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void _launchRequest();
-        void _setInitialRequest(ConnectionRequestPointer iInitialRequest);
+        void _launchRequest(ConnectionRequestPointer iConnectionRequest);
 
         // Internal slots
     private slots:
@@ -49,9 +50,6 @@ namespace iRail
         CachedAPI* mAPI;
         MainView* mView;
         QList<QVariant> mHistory;
-
-        // Temporary data
-        ConnectionRequestPointer mInitialRequest;
 
         // Screens
         LiveboardController* mScreenLiveboard;

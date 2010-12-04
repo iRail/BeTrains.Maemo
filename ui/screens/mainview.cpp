@@ -149,8 +149,16 @@ void MainView::do_lstHistory_clicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    ConnectionRequestPointer tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
-    emit setInitialRequest(tInitialRequest);
+    if (iIndex.data(ConnectionRequestRole).canConvert<ConnectionRequestPointer>())
+    {
+        ConnectionRequestPointer tConnectionRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
+        emit launchRequest(tConnectionRequest);
+    }
+    else if (iIndex.data(LiveboardRequestRole).canConvert<LiveboardRequestPointer>())
+    {
+        LiveboardRequestPointer tLiveboardRequest = iIndex.data(LiveboardRequestRole).value<LiveboardRequestPointer>();
+        emit launchLiveboard(tLiveboardRequest);
+    }
 }
 
 void MainView::do_actAbout_triggered()

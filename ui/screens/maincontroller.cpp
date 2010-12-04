@@ -20,7 +20,9 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
     mView = new MainView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
     connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
+    connect(mView, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
     connect(mView, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
+    connect(mView, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
 
     mScreenLiveboard = 0;
     mScreenRequest = 0;
@@ -71,6 +73,19 @@ void MainController::_launchLiveboard()
     mScreenLiveboard->showView();
 }
 
+void MainController::_launchLiveboard(LiveboardRequestPointer iLiveboardRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    if (mScreenLiveboard == 0)
+    {
+        mScreenLiveboard = new LiveboardController(mAPI, mView);
+        connect(mScreenLiveboard, SIGNAL(addHistory(LiveboardRequestPointer)), this, SLOT(_addHistory(LiveboardRequestPointer)));
+    }
+
+    mScreenLiveboard->showView(iLiveboardRequest);
+}
+
 void MainController::_launchRequest()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -81,16 +96,22 @@ void MainController::_launchRequest()
         connect(mScreenRequest, SIGNAL(addHistory(ConnectionRequestPointer)), this, SLOT(_addHistory(ConnectionRequestPointer)));
     }
 
-    if (!mInitialRequest.isNull())
-        mScreenRequest->showView(mInitialRequest);
-    else
-        mScreenRequest->showView();
+    mScreenRequest->showView();
 }
 
-void MainController::_setInitialRequest(ConnectionRequestPointer iInitialRequest)
+void MainController::_launchRequest(ConnectionRequestPointer iConnectionRequest)
 {
-    mInitialRequest = iInitialRequest;
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    if (mScreenRequest == 0)
+    {
+        mScreenRequest = new RequestController(mAPI, mView);
+        connect(mScreenRequest, SIGNAL(addHistory(ConnectionRequestPointer)), this, SLOT(_addHistory(ConnectionRequestPointer)));
+    }
+
+    mScreenRequest->showView(iConnectionRequest);
 }
+
 
 
 //
@@ -119,7 +140,7 @@ void MainController::_addHistory(LiveboardRequestPointer iLiveboardRequest)
 
     QVariant tRequest;
     tRequest.setValue(iLiveboardRequest);
-    mHistory.push_back(tRequest);
+    mHistory.push_front(tRequest);
 
     mView->load(mHistory);
 }
@@ -130,7 +151,7 @@ void MainController::_addHistory(ConnectionRequestPointer iConnectionRequest)
 
     QVariant tRequest;
     tRequest.setValue(iConnectionRequest);
-    mHistory.push_back(tRequest);
+    mHistory.push_front(tRequest);
 
     mView->load(mHistory);
 }

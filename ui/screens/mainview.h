@@ -44,8 +44,9 @@ namespace iRail
     signals:
         void downloadStations();
         void launchLiveboard();
+        void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void launchRequest();
-        void setInitialRequest(ConnectionRequestPointer iInitialRequest);
+        void launchRequest(ConnectionRequestPointer iConnectionRequest);
 
         // UI events
     private slots:
