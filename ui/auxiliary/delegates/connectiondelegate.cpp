@@ -30,10 +30,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
         paint(iPainter, iOption, iIndex, tConnectionLine);
     }
     else
-    {
-        qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
-    }
 
 }
 

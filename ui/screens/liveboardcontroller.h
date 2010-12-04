@@ -36,6 +36,10 @@ namespace iRail
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
         void gotLiveboard(LiveboardPointer* iLiveboard, QDateTime iTimestamp);
 
+        // External signals:
+    signals:
+        void addHistory(LiveboardRequestPointer iLiveboardRequest);
+
     private:
         // Member data
         CachedAPI* mAPI;

@@ -31,10 +31,7 @@ void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOpt
         paint(iPainter, iOption, iIndex, tConnectionRequestPointer);
     }
     else
-    {
-        qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
-    }
 }
 
 void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, const QModelIndex &iIndex, ConnectionRequestPointer iConnectionRequest) const
@@ -58,7 +55,7 @@ void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOpt
     iPainter->save();
 
     // Header
-    QString tHeader = iConnectionRequest->origin() + " " + tr("to") + " " + iConnectionRequest->destination(); // TODO: stringbuider??
+    QString tHeader = tr("Connections from") % " " % iConnectionRequest->origin() + " " + tr("to") + " " + iConnectionRequest->destination(); // TODO: stringbuider??
     if (iConnectionRequest->timed())
         iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tHeader);
     else

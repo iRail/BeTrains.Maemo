@@ -12,6 +12,7 @@
 #include "api/connectionrequest.h"
 #include "api/vehicle.h"
 #include "api/liveboard.h"
+#include "api/liveboardrequest.h"
 #include "genericview.h"
 #include "ui/global.h"
 #include <QObject>
@@ -37,6 +38,7 @@ namespace iRail
         void setStations(QMap<QString, StationPointer>* iStations);
         void load();
         void load(const QMap<QString, StationPointer>& iStations);
+        void load(const QList<QVariant>& iHistory);
 
         // Controller signals
     signals:
@@ -52,7 +54,6 @@ namespace iRail
 
     private:
         // Member data
-        QList<ConnectionRequestPointer> mConnectionRequestHistory;
         QMap<QString, StationPointer> mStations;
 
         // UI members
@@ -66,7 +67,7 @@ namespace iRail
         void init_menu();
 
         // Auxiliary
-        void populateModel();
+        void populateModel(const QList<QVariant>& iHistory);
     };
 }
 

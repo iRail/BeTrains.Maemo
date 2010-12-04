@@ -38,6 +38,13 @@ void MainView::load()
     emit downloadStations();
 }
 
+void MainView::load(const QList<QVariant>& iHistory)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    populateModel(iHistory);
+}
+
 void MainView::load(const QMap<QString, StationPointer>& iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -46,7 +53,7 @@ void MainView::load(const QMap<QString, StationPointer>& iStations)
     mStations = iStations;
     mView->setItemDelegate(new RequestDelegate(mStations));
     // TODO: load the history
-    populateModel();
+    populateModel(QList<QVariant>());
 }
 
 //
@@ -118,11 +125,13 @@ void MainView::init_ui()
     // OTHER //
 
     // Populate the model
-    populateModel();
+    populateModel(QList<QVariant>());
 }
 
 void MainView::init_menu()
 {
+    qDebug() << "+ " << Q_FUNC_INFO;
+
     QMenu *tMenuTools = menuBar()->addMenu(tr("&Tools"));
     QAction *tActionPreferences = tMenuTools->addAction(tr("&Preferences"));
 
@@ -159,8 +168,8 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    load(*iStations);
     delete iStations;
-    qWarning() << "! " << "Handler not currently used";
 }
 
 
@@ -168,7 +177,7 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
 // Auxiliary
 //
 
-void MainView::populateModel()
+void MainView::populateModel(const QList<QVariant>& iHistory)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -178,7 +187,7 @@ void MainView::populateModel()
         mModel->removeRows(1, mModel->rowCount()-1);
     }
 
-    if (mConnectionRequestHistory.size() == 0)
+    if (iHistory.size() == 0)
     {
         mViewDummy->setVisible(true);
         mView->setFixedHeight(mViewHeader->height());   // HACK
@@ -186,12 +195,18 @@ void MainView::populateModel()
     else
     {
         // Add the contents
-        for (int i = 0; i < mConnectionRequestHistory.size(); i++)
+        for (int i = 0; i < iHistory.size(); i++)
         {
-            ConnectionRequestPointer tConnectionRequest = mConnectionRequestHistory.at(i);
             QStandardItem *tItem = new QStandardItem;
 
-            tItem->setData(QVariant::fromValue(tConnectionRequest), ConnectionRequestRole);
+            QVariant tRequest = iHistory.at(i);
+            if (tRequest.canConvert<LiveboardRequestPointer>())
+                tItem->setData(tRequest, LiveboardRequestRole);
+            else if (tRequest.canConvert<ConnectionRequestPointer>())
+                tItem->setData(tRequest, ConnectionRequestRole);
+            else
+                continue;
+
             mModel->appendRow(tItem);
         }
 

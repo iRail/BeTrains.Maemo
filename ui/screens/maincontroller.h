@@ -39,10 +39,16 @@ namespace iRail
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
 
+        // External signal slots
+    private slots:
+        void _addHistory(LiveboardRequestPointer iLiveboardRequest);
+        void _addHistory(ConnectionRequestPointer iConnectionRequest);
+
     private:
         // Member data
         CachedAPI* mAPI;
         MainView* mView;
+        QList<QVariant> mHistory;
 
         // Temporary data
         ConnectionRequestPointer mInitialRequest;

@@ -128,6 +128,7 @@ void LiveboardView::do_btnStations_clicked()
     {
         tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
         mUIStationEdit->setText(mStations[tLiveboardRequest->station()]->name());
+
         emit downloadLiveboard(tLiveboardRequest);
     }
 }

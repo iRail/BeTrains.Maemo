@@ -21,10 +21,7 @@ void ConnectionPOIDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
     if (! qVariantCanConvert<Connection::POI>(iIndex.data(ConnectionPOIRole)))
-    {
-        qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
-    }
 
     Connection::POI tConnectionPOI = qVariantValue<Connection::POI>(iIndex.data(ConnectionPOIRole));
 

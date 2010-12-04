@@ -37,6 +37,7 @@ void MainController::showView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    mView->load();
     mView->show();
 }
 
@@ -64,6 +65,7 @@ void MainController::_launchLiveboard()
     if (mScreenLiveboard == 0)
     {
         mScreenLiveboard = new LiveboardController(mAPI, mView);
+        connect(mScreenLiveboard, SIGNAL(addHistory(LiveboardRequestPointer)), this, SLOT(_addHistory(LiveboardRequestPointer)));
     }
 
     mScreenLiveboard->showView();
@@ -76,6 +78,7 @@ void MainController::_launchRequest()
     if (mScreenRequest == 0)
     {
         mScreenRequest = new RequestController(mAPI, mView);
+        connect(mScreenRequest, SIGNAL(addHistory(ConnectionRequestPointer)), this, SLOT(_addHistory(ConnectionRequestPointer)));
     }
 
     if (!mInitialRequest.isNull())
@@ -103,4 +106,31 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations, QDate
         mView->setStations(iStations);
     else
         mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+}
+
+
+//
+// External signal slots
+//
+
+void MainController::_addHistory(LiveboardRequestPointer iLiveboardRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    QVariant tRequest;
+    tRequest.setValue(iLiveboardRequest);
+    mHistory.push_back(tRequest);
+
+    mView->load(mHistory);
+}
+
+void MainController::_addHistory(ConnectionRequestPointer iConnectionRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    QVariant tRequest;
+    tRequest.setValue(iConnectionRequest);
+    mHistory.push_back(tRequest);
+
+    mView->load(mHistory);
 }

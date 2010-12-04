@@ -37,6 +37,10 @@ namespace iRail
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
 
+        // External signals:
+    signals:
+        void addHistory(ConnectionRequestPointer iConnectionRequest);
+
     private:
         // Member data
         CachedAPI* mAPI;
