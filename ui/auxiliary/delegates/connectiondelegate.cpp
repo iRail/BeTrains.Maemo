@@ -44,7 +44,6 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     // Configure layout
     //
 
-
     // Main drawing rectangle
     QRect rect = iOption.rect;
     rect.adjust(0, 8, -20, -8);
@@ -126,7 +125,6 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     //
     // Configure layout
     //
-
 
     // Main drawing rectangle
     QRect rect = iOption.rect;

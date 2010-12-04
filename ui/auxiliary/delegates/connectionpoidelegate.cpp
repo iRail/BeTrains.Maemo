@@ -14,6 +14,10 @@ using namespace iRail;
 
 void ConnectionPOIDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, const QModelIndex &iIndex) const
 {
+    //
+    // Fetch data
+    //
+
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
     if (! qVariantCanConvert<Connection::POI>(iIndex.data(ConnectionPOIRole)))
@@ -21,13 +25,25 @@ void ConnectionPOIDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem
         qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
         return;
     }
+
     Connection::POI tConnectionPOI = qVariantValue<Connection::POI>(iIndex.data(ConnectionPOIRole));
 
-    QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
+    //
+    // Configure layout
+    //
+
+    // Main drawing rectangle
     QRect rect = iOption.rect;
     rect.adjust(20, 8, -20, -8);
+
+    // Main font
     QFont font = iOption.font;
+
+
+    //
+    // Draw text
+    //
 
     iPainter->save();
 

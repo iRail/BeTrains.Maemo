@@ -57,7 +57,7 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
 
     // Initial request: scroll to the top
     if (mDepartures.count() == 0)
-        mUIScrollArea->ensureVisible(0, 0, 0, 0);
+        mView->scrollToTop();
 
     // Append the results
     int tAppendedItems = 0;
@@ -91,7 +91,10 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
     if (tAppendedItems == 0)
     {
         if (mDepartures.count() == 0)
+        {
             showError(tr("The liveboard seems to be empty."));
+            populateModel();
+        }
         else
             showError(tr("No new items received."));
     }
@@ -181,41 +184,13 @@ void LiveboardView::init_ui()
     // Window settings
     setWindowTitle(tr("Departures"));
 
-    // Scroll area
-    QVBoxLayout* mUILayout = new QVBoxLayout(centralWidget());
-    mUILayout->setMargin(0);
-    mUIScrollArea = new QScrollArea(centralWidget());
-    mUILayout->addWidget(mUIScrollArea);
-
-    // Parent widget
-    QWidget *tWidget = new QWidget();
-    mUIScrollArea->setWidget(tWidget);
-    mUIScrollArea->setWidgetResizable(true);
-
     // Main layout
-    mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
-    tWidget->setLayout(mUIScrollLayout);
+    QVBoxLayout *tUILayout = new QVBoxLayout();
+    tUILayout->setAlignment(Qt::AlignTop);
+    centralWidget()->setLayout(tUILayout);
 
 
-    // TOP BAR //
-
-    QHBoxLayout *mUITop = new QHBoxLayout();
-
-    // Station button
-    mUIStationButton = new QPushButton(tr("Station"));
-    mUIStationButton->setEnabled(false);
-    mUITop->addWidget(mUIStationButton);
-    connect(mUIStationButton, SIGNAL(clicked()), this, SLOT(do_btnStations_clicked()));
-
-    // Station edit
-    mUIStationEdit = new QLineEdit;
-    mUIStationEdit->setEnabled(false);
-    mUITop->addWidget(mUIStationEdit);
-
-    mUIScrollLayout->addLayout(mUITop);
-
-
-    // RESULT VIEW //
+    // VIEW //
 
     // Populate the history list model
     mModel = new QStandardItemModel(0, 1);
@@ -227,23 +202,41 @@ void LiveboardView::init_ui()
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new LiveboardDepartureDelegate(mStations));
-    mView->setResizeMode(QListView::Adjust);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstDepartures_doubleClicked(QModelIndex)));
-    mUIScrollLayout->addWidget(mView);
+    tUILayout->addWidget(mView);
 
     // Create the history listview dummy
-    mViewDummy = new QLabel();
+    mViewDummy = new QLabel(tr("No departures to be shown."));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     mViewDummy->setEnabled(false);
     QFont font;
     font.setPointSize(24);
     mViewDummy->setFont(font);
-    mUIScrollLayout->addWidget(mViewDummy);
+    tUILayout->addWidget(mViewDummy);
 
-    // Create the history listview spacer
-    mViewSpacer = new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
-    mUIScrollLayout->addSpacerItem(mViewSpacer);
+
+    // VIEW HEADER //
+
+    mViewHeader = new QWidget();
+    QHBoxLayout *tViewHeaderLayout = new QHBoxLayout;
+    mViewHeader->setLayout(tViewHeaderLayout);
+
+    // Station button
+    mUIStationButton = new QPushButton(tr("Station"));
+    mUIStationButton->setEnabled(false);
+    tViewHeaderLayout->addWidget(mUIStationButton);
+    connect(mUIStationButton, SIGNAL(clicked()), this, SLOT(do_btnStations_clicked()));
+
+    // Station edit
+    mUIStationEdit = new QLineEdit;
+    mUIStationEdit->setEnabled(false);
+    tViewHeaderLayout->addWidget(mUIStationEdit);
+
+    // Add to the view
+    mModel->appendRow(new QStandardItem());
+    mView->setIndexWidget(mModel->index(0, 0), mViewHeader);
+    mModel->item(0, 0)->setSelectable(false);
 
 
     // OTHER //
@@ -262,14 +255,16 @@ void LiveboardView::populateModel()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mModel->clear();
+    // Remove all rows but the header
+    if (mModel->rowCount() > 1)
+    {
+        mModel->removeRows(1, mModel->rowCount()-1);
+    }
 
     if (mDepartures.size() == 0)
     {
-        mViewDummy->setText(tr("No departures to be shown."));
         mViewDummy->setVisible(true);
-        mView->setVisible(false);
-        mUIScrollLayout->removeItem(mViewSpacer);       // HACK (without fixedheight we could use sizepolicy)
+        mView->setFixedHeight(mViewHeader->height());   // HACK
     }
     else
     {
@@ -291,10 +286,7 @@ void LiveboardView::populateModel()
         mModel->item(mModel->rowCount()-1, 0)->setSelectable(false);
 
         mViewDummy->setVisible(false);
-        mView->setVisible(true);
-        mView->setModel(mModel);
-        mView->setFixedHeight(70 * mModel->rowCount());   // HACK (sizehint not respected)
-        mUIScrollLayout->removeItem(mViewSpacer);         // HACK (without fixedheight we could use sizepolicy)
-        mUIScrollLayout->addSpacerItem(mViewSpacer);
+        //mView->setFixedHeight(mView->sizeHint().height());  // HACK
+        mView->setFixedHeight(centralWidget()->height());   // HACK OF HACK
     }
 }

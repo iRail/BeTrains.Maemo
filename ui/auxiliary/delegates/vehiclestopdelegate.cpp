@@ -18,6 +18,8 @@ void VehicleStopDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &
     // Fetch data
     //
 
+    QStyledItemDelegate::paint(iPainter, iOption, iIndex);
+
     if (! qVariantCanConvert<Vehicle::Stop>(iIndex.data(VehicleStopRole)))
     {
         qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
@@ -30,8 +32,6 @@ void VehicleStopDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &
     //
     // Configure layout
     //
-
-    QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
     // Main drawing rectangle
     QRect rect = iOption.rect;

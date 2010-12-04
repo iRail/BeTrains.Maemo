@@ -18,6 +18,8 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     // Fetch data
     //
 
+    QStyledItemDelegate::paint(iPainter, iOption, iIndex);
+
     if (! qVariantCanConvert<Liveboard::Departure>(iIndex.data(LiveboardDepartureRole)))
     {
         qWarning() << "! " << Q_FUNC_INFO << "cannot paint" << iIndex.data().typeName();
@@ -31,7 +33,6 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     // Configure layout
     //
 
-    QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
     // Main drawing rectangle
     QRect rect = iOption.rect;

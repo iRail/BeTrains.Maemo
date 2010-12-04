@@ -47,18 +47,8 @@ void MainView::init_ui()
     tUILayout->setAlignment(Qt::AlignTop);
     centralWidget()->setLayout(tUILayout);
 
-    // History listview header
-    QHBoxLayout *tButtons = new QHBoxLayout;
-    QPushButton* tUIButtonSearch = new QPushButton(tr("Plan a journey"));
-    tUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
-    QPushButton *mUIButtonLiveboard = new QPushButton(tr("View departures"));
-    mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
-    tButtons->addWidget(tUIButtonSearch);
-    tButtons->addWidget(mUIButtonLiveboard);
-    connect(tUIButtonSearch, SIGNAL(clicked()), this, SIGNAL(launchRequest()));
-    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SIGNAL(launchLiveboard()));
-    mViewHeader = new QWidget();
-    mViewHeader->setLayout(tButtons);
+
+    // VIEW //
 
     // Populate the history list model
     mModel = new QStandardItemModel(0, 1);
@@ -70,7 +60,6 @@ void MainView::init_ui()
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionRequestDelegate());
-    mView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
     tUILayout->addWidget(mView);
 
@@ -84,7 +73,34 @@ void MainView::init_ui()
     mViewDummy->setFont(font);
     tUILayout->addWidget(mViewDummy);
 
-    // TODO: load history from file
+
+    // VIEW HEADER //
+
+    mViewHeader = new QWidget();
+    QHBoxLayout *tViewHeaderLayout = new QHBoxLayout;
+    mViewHeader->setLayout(tViewHeaderLayout);
+
+    // Journey button
+    QPushButton* tUIButtonSearch = new QPushButton(tr("Plan a journey"));
+    tUIButtonSearch->setIcon(QIcon(":ui/assets/icons/train.png"));
+    tViewHeaderLayout->addWidget(tUIButtonSearch);
+    connect(tUIButtonSearch, SIGNAL(clicked()), this, SIGNAL(launchRequest()));
+
+    // Liveboard button
+    QPushButton *mUIButtonLiveboard = new QPushButton(tr("View departures"));
+    mUIButtonLiveboard->setIcon(QIcon(":ui/assets/icons/liveboard.png"));
+    tViewHeaderLayout->addWidget(mUIButtonLiveboard);
+    connect(mUIButtonLiveboard, SIGNAL(clicked()), this, SIGNAL(launchLiveboard()));
+
+    // Add to the view
+    mModel->appendRow(new QStandardItem());
+    mView->setIndexWidget(mModel->index(0, 0), mViewHeader);
+    mModel->item(0, 0)->setSelectable(false);
+
+
+    // OTHER //
+
+    // Populate the model
     populateModel();
 }
 
@@ -139,15 +155,20 @@ void MainView::populateModel()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mModel->clear();
-
-    // Button header
-    mModel->appendRow(new QStandardItem());
-    mView->setIndexWidget(mModel->index(0, 0), mViewHeader);
-    mModel->item(0, 0)->setSelectable(false);
-
-    if (mConnectionRequestHistory.size() > 0)
+    // Remove all rows but the header
+    if (mModel->rowCount() > 1)
     {
+        mModel->removeRows(1, mModel->rowCount()-1);
+    }
+
+    if (mConnectionRequestHistory.size() == 0)
+    {
+        mViewDummy->setVisible(true);
+        mView->setFixedHeight(mViewHeader->height());   // HACK
+    }
+    else
+    {
+        // Add the contents
         for (int i = 0; i < mConnectionRequestHistory.size(); i++)
         {
             ConnectionRequestPointer tConnectionRequest = mConnectionRequestHistory.at(i);
@@ -159,10 +180,5 @@ void MainView::populateModel()
 
         mViewDummy->setVisible(false);
         mView->setFixedHeight(mView->sizeHint().height());  // HACK
-    }
-    else
-    {
-        mViewDummy->setVisible(true);
-        mView->setFixedHeight(mViewHeader->height());   // HACK
     }
 }
