@@ -4,7 +4,6 @@
 
 // Includes
 #include "connectionview.h"
-#include "ui/auxiliary/delegates/connectionrequestdelegate.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>

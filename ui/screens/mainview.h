@@ -35,6 +35,8 @@ namespace iRail
         // Controller actions
     public slots:
         void setStations(QMap<QString, StationPointer>* iStations);
+        void load();
+        void load(const QMap<QString, StationPointer>& iStations);
 
         // Controller signals
     signals:
@@ -51,6 +53,7 @@ namespace iRail
     private:
         // Member data
         QList<ConnectionRequestPointer> mConnectionRequestHistory;
+        QMap<QString, StationPointer> mStations;
 
         // UI members
         QLabel *mViewDummy;

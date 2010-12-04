@@ -15,7 +15,6 @@ SOURCES += main.cpp \
     ui/screens/maincontroller.cpp \
     ui/dialogs/stationchooser.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
-    ui/auxiliary/delegates/connectionrequestdelegate.cpp \
     ui/auxiliary/delegates/connectionpoidelegate.cpp \
     ui/auxiliary/delegates/vehiclestopdelegate.cpp \
     ui/auxiliary/delegates/liveboarddeparturedelegate.cpp \
@@ -31,13 +30,13 @@ SOURCES += main.cpp \
     ui/auxiliary/loaderwidget.cpp \
     ui/screens/genericview.cpp \
     application.cpp \
-    ui/dialogs/about.cpp
+    ui/dialogs/about.cpp \
+    ui/auxiliary/delegates/requestdelegate.cpp
 HEADERS += \
     ui/global.h \
     ui/screens/maincontroller.h \
     ui/dialogs/stationchooser.h \
     ui/auxiliary/delegates/connectiondelegate.h \
-    ui/auxiliary/delegates/connectionrequestdelegate.h \
     ui/auxiliary/delegates/connectionpoidelegate.h \
     ui/auxiliary/delegates/vehiclestopdelegate.h \
     ui/auxiliary/delegates/liveboarddeparturedelegate.h \
@@ -56,7 +55,8 @@ HEADERS += \
     ui/auxiliary/animationrectitem.h \
     ui/auxiliary/graphicsrectobject.h \
     application.h \
-    ui/dialogs/about.h
+    ui/dialogs/about.h \
+    ui/auxiliary/delegates/requestdelegate.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 

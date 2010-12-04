@@ -4,7 +4,7 @@
 
 // Includes
 #include "mainview.h"
-#include "ui/auxiliary/delegates/connectionrequestdelegate.h"
+#include "ui/auxiliary/delegates/requestdelegate.h"
 #include "ui/dialogs/about.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -29,6 +29,24 @@ MainView::MainView(QWidget* iParent) : GenericView(iParent)
     hide();
     init_ui();
     init_menu();
+}
+
+void MainView::load()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    emit downloadStations();
+}
+
+void MainView::load(const QMap<QString, StationPointer>& iStations)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
+
+    mStations = iStations;
+    mView->setItemDelegate(new RequestDelegate(mStations));
+    // TODO: load the history
+    populateModel();
 }
 
 //
@@ -59,7 +77,6 @@ void MainView::init_ui()
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
-    mView->setItemDelegate(new ConnectionRequestDelegate());
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
     tUILayout->addWidget(mView);
 
