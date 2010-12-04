@@ -5,6 +5,7 @@
 // Includes
 #include "mainview.h"
 #include "ui/auxiliary/delegates/connectionrequestdelegate.h"
+#include "ui/dialogs/about.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -88,6 +89,7 @@ void MainView::init_menu()
 
     QMenu *tMenuHelp = menuBar()->addMenu(tr("&Help"));
     QAction *tActionAbout = tMenuHelp->addAction(tr("&About"));
+    connect(tActionAbout, SIGNAL(triggered()), this, SLOT(do_actAbout_triggered()));
 }
 
 
@@ -101,6 +103,12 @@ void MainView::do_lstHistory_clicked(QModelIndex iIndex)
 
     ConnectionRequestPointer tInitialRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
     emit setInitialRequest(tInitialRequest);
+}
+
+void MainView::do_actAbout_triggered()
+{
+    About tAbout(this);
+    tAbout.exec();
 }
 
 

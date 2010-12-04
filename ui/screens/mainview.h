@@ -46,6 +46,7 @@ namespace iRail
         // UI events
     private slots:
         void do_lstHistory_clicked(QModelIndex iIndex);
+        void do_actAbout_triggered();
 
     private:
         // Member data

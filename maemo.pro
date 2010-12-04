@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     ui/screens/requestview.cpp \
     ui/auxiliary/loaderwidget.cpp \
     ui/screens/genericview.cpp \
-    application.cpp
+    application.cpp \
+    ui/dialogs/about.cpp
 HEADERS += \
     ui/global.h \
     ui/screens/maincontroller.h \
@@ -54,7 +55,8 @@ HEADERS += \
     ui/auxiliary/animationwidget.h \
     ui/auxiliary/animationrectitem.h \
     ui/auxiliary/graphicsrectobject.h \
-    application.h
+    application.h \
+    ui/dialogs/about.h
 TRANSLATIONS += \
     translations/nl_BE.ts
 
