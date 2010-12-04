@@ -15,11 +15,13 @@ namespace iRail
     {
         ConnectionRequestRole = Qt::UserRole + 1,
         StationRole,
+        ConnectionRequestRole,
         ConnectionRole,
         ConnectionLineRole,
         ConnectionPOIRole,
         VehicleRole,
         VehicleStopRole,
+        LiveboardRequestRolt,
         LiveboardRole,
         LiveboardDepartureRole
     };
