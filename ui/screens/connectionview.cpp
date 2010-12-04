@@ -61,11 +61,7 @@ void ConnectionView::do_lstConnections_doubleClicked(QModelIndex iIndex)
     {
         ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
 
-        if (tConnection->lines().count() == 1)
-        {
-            Connection::Line tConnectionLine = tConnection->lines()[0];
-            emit launchVehicle(tConnectionLine);
-        }
+        /* Maybe show a vehicle view of _all_ the lines? */
     }
     else if (qVariantCanConvert<Connection::Line>(iIndex.data(ConnectionLineRole)))
     {

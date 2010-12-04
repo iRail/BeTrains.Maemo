@@ -92,20 +92,13 @@ void VehicleView::init_ui()
     // Window settings
     setWindowTitle(QString(tr("Connection detail")));
 
-    // Scroll area
-    QVBoxLayout* mUILayout = new QVBoxLayout(centralWidget());
-    mUILayout->setMargin(0);
-    mUIScrollArea = new QScrollArea(centralWidget());
-    mUILayout->addWidget(mUIScrollArea);
-
-    // Parent widget
-    QWidget *tWidget = new QWidget();
-    mUIScrollArea->setWidget(tWidget);
-    mUIScrollArea->setWidgetResizable(true);
-
     // Main layout
-    mUIScrollLayout = new QVBoxLayout(mUIScrollArea);
-    tWidget->setLayout(mUIScrollLayout);
+    QVBoxLayout *tUILayout = new QVBoxLayout();
+    tUILayout->setAlignment(Qt::AlignTop);
+    centralWidget()->setLayout(tUILayout);
+
+
+    // VIEW //
 
     // Create the stops model
     mModel = new QStandardItemModel(0, 1);
@@ -116,7 +109,7 @@ void VehicleView::init_ui()
     mView->setModel(mModel);
     mView->setItemDelegate(new VehicleStopDelegate(mStations));
     mView->setSelectionMode(QAbstractItemView::NoSelection);
-    mUIScrollLayout->addWidget(mView);
+    tUILayout->addWidget(mView);
 }
 
 void VehicleView::populateModel(Connection::Line iLine, VehiclePointer iVehicle)
@@ -160,5 +153,5 @@ void VehicleView::populateModel(Connection::Line iLine, VehiclePointer iVehicle)
     }
 
     // Fix the scroll location
-    mUIScrollArea->ensureVisible(0, 0, 0, 0);
+    mView->scrollToTop();
 }

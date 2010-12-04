@@ -58,8 +58,6 @@ namespace iRail
 
         // UI members
     private:
-        QScrollArea* mUIScrollArea;
-        QVBoxLayout* mUIScrollLayout;
         QListView* mView;
         QStandardItemModel* mModel;
     };
