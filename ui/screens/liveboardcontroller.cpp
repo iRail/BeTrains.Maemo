@@ -19,8 +19,7 @@ LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : mA
 
     mView = new LiveboardView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
-    connect(mView, SIGNAL(downloadLiveboard(QString)), this, SLOT(_downloadLiveboard(QString)));
+    connect(mView, SIGNAL(downloadLiveboard(LiveboardRequestPointer)), this, SLOT(_downloadLiveboard(LiveboardRequestPointer)));
     connect(mView, SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicle(QString,Liveboard::Departure)));
 
     mScreenVehicle = 0;
@@ -58,14 +57,14 @@ void LiveboardController::_downloadStations()
         mView->showProgress();
 }
 
-void LiveboardController::_downloadLiveboard(QString iStationId)
+void LiveboardController::_downloadLiveboard(LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
 
     bool tCached;
-    mAPI->requestLiveboard(iStationId, tCached);
+    mAPI->requestLiveboard(iLiveboardRequest, tCached);
     if (!tCached)
         mView->showProgress();
 }

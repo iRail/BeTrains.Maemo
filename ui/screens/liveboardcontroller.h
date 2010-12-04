@@ -28,7 +28,7 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
-        void _downloadLiveboard(QString iStationId);
+        void _downloadLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void _launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 
         // Internal slots

@@ -43,11 +43,11 @@ void LiveboardView::load(const QMap<QString, StationPointer>& iStations)
     mUIStationButton->setEnabled(true);
 }
 
-void LiveboardView::load(QString iStationId)
+void LiveboardView::load(LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    emit downloadLiveboard(iStationId);
+    emit downloadLiveboard(iLiveboardRequest);
 }
 
 void LiveboardView::load(LiveboardPointer iLiveboard)
@@ -83,9 +83,9 @@ void LiveboardView::do_btnStations_clicked()
     int tReturn = tChooser.exec();
     if (tReturn == QDialog::Accepted)
     {
-        tStationId = tChooser.getSelection();
-        mUIStationEdit->setText(mStations[tStationId]->name());
-        emit load(tStationId);
+        tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
+        mUIStationEdit->setText(mStations[tLiveboardRequest->station()]->name());
+        emit load(tLiveboardRequest);
     }
 }
 
@@ -93,7 +93,7 @@ void LiveboardView::do_lstDepartures_doubleClicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    emit launchVehicle(tStationId, iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
+    emit launchVehicle(tLiveboardRequest->station(), iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
 }
 
 

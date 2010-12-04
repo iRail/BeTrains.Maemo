@@ -13,8 +13,7 @@ namespace iRail
 {
     enum iRailRoles
     {
-        ConnectionRequestRole = Qt::UserRole + 1,
-        StationRole,
+        StationRole = Qt::UserRole + 1,
         ConnectionRequestRole,
         ConnectionRole,
         ConnectionLineRole,

@@ -10,6 +10,7 @@
 #include <QDebug>
 #include "genericview.h"
 #include "api/vehicle.h"
+#include "api/liveboardrequest.h"
 #include "api/liveboard.h"
 #include <QVBoxLayout>
 #include <QModelIndex>
@@ -29,7 +30,7 @@ namespace iRail
         LiveboardView(QWidget *iParent);
         void load();
         void load(const QMap<QString, StationPointer>& iStations);
-        void load(QString iStationId);
+        void load(LiveboardRequestPointer iLiveboardRequest);
         void load(LiveboardPointer iLiveboard);
 
         // UI events
@@ -46,13 +47,13 @@ namespace iRail
         // Controller signals
     signals:
         void downloadStations();
-        void downloadLiveboard(QString iStationId);
+        void downloadLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 
     private:
         // Member data
         QMap<QString, StationPointer> mStations;
-        QString tStationId;
+        LiveboardRequestPointer tLiveboardRequest;
 
         // UI Members
         QVBoxLayout *mUIScrollLayout;
