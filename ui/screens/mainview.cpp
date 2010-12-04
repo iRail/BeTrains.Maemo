@@ -42,6 +42,11 @@ void MainView::init_ui()
     // Window settings
     setWindowTitle(QString("BeTrains"));
 
+    // Main layout
+    QVBoxLayout *tUILayout = new QVBoxLayout();
+    tUILayout->setAlignment(Qt::AlignTop);
+    centralWidget()->setLayout(tUILayout);
+
     // History listview header
     QHBoxLayout *tButtons = new QHBoxLayout;
     QPushButton* tUIButtonSearch = new QPushButton(tr("Plan a journey"));
@@ -60,23 +65,24 @@ void MainView::init_ui()
 
     // Create the history listview
     mView = new QListView();
-    setCentralWidget(mView);
     mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionRequestDelegate());
-    mView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    mView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
+    tUILayout->addWidget(mView);
 
     // Create the history listview dummy
     mViewDummy = new QLabel(tr("No history or favorites"));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     mViewDummy->setEnabled(false);
     QFont font;
     font.setPointSize(24);
     mViewDummy->setFont(font);
+    tUILayout->addWidget(mViewDummy);
 
     // TODO: load history from file
     populateModel();
@@ -152,12 +158,11 @@ void MainView::populateModel()
         }
 
         mViewDummy->setVisible(false);
+        mView->setFixedHeight(mView->sizeHint().height());  // HACK
     }
     else
     {
-        mModel->appendRow(new QStandardItem());
-        mView->setIndexWidget(mModel->index(1, 0), mViewDummy);
-        mModel->item(1, 0)->setSelectable(false);
-        mViewDummy->setMinimumHeight(mView->height() - mViewHeader->height() - 60); // HACK
+        mViewDummy->setVisible(true);
+        mView->setFixedHeight(mViewHeader->height());   // HACK
     }
 }
