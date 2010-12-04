@@ -55,11 +55,48 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
 
+    // Initial request: scroll to the top
+    if (mDepartures.count() == 0)
+        mUIScrollArea->ensureVisible(0, 0, 0, 0);
+
+    // Append the results
+    int tAppendedItems = 0;
+    for (int i = 0; i < iLiveboard->departures().size(); i++)
+    {
+        // Check if the item isn't present already
+        const Liveboard::Departure tDeparture = iLiveboard->departures().at(i);
+        bool tPresent = false;
+        for (int j = 0; j < mDepartures.size(); j++)
+        {
+            // TODO: comparison operator for data objects
+            if (mDepartures.at(j).station == tDeparture.station && mDepartures.at(j).datetime == tDeparture.datetime)
+            {
+                tPresent = true;
+            }
+        }
+
+        // If not found, add this and all others
+        if (!tPresent)
+        {
+            for (int j = i; j < iLiveboard->departures().size(); j++)
+            {
+                mDepartures.append(iLiveboard->departures().at(j));
+                tAppendedItems++;
+            }
+            break;
+        }
+    }
+
     // Show the results
-    if (iLiveboard->departures().count() > 0)
-        populateModel(iLiveboard->departures());
+    if (tAppendedItems == 0)
+    {
+        if (mDepartures.count() == 0)
+            showError(tr("The liveboard seems to be empty."));
+        else
+            showError(tr("No new items received."));
+    }
     else
-        showError(tr("The liveboard seems to be empty."));
+        populateModel();
 }
 
 
@@ -72,12 +109,15 @@ void LiveboardView::clear()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mUIStationEdit->clear();
-    populateModel(QList<Liveboard::Departure>());
+    mDepartures.clear();
+    populateModel();
 }
 
 void LiveboardView::do_btnStations_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+
+    mDepartures.clear();
 
     StationChooser tChooser(mStations, centralWidget());
     int tReturn = tChooser.exec();
@@ -85,7 +125,7 @@ void LiveboardView::do_btnStations_clicked()
     {
         tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
         mUIStationEdit->setText(mStations[tLiveboardRequest->station()]->name());
-        emit load(tLiveboardRequest);
+        emit downloadLiveboard(tLiveboardRequest);
     }
 }
 
@@ -94,6 +134,20 @@ void LiveboardView::do_lstDepartures_doubleClicked(QModelIndex iIndex)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     emit launchVehicle(tLiveboardRequest->station(), iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
+}
+
+void LiveboardView::do_btnMore_clicked()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Lookup last departure
+    Q_ASSERT(mDepartures.size());
+    Liveboard::Departure tDeparture = mDepartures.last();
+
+    // Make a new request
+    tLiveboardRequest->setTime(tDeparture.datetime);
+    emit downloadLiveboard(tLiveboardRequest);
+
 }
 
 
@@ -143,22 +197,22 @@ void LiveboardView::init_ui()
     tWidget->setLayout(mUIScrollLayout);
 
 
-    // STATION //
+    // TOP BAR //
 
-    QHBoxLayout *mUIStation = new QHBoxLayout();
+    QHBoxLayout *mUITop = new QHBoxLayout();
 
-    // Station Button
-    mUIStationButton = new QPushButton(QString(tr("Station")));
+    // Station button
+    mUIStationButton = new QPushButton(tr("Station"));
     mUIStationButton->setEnabled(false);
-    mUIStation->addWidget(mUIStationButton);
+    mUITop->addWidget(mUIStationButton);
     connect(mUIStationButton, SIGNAL(clicked()), this, SLOT(do_btnStations_clicked()));
 
-    // Station Edit
+    // Station edit
     mUIStationEdit = new QLineEdit;
     mUIStationEdit->setEnabled(false);
-    mUIStation->addWidget(mUIStationEdit);
+    mUITop->addWidget(mUIStationEdit);
 
-    mUIScrollLayout->addLayout(mUIStation);
+    mUIScrollLayout->addLayout(mUITop);
 
 
     // RESULT VIEW //
@@ -191,7 +245,11 @@ void LiveboardView::init_ui()
     mViewSpacer = new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
     mUIScrollLayout->addSpacerItem(mViewSpacer);
 
-    populateModel(QList<Liveboard::Departure>());
+
+    // OTHER //
+
+    // Populate the model
+    populateModel();
 
 }
 
@@ -200,12 +258,13 @@ void LiveboardView::init_ui()
 // Auxiliary
 //
 
-void LiveboardView::populateModel(const QList<Liveboard::Departure>& iDepartures)
+void LiveboardView::populateModel()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mModel->clear();
-    if (iDepartures.size() == 0)
+
+    if (mDepartures.size() == 0)
     {
         mViewDummy->setText(tr("No departures to be shown."));
         mViewDummy->setVisible(true);
@@ -214,14 +273,22 @@ void LiveboardView::populateModel(const QList<Liveboard::Departure>& iDepartures
     }
     else
     {
-        for (int i = 0; i < iDepartures.size(); i++)
+        // Add the departures
+        for (int i = 0; i < mDepartures.size(); i++)
         {
-            Liveboard::Departure tDeparture = iDepartures.at(i);
+            Liveboard::Departure tDeparture = mDepartures.at(i);
             QStandardItem *tItem = new QStandardItem;
 
             tItem->setData(QVariant::fromValue(tDeparture), LiveboardDepartureRole);
             mModel->appendRow(tItem);
         }
+
+        // Add the "more" button
+        QPushButton *tMore = new QPushButton(tr("More"));
+        connect(tMore, SIGNAL(clicked()), this, SLOT(do_btnMore_clicked()));
+        mModel->appendRow(new QStandardItem());
+        mView->setIndexWidget(mModel->index(mModel->rowCount()-1, 0), tMore);
+        mModel->item(mModel->rowCount()-1, 0)->setSelectable(false);
 
         mViewDummy->setVisible(false);
         mView->setVisible(true);
@@ -230,7 +297,4 @@ void LiveboardView::populateModel(const QList<Liveboard::Departure>& iDepartures
         mUIScrollLayout->removeItem(mViewSpacer);         // HACK (without fixedheight we could use sizepolicy)
         mUIScrollLayout->addSpacerItem(mViewSpacer);
     }
-
-    // Fix the scroll location
-    mUIScrollArea->ensureVisible(0, 0, 0, 0);
 }

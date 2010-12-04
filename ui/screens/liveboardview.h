@@ -37,6 +37,7 @@ namespace iRail
     private slots:
         void do_btnStations_clicked();
         void do_lstDepartures_doubleClicked(QModelIndex iIndex);
+        void do_btnMore_clicked();
         void clear();
 
         // Controller actions
@@ -53,24 +54,25 @@ namespace iRail
     private:
         // Member data
         QMap<QString, StationPointer> mStations;
+        QList<Liveboard::Departure> mDepartures;
         LiveboardRequestPointer tLiveboardRequest;
 
         // UI Members
         QVBoxLayout *mUIScrollLayout;
         QScrollArea* mUIScrollArea;
         QLineEdit *mUIStationEdit;
+        QPushButton *mUIStationButton;
         QLabel *mViewDummy;
         QListView *mView;
         QSpacerItem* mViewSpacer;
         QVBoxLayout *mViewLayout;
         QStandardItemModel *mModel;
-        QPushButton *mUIStationButton;
 
         // Initialization
         void init_ui();
 
         // Auxiliary
-        void populateModel(const QList<Liveboard::Departure>& iDepartures);
+        void populateModel();
     };
 }
 
