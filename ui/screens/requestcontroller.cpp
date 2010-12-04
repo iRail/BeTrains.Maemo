@@ -39,6 +39,10 @@ void RequestController::showView()
     mView->load();
 }
 
+// TODO: this method just forwards the data to the following
+//       widget. This won't be neccesary when we have access
+//       to all screens from the application controller
+//       (using a state machine).
 void RequestController::showView(ConnectionRequestPointer iInitialRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -46,6 +50,7 @@ void RequestController::showView(ConnectionRequestPointer iInitialRequest)
     mView->show();
     mView->load();
     mView->configure(iInitialRequest);
+    emit _launchConnection(iInitialRequest);
 }
 
 
