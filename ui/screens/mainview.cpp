@@ -138,6 +138,8 @@ void MainView::init_menu()
 
     QMenu *tMenuTools = menuBar()->addMenu(tr("&Tools"));
     QAction *tActionPreferences = tMenuTools->addAction(tr("&Preferences"));
+    QAction *tActionClearHistory = tMenuTools->addAction(tr("&Clear history"));
+    connect(tActionClearHistory, SIGNAL(triggered()), this, SLOT(do_actClearHistory_triggered()));
 
     QMenu *tMenuHelp = menuBar()->addMenu(tr("&Help"));
     QAction *tActionAbout = tMenuHelp->addAction(tr("&About"));
@@ -224,6 +226,11 @@ void MainView::do_actAddFavourite()
     QAction *tAction = qobject_cast<QAction *>(sender());
     if (tAction)
         emit addFavourite(tAction->data());
+}
+
+void MainView::do_actClearHistory_triggered()
+{
+    emit clearHistory();
 }
 
 

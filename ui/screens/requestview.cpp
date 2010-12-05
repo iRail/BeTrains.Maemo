@@ -92,7 +92,8 @@ void RequestView::do_btnSearch_clicked()
     }
     else
     {
-        ConnectionRequestPointer tConnectionRequest = ConnectionRequestPointer(new ConnectionRequest(mUIFromLine->text(), mUIToLine->text()));
+        ConnectionRequestPointer tConnectionRequest = ConnectionRequestPointer(
+                    new ConnectionRequest(capitalize(mUIFromLine->text()), capitalize(mUIToLine->text())));
 
         if (mUIUseTime->isChecked())
         {

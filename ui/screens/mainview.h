@@ -50,6 +50,7 @@ namespace iRail
         void launchRequest(ConnectionRequestPointer iConnectionRequest);
         void addFavourite(QVariant iRequest);
         void removeFavourite(QVariant iRequest);
+        void clearHistory();
 
         // UI events
     private slots:
@@ -58,6 +59,7 @@ namespace iRail
         void do_lstHistory_contextMenu(const QPoint& iPosition);
         void do_actRemoveFavourite();
         void do_actAddFavourite();
+        void do_actClearHistory_triggered();
 
     private:
         // Member data

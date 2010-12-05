@@ -27,6 +27,7 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
     connect(mView, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
     connect(mView, SIGNAL(addFavourite(QVariant)), this, SLOT(_addFavourite(QVariant)));
     connect(mView, SIGNAL(removeFavourite(QVariant)), this, SLOT(_removeFavourite(QVariant)));
+    connect(mView, SIGNAL(clearHistory()), this, SLOT(_clearHistory()));
 
     mScreenLiveboard = 0;
     mScreenRequest = 0;
@@ -147,6 +148,17 @@ void MainController::_removeFavourite(QVariant iRequest)
     mFavourites.removeOne(iRequest);
 
     Application::storage()->setFavourites(mFavourites);
+
+    mView->load(mHistory, mFavourites);
+}
+
+void MainController::_clearHistory()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mHistory.clear();
+
+    Application::storage()->clearHistory();
 
     mView->load(mHistory, mFavourites);
 }

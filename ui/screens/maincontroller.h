@@ -38,6 +38,7 @@ namespace iRail
         void _launchRequest(ConnectionRequestPointer iConnectionRequest);
         void _addFavourite(QVariant iRequest);
         void _removeFavourite(QVariant iRequest);
+        void _clearHistory();
 
         // Internal slots
     private slots:
