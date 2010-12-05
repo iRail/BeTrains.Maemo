@@ -151,12 +151,12 @@ void MainView::do_lstHistory_clicked(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    if (iIndex.data(ConnectionRequestRole).canConvert<ConnectionRequestPointer>())
+    if (iIndex.data(ConnectionRequestRole).type() != QVariant::Invalid)
     {
         ConnectionRequestPointer tConnectionRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
         emit launchRequest(tConnectionRequest);
     }
-    else if (iIndex.data(LiveboardRequestRole).canConvert<LiveboardRequestPointer>())
+    else if (iIndex.data(LiveboardRequestRole).type() != QVariant::Invalid)
     {
         LiveboardRequestPointer tLiveboardRequest = iIndex.data(LiveboardRequestRole).value<LiveboardRequestPointer>();
         emit launchLiveboard(tLiveboardRequest);
@@ -183,11 +183,14 @@ void MainView::do_lstHistory_contextMenu(const QPoint& iPosition)
     QMenu *tContextMenu = new QMenu;
     QAction *tAction = tContextMenu->addAction("");
 
-    // Set the data (could be shorter if we could extract the complete QVariant)
-    if (tIndex.data(LiveboardRequestRole).canConvert<LiveboardRequestPointer>())
+    // Set the data (a QStandardItem can contain multiple QVariants,
+    // hence the different cases)
+    if (tIndex.data(LiveboardRequestRole).type() != QVariant::Invalid)
         tAction->setData(tIndex.data(LiveboardRequestRole));
-    else if (tIndex.data(ConnectionRequestRole).canConvert<ConnectionRequestPointer>())
+    else if (tIndex.data(ConnectionRequestRole) != QVariant::Invalid)
         tAction->setData(tIndex.data(ConnectionRequestRole));
+    else
+        return;
 
     // Populate the menu
     if (tFavourite)

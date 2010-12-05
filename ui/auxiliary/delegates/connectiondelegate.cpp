@@ -19,14 +19,14 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
-    if (qVariantCanConvert<ConnectionPointer>(iIndex.data(ConnectionRole)))
+    if (iIndex.data(ConnectionRole).type() != QVariant::Invalid)
     {
-        ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
+        ConnectionPointer tConnection = iIndex.data(ConnectionRole).value<ConnectionPointer>();
         paint(iPainter, iOption, iIndex, tConnection);
     }
-    else if (qVariantCanConvert<Connection::Line>(iIndex.data(ConnectionLineRole)))
+    else if (iIndex.data(ConnectionLineRole).type() != QVariant::Invalid)
     {
-        Connection::Line tConnectionLine = qVariantValue<Connection::Line>(iIndex.data(ConnectionLineRole));
+        Connection::Line tConnectionLine = iIndex.data(ConnectionLineRole).value<Connection::Line>();
         paint(iPainter, iOption, iIndex, tConnectionLine);
     }
     else

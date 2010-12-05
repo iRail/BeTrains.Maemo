@@ -20,14 +20,14 @@ void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOpt
 
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
-    if (qVariantCanConvert<LiveboardRequestPointer>(iIndex.data(LiveboardRequestRole)))
+    if (iIndex.data(LiveboardRequestRole).type() != QVariant::Invalid)
     {
-        LiveboardRequestPointer tLiveboardRequest = qVariantValue<LiveboardRequestPointer>(iIndex.data(LiveboardRequestRole));
+        LiveboardRequestPointer tLiveboardRequest = iIndex.data(LiveboardRequestRole).value<LiveboardRequestPointer>();
         paint(iPainter, iOption, iIndex, tLiveboardRequest);
     }
-    else if (qVariantCanConvert<ConnectionRequestPointer>(iIndex.data(ConnectionRequestRole)))
+    else if (iIndex.data(ConnectionRequestRole).type() != QVariant::Invalid)
     {
-        ConnectionRequestPointer tConnectionRequestPointer = qVariantValue<ConnectionRequestPointer>(iIndex.data(ConnectionRequestRole));
+        ConnectionRequestPointer tConnectionRequestPointer =  iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
         paint(iPainter, iOption, iIndex, tConnectionRequestPointer);
     }
     else

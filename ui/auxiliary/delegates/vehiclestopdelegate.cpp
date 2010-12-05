@@ -20,10 +20,10 @@ void VehicleStopDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &
 
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
-    if (! qVariantCanConvert<Vehicle::Stop>(iIndex.data(VehicleStopRole)))
+    if (! iIndex.data(VehicleStopRole).type() != QVariant::Invalid)
         return;
 
-    Vehicle::Stop tStop = qVariantValue<Vehicle::Stop>(iIndex.data(VehicleStopRole));
+    Vehicle::Stop tStop = iIndex.data(VehicleStopRole).value<Vehicle::Stop>();
 
 
     //

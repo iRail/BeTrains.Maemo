@@ -20,10 +20,10 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
 
     QStyledItemDelegate::paint(iPainter, iOption, iIndex);
 
-    if (! qVariantCanConvert<Liveboard::Departure>(iIndex.data(LiveboardDepartureRole)))
+    if (! iIndex.data(LiveboardDepartureRole).type() != QVariant::Invalid)
         return;
 
-    Liveboard::Departure tLiveboardDeparture = qVariantValue<Liveboard::Departure>(iIndex.data(LiveboardDepartureRole));
+    Liveboard::Departure tLiveboardDeparture = iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>();
 
 
     //
