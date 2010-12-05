@@ -31,7 +31,6 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
     // Configure layout
     //
 
-
     // Main drawing rectangle
     QRect rect = iOption.rect;
     rect.adjust(20, 8, -20, -8);
