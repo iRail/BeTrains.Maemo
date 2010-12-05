@@ -43,6 +43,7 @@ namespace iRail
         // Controller signals
     signals:
         void downloadStations();
+        void getHistoryFavourites();
         void launchLiveboard();
         void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void launchRequest();

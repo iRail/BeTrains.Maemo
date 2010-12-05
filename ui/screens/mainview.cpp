@@ -50,10 +50,12 @@ void MainView::load(const QMap<QString, StationPointer>& iStations)
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
 
+    // Set the stations
     mStations = iStations;
     mView->setItemDelegate(new RequestDelegate(mStations));
-    // TODO: load the history
-    populateModel(QList<QVariant>(), QList<QVariant>());
+
+    // Request the history and favourites
+    emit getHistoryFavourites();
 }
 
 //

@@ -4,6 +4,7 @@
 
 // Includes
 #include "maincontroller.h"
+#include "application.h"
 
 // Namespaces
 using namespace iRail;
@@ -19,6 +20,7 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 
     mView = new MainView(iParent);
     connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(mView, SIGNAL(getHistoryFavourites()), this, SLOT(_getHistoryFavourites()));
     connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
     connect(mView, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
     connect(mView, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
@@ -60,6 +62,17 @@ void MainController::_downloadStations()
     mAPI->requestStations(tCached);
     if (!tCached)
         mView->showProgress();
+}
+
+void MainController::_getHistoryFavourites()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mHistory = Application::storage()->userList("history");
+    mFavourites = Application::storage()->userList("favourites");
+
+    mView->load(mHistory, mFavourites);
+
 }
 
 void MainController::_launchLiveboard()
@@ -121,12 +134,17 @@ void MainController::_addFavourite(QVariant iRequest)
     mFavourites.push_back(iRequest);
     mHistory.removeOne(iRequest);
 
+    Application::storage()->setUserList("history", mHistory);
+    Application::storage()->setUserList("favourites", mFavourites);
+
     mView->load(mHistory, mFavourites);
 }
 
 void MainController::_removeFavourite(QVariant iRequest)
 {
     mFavourites.removeOne(iRequest);
+
+    Application::storage()->setUserList("favourites", mFavourites);
 
     mView->load(mHistory, mFavourites);
 }
@@ -158,6 +176,8 @@ void MainController::_addHistory(QVariant iRequest)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mHistory.push_front(iRequest);
+
+    Application::storage()->setUserList("history", mHistory);
 
     mView->load(mHistory, mFavourites);
 }

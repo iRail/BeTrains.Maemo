@@ -31,6 +31,7 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
+        void _getHistoryFavourites();
         void _launchLiveboard();
         void _launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void _launchRequest();
