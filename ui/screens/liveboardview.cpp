@@ -48,6 +48,7 @@ void LiveboardView::load(LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    tLiveboardRequest = iLiveboardRequest;
     emit downloadLiveboard(iLiveboardRequest);
 }
 
