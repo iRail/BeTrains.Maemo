@@ -206,7 +206,6 @@ void MainView::populateModel(const QList<QVariant>& iHistory)
         for (int i = 0; i < iHistory.size(); i++)
         {
             QStandardItem *tItem = new QStandardItem();
-            tItem->setIcon(QIcon(":ui/assets/favourite_unchecked.svg"));
 
             QVariant tRequest = iHistory.at(i);
             if (tRequest.canConvert<LiveboardRequestPointer>())

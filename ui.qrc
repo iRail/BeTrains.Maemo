@@ -4,7 +4,6 @@
         <file>ui/assets/icons/liveboard.png</file>
         <file>ui/assets/loader.png</file>
         <file>ui/assets/swap.png</file>
-        <file>ui/assets/favourite_checked.svg</file>
-        <file>ui/assets/favourite_unchecked.svg</file>
+        <file>ui/assets/favourite.svg</file>
     </qresource>
 </RCC>
