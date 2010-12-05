@@ -30,6 +30,7 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     setOrganizationName("iRail");
     setOrganizationDomain("irail.be");
     setApplicationName("BeTrains");
+    setApplicationVersion("0.1");
 
     // Translate the user interface
     Q_INIT_RESOURCE(translations);
@@ -59,7 +60,8 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     if (tFileOpen)
     {
         QDataStream tStreamRead(&tFile);
-        mStorage.deserialize(tStreamRead);
+        if (! mStorage.deserialize(tStreamRead, applicationVersion()))
+            qWarning() << "! " << "Storage data corrupted, contents discarded";
         tFile.close();
     }
     else
@@ -111,7 +113,7 @@ void Application::close()
     if (tFileOpen)
     {
         QDataStream tStreamWrite(&tFile);
-        mStorage.serialize(tStreamWrite);
+        mStorage.serialize(tStreamWrite, applicationVersion());
         tFile.close();
     }
     else
