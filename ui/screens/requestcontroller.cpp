@@ -73,7 +73,7 @@ void RequestController::_downloadStations()
 void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    emit addHistory(iConnectionRequest);
+    emit addHistory(QVariant::fromValue(iConnectionRequest));
 
     if (mScreenConnection == 0)
     {

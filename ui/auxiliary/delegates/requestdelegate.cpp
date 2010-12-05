@@ -42,11 +42,7 @@ void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOpt
 
     // Main drawing rectangle
     QRect rect = iOption.rect;
-    rect.adjust(20, 8, -20, -8);
-
-    // Do we have an icon?
-    if (iIndex.data(Qt::DecorationRole).canConvert<QIcon>())
-        rect.adjust(40, 0, 0, 0);
+    rect.adjust(60, 8, -20, -8);
 
     // Main font
     QFont font = iOption.font;
@@ -90,11 +86,7 @@ void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOpt
 
     // Main drawing rectangle
     QRect rect = iOption.rect;
-    rect.adjust(20, 8, -20, -8);
-
-    // Do we have an icon?
-    if (iIndex.data(Qt::DecorationRole).canConvert<QIcon>())
-        rect.adjust(40, 0, 0, 0);
+    rect.adjust(60, 8, -20, -8);
 
     // Main font
     QFont font = iOption.font;

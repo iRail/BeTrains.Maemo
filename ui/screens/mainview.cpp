@@ -38,11 +38,11 @@ void MainView::load()
     emit downloadStations();
 }
 
-void MainView::load(const QList<QVariant>& iHistory)
+void MainView::load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    populateModel(iHistory);
+    populateModel(iHistory, iFavourites);
 }
 
 void MainView::load(const QMap<QString, StationPointer>& iStations)
@@ -53,7 +53,7 @@ void MainView::load(const QMap<QString, StationPointer>& iStations)
     mStations = iStations;
     mView->setItemDelegate(new RequestDelegate(mStations));
     // TODO: load the history
-    populateModel(QList<QVariant>());
+    populateModel(QList<QVariant>(), QList<QVariant>());
 }
 
 //
@@ -84,6 +84,8 @@ void MainView::init_ui()
     mView->setModel(mModel);
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
+    mView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(mView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(do_lstHistory_contextMenu(QPoint)));
     connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
     tUILayout->addWidget(mView);
 
@@ -125,7 +127,7 @@ void MainView::init_ui()
     // OTHER //
 
     // Populate the model
-    populateModel(QList<QVariant>());
+    populateModel(QList<QVariant>(), QList<QVariant>());
 }
 
 void MainView::init_menu()
@@ -167,6 +169,58 @@ void MainView::do_actAbout_triggered()
     tAbout.exec();
 }
 
+void MainView::do_lstHistory_contextMenu(const QPoint& iPosition)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Get the data
+    QModelIndex tIndex = mView->indexAt(iPosition);
+    if (! tIndex.data(RequestFavouriteRole).canConvert<bool>())
+        return;
+    bool tFavourite = tIndex.data(RequestFavouriteRole).value<bool>();
+
+    // Create the objects
+    QMenu *tContextMenu = new QMenu;
+    QAction *tAction = tContextMenu->addAction("");
+
+    // Set the data (could be shorter if we could extract the complete QVariant)
+    if (tIndex.data(LiveboardRequestRole).canConvert<LiveboardRequestPointer>())
+        tAction->setData(tIndex.data(LiveboardRequestRole));
+    else if (tIndex.data(ConnectionRequestRole).canConvert<ConnectionRequestPointer>())
+        tAction->setData(tIndex.data(ConnectionRequestRole));
+
+    // Populate the menu
+    if (tFavourite)
+    {
+        tAction->setText(tr("Remove from favourites"));
+        connect(tAction, SIGNAL(triggered()), this, SLOT(do_actRemoveFavourite()));
+    }
+    else
+    {
+        tAction->setText(tr("Add to favourites"));
+        connect(tAction, SIGNAL(triggered()), this, SLOT(do_actAddFavourite()));
+    }
+    tContextMenu->exec(mView->mapToGlobal(iPosition));
+}
+
+void MainView::do_actRemoveFavourite()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    QAction *tAction = qobject_cast<QAction *>(sender());
+    if (tAction)
+        emit removeFavourite(tAction->data());
+}
+
+void MainView::do_actAddFavourite()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    QAction *tAction = qobject_cast<QAction *>(sender());
+    if (tAction)
+        emit addFavourite(tAction->data());
+}
+
 
 //
 // Controller actions
@@ -185,7 +239,7 @@ void MainView::setStations(QMap<QString, StationPointer>* iStations)
 // Auxiliary
 //
 
-void MainView::populateModel(const QList<QVariant>& iHistory)
+void MainView::populateModel(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -195,17 +249,36 @@ void MainView::populateModel(const QList<QVariant>& iHistory)
         mModel->removeRows(1, mModel->rowCount()-1);
     }
 
-    if (iHistory.size() == 0)
+    if (iHistory.size() + iFavourites.size() == 0)
     {
         mViewDummy->setVisible(true);
         mView->setFixedHeight(mViewHeader->height());   // HACK
     }
     else
-    {
-        // Add the contents
+    {        
+        // Add the favourites
+        for (int i = 0; i < iFavourites.size(); i++)
+        {
+            QStandardItem *tItem = new QStandardItem();
+            tItem->setIcon(QIcon(":/ui/assets/favourite.svg"));
+            tItem->setData(QVariant::fromValue(true), RequestFavouriteRole);
+
+            QVariant tRequest = iFavourites.at(i);
+            if (tRequest.canConvert<LiveboardRequestPointer>())
+                tItem->setData(tRequest, LiveboardRequestRole);
+            else if (tRequest.canConvert<ConnectionRequestPointer>())
+                tItem->setData(tRequest, ConnectionRequestRole);
+            else
+                continue;
+
+            mModel->appendRow(tItem);
+        }
+
+        // Add the history
         for (int i = 0; i < iHistory.size(); i++)
         {
             QStandardItem *tItem = new QStandardItem();
+            tItem->setData(QVariant::fromValue(false), RequestFavouriteRole);
 
             QVariant tRequest = iHistory.at(i);
             if (tRequest.canConvert<LiveboardRequestPointer>())

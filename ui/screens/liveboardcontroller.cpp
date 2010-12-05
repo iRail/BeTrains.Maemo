@@ -75,7 +75,7 @@ void LiveboardController::_downloadLiveboard(LiveboardRequestPointer iLiveboardR
 
     // Manage history (but skip timed requests, from the "More" button)
     if (! iLiveboardRequest->timed())
-        emit addHistory(iLiveboardRequest);
+        emit addHistory(QVariant::fromValue(iLiveboardRequest));
 
     connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
 

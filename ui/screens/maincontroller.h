@@ -35,6 +35,8 @@ namespace iRail
         void _launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void _launchRequest();
         void _launchRequest(ConnectionRequestPointer iConnectionRequest);
+        void _addFavourite(QVariant iRequest);
+        void _removeFavourite(QVariant iRequest);
 
         // Internal slots
     private slots:
@@ -42,14 +44,13 @@ namespace iRail
 
         // External signal slots
     private slots:
-        void _addHistory(LiveboardRequestPointer iLiveboardRequest);
-        void _addHistory(ConnectionRequestPointer iConnectionRequest);
+        void _addHistory(QVariant iRequest);
 
     private:
         // Member data
         CachedAPI* mAPI;
         MainView* mView;
-        QList<QVariant> mHistory;
+        QList<QVariant> mHistory, mFavourites;
 
         // Screens
         LiveboardController* mScreenLiveboard;

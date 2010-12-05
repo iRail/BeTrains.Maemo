@@ -22,7 +22,8 @@ namespace iRail
         VehicleStopRole,
         LiveboardRequestRole,
         LiveboardRole,
-        LiveboardDepartureRole
+        LiveboardDepartureRole,
+        RequestFavouriteRole
     };
 }
 

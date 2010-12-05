@@ -39,7 +39,7 @@ namespace iRail
 
         // External signals:
     signals:
-        void addHistory(LiveboardRequestPointer iLiveboardRequest);
+        void addHistory(QVariant iRequest);
 
     private:
         // Member data

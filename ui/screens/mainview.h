@@ -38,7 +38,7 @@ namespace iRail
         void setStations(QMap<QString, StationPointer>* iStations);
         void load();
         void load(const QMap<QString, StationPointer>& iStations);
-        void load(const QList<QVariant>& iHistory);
+        void load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
 
         // Controller signals
     signals:
@@ -47,11 +47,16 @@ namespace iRail
         void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void launchRequest();
         void launchRequest(ConnectionRequestPointer iConnectionRequest);
+        void addFavourite(QVariant iRequest);
+        void removeFavourite(QVariant iRequest);
 
         // UI events
     private slots:
         void do_lstHistory_clicked(QModelIndex iIndex);
         void do_actAbout_triggered();
+        void do_lstHistory_contextMenu(const QPoint& iPosition);
+        void do_actRemoveFavourite();
+        void do_actAddFavourite();
 
     private:
         // Member data
@@ -68,7 +73,7 @@ namespace iRail
         void init_menu();
 
         // Auxiliary
-        void populateModel(const QList<QVariant>& iHistory);
+        void populateModel(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
     };
 }
 

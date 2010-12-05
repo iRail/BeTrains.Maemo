@@ -23,6 +23,8 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
     connect(mView, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
     connect(mView, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
     connect(mView, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
+    connect(mView, SIGNAL(addFavourite(QVariant)), this, SLOT(_addFavourite(QVariant)));
+    connect(mView, SIGNAL(removeFavourite(QVariant)), this, SLOT(_removeFavourite(QVariant)));
 
     mScreenLiveboard = 0;
     mScreenRequest = 0;
@@ -67,7 +69,7 @@ void MainController::_launchLiveboard()
     if (mScreenLiveboard == 0)
     {
         mScreenLiveboard = new LiveboardController(mAPI, mView);
-        connect(mScreenLiveboard, SIGNAL(addHistory(LiveboardRequestPointer)), this, SLOT(_addHistory(LiveboardRequestPointer)));
+        connect(mScreenLiveboard, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
     mScreenLiveboard->showView();
@@ -80,7 +82,7 @@ void MainController::_launchLiveboard(LiveboardRequestPointer iLiveboardRequest)
     if (mScreenLiveboard == 0)
     {
         mScreenLiveboard = new LiveboardController(mAPI, mView);
-        connect(mScreenLiveboard, SIGNAL(addHistory(LiveboardRequestPointer)), this, SLOT(_addHistory(LiveboardRequestPointer)));
+        connect(mScreenLiveboard, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
     mScreenLiveboard->showView(iLiveboardRequest);
@@ -93,7 +95,7 @@ void MainController::_launchRequest()
     if (mScreenRequest == 0)
     {
         mScreenRequest = new RequestController(mAPI, mView);
-        connect(mScreenRequest, SIGNAL(addHistory(ConnectionRequestPointer)), this, SLOT(_addHistory(ConnectionRequestPointer)));
+        connect(mScreenRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
     mScreenRequest->showView();
@@ -106,10 +108,27 @@ void MainController::_launchRequest(ConnectionRequestPointer iConnectionRequest)
     if (mScreenRequest == 0)
     {
         mScreenRequest = new RequestController(mAPI, mView);
-        connect(mScreenRequest, SIGNAL(addHistory(ConnectionRequestPointer)), this, SLOT(_addHistory(ConnectionRequestPointer)));
+        connect(mScreenRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
     mScreenRequest->showView(iConnectionRequest);
+}
+
+void MainController::_addFavourite(QVariant iRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mFavourites.push_back(iRequest);
+    mHistory.removeOne(iRequest);
+
+    mView->load(mHistory, mFavourites);
+}
+
+void MainController::_removeFavourite(QVariant iRequest)
+{
+    mFavourites.removeOne(iRequest);
+
+    mView->load(mHistory, mFavourites);
 }
 
 
@@ -134,24 +153,11 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations, QDate
 // External signal slots
 //
 
-void MainController::_addHistory(LiveboardRequestPointer iLiveboardRequest)
+void MainController::_addHistory(QVariant iRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    QVariant tRequest;
-    tRequest.setValue(iLiveboardRequest);
-    mHistory.push_front(tRequest);
+    mHistory.push_front(iRequest);
 
-    mView->load(mHistory);
-}
-
-void MainController::_addHistory(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    QVariant tRequest;
-    tRequest.setValue(iConnectionRequest);
-    mHistory.push_front(tRequest);
-
-    mView->load(mHistory);
+    mView->load(mHistory, mFavourites);
 }
