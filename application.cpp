@@ -87,6 +87,11 @@ QSettings& Application::settings()
     return instance()->mSettings;
 }
 
+Storage *Application::storage()
+{
+    return &(instance()->mStorage);
+}
+
 
 //
 // UI events

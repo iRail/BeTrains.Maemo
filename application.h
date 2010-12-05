@@ -29,6 +29,7 @@ namespace iRail
         // Singleton objects
         static Application *instance();
         static QSettings &settings();
+        static Storage* storage();
 
         // UI events
     public slots:
