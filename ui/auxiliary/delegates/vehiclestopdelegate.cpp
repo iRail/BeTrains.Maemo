@@ -7,6 +7,7 @@
 #include "api/vehicle.h"
 #include "ui/global.h"
 #include <QStringBuilder>
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -63,7 +64,7 @@ void VehicleStopDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &
 
     // Station
     iPainter->setPen(iOption.palette.foreground().color());
-    QString tStation = mStations[tStop.station]->name();
+    QString tStation = stationName(mStations, tStop.station);
     iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignLeft, tStation);
 
     // Platform

@@ -6,6 +6,7 @@
 #include "connectiondelegate.h"
 #include "ui/global.h"
 #include <QStringBuilder>
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -61,7 +62,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->save();
 
     // Connection
-    QString tConnectionString = mStations[iConnection->departure().station]->name() % " " % tr("to") % " " % mStations[iConnection->arrival().station]->name();
+    QString tConnectionString = stationName(mStations, iConnection->departure().station) % " " % tr("to") % " " % stationName(mStations, iConnection->arrival().station);
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tConnectionString);
 
     // Transfers
@@ -162,9 +163,9 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignHCenter, tArrival);
 
     // Connection
-    QString tConnectionString = mStations[iLine.departure.station]->name() % " " % tr("to") % " " % mStations[iLine.arrival.station]->name();
-    iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, mStations[iLine.departure.station]->name());
-    iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, mStations[iLine.arrival.station]->name());
+    QString tConnectionString = stationName(mStations, iLine.departure.station) % " " % tr("to") % " " % stationName(mStations, iLine.arrival.station);
+    iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, stationName(mStations, iLine.departure.station));
+    iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, stationName(mStations, iLine.arrival.station));
 
     // Delay
     if (iLine.departure.delay != 0 || iLine.arrival.delay != 0)

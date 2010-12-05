@@ -7,6 +7,7 @@
 #include "api/liveboard.h"
 #include "ui/global.h"
 #include <QStringBuilder>
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -64,7 +65,7 @@ void LiveboardDepartureDelegate::paint(QPainter *iPainter, const QStyleOptionVie
 
     // Station
     iPainter->setPen(iOption.palette.foreground().color());
-    QString tStation = mStations[tLiveboardDeparture.station]->name();
+    QString tStation = stationName(mStations, tLiveboardDeparture.station);
     iPainter->drawText(rect_c3, Qt::AlignTop | Qt::AlignLeft, tStation);
 
     // Platform

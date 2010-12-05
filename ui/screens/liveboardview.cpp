@@ -8,6 +8,7 @@
 #include <QScrollArea>
 #include "ui/auxiliary/delegates/liveboarddeparturedelegate.h"
 #include <QtMaemo5/QMaemo5InformationBox>
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -55,9 +56,8 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
 
-    // Initial request: scroll to the top
-    if (mDepartures.count() == 0)
-        mView->scrollToTop();
+    // Preserve the scroll position
+    bool tScrollToTop = (mDepartures.count() == 0);
 
     // Append the results
     int tAppendedItems = 0;
@@ -100,6 +100,12 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
     }
     else
         populateModel();
+
+    // Scroll
+    if (tScrollToTop)
+        mView->scrollToTop();
+    else
+        mView->scrollTo(mModel->index(mModel->rowCount()-tAppendedItems-1, 0));
 }
 
 
@@ -127,7 +133,7 @@ void LiveboardView::do_btnStations_clicked()
     if (tReturn == QDialog::Accepted)
     {
         tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
-        mUIStationEdit->setText(mStations[tLiveboardRequest->station()]->name());
+        mUIStationEdit->setText(stationName(mStations, tLiveboardRequest->station()));
 
         emit downloadLiveboard(tLiveboardRequest);
     }

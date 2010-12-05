@@ -7,6 +7,7 @@
 #include "api/connection.h"
 #include "ui/global.h"
 #include <QStringBuilder>
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -45,7 +46,7 @@ void ConnectionPOIDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem
     iPainter->save();
 
     // Station
-    QString tStation = mStations[tConnectionPOI.station]->name();
+    QString tStation = stationName(mStations, tConnectionPOI.station);
     iPainter->drawText(rect, Qt::AlignTop | Qt::AlignLeft, tStation);
 
     // Platform (TODO: might not be available for stops between endpoints)

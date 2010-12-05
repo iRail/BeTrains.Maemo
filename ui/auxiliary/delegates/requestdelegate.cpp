@@ -7,6 +7,7 @@
 #include "api/connectionrequest.h"
 #include "ui/global.h"
 #include <QStringBuilder>
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -99,7 +100,7 @@ void RequestDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOpt
     iPainter->save();
 
     // Header
-    QString tHeader = tr("Departures at") % " " % mStations[iLiveboardRequest->station()]->name();
+    QString tHeader = tr("Departures at") % " " % stationName(mStations, iLiveboardRequest->station());
     iPainter->drawText(rect, Qt::AlignVCenter | Qt::AlignLeft, tHeader);
 
     iPainter->restore();

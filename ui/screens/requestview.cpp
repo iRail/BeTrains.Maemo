@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QFont>
 #include "ui/dialogs/stationchooser.h"
+#include "api/auxiliary.h"
 
 // Namespaces
 using namespace iRail;
@@ -133,7 +134,7 @@ void RequestView::do_btnFrom_clicked()
     if (tReturn == QDialog::Accepted)
     {
         QString tStationId = tChooser.getSelection();
-        mUIFromLine->setText(mStations[tStationId]->name());
+        mUIFromLine->setText(stationName(mStations, tStationId));
     }
 }
 
@@ -146,7 +147,7 @@ void RequestView::do_btnTo_clicked()
     if (tReturn == QDialog::Accepted)
     {
         QString tStationId = tChooser.getSelection();
-        mUIToLine->setText(mStations[tStationId]->name());
+        mUIToLine->setText(stationName(mStations, tStationId));
     }
 }
 
