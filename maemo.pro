@@ -58,7 +58,8 @@ HEADERS += \
     ui/dialogs/about.h \
     ui/auxiliary/delegates/requestdelegate.h
 TRANSLATIONS += \
-    translations/nl_BE.ts
+    translations/nl_BE.ts \
+    translations/en_US.ts
 
 # This conditional needed to trick Qt Creator
 unix:!symbian {
