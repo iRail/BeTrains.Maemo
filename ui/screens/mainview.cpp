@@ -88,7 +88,7 @@ void MainView::init_ui()
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(do_lstHistory_contextMenu(QPoint)));
-    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstHistory_clicked(QModelIndex)));
+    connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstHistory_activated(QModelIndex)));
     tUILayout->addWidget(mView);
 
     // Create the history listview dummy
@@ -151,7 +151,7 @@ void MainView::init_menu()
 // UI events
 //
 
-void MainView::do_lstHistory_clicked(QModelIndex iIndex)
+void MainView::do_lstHistory_activated(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

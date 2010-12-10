@@ -32,7 +32,7 @@ namespace iRail
 
         // UI events
     private slots:
-        void do_lstConnections_doubleClicked(QModelIndex iIndex);
+        void do_lstConnections_activated(QModelIndex iIndex);
 
         // Controller actions
     public slots:

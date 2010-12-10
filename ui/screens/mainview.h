@@ -54,7 +54,7 @@ namespace iRail
 
         // UI events
     private slots:
-        void do_lstHistory_clicked(QModelIndex iIndex);
+        void do_lstHistory_activated(QModelIndex iIndex);
         void do_actAbout_triggered();
         void do_lstHistory_contextMenu(const QPoint& iPosition);
         void do_actRemoveFavourite();

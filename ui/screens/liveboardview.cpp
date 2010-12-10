@@ -140,7 +140,7 @@ void LiveboardView::do_btnStations_clicked()
     }
 }
 
-void LiveboardView::do_lstDepartures_doubleClicked(QModelIndex iIndex)
+void LiveboardView::do_lstDepartures_activated(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -210,7 +210,7 @@ void LiveboardView::init_ui()
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new LiveboardDepartureDelegate(mStations));
-    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstDepartures_doubleClicked(QModelIndex)));
+    connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstDepartures_activated(QModelIndex)));
     tUILayout->addWidget(mView);
 
     // Create the history listview dummy

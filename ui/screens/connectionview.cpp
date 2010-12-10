@@ -52,7 +52,7 @@ void ConnectionView::load(const QMap<QString, StationPointer>& iStations, const 
 // UI events
 //
 
-void ConnectionView::do_lstConnections_doubleClicked(QModelIndex iIndex)
+void ConnectionView::do_lstConnections_activated(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
@@ -60,7 +60,7 @@ void ConnectionView::do_lstConnections_doubleClicked(QModelIndex iIndex)
     {
         ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
 
-        /* Maybe show a vehicle view of _all_ the lines? */
+        /* Maybe show a vehicle view of _all_ the lines? But only when expanded! */
     }
     else if (qVariantCanConvert<Connection::Line>(iIndex.data(ConnectionLineRole)))
     {
@@ -120,7 +120,7 @@ void ConnectionView::init_ui()
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionDelegate(mStations, mView));
-    connect(mView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(do_lstConnections_doubleClicked(QModelIndex)));
+    connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstConnections_activated(QModelIndex)));
     mUILayout->addWidget(mView);
 }
 

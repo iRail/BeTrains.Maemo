@@ -36,7 +36,7 @@ namespace iRail
         // UI events
     private slots:
         void do_btnStations_clicked();
-        void do_lstDepartures_doubleClicked(QModelIndex iIndex);
+        void do_lstDepartures_activated(QModelIndex iIndex);
         void do_btnMore_clicked();
         void clear();
 
