@@ -77,7 +77,7 @@ unix:!symbian {
     target.path = $$BINDIR
 
     desktop.path = $$DATADIR/applications/hildon
-    desktop.files += qtc_packaging/$${TARGET}.desktop
+    desktop.files += $${TARGET}.desktop
 
     icon48.path = $$DATADIR/icons/hicolor/48x48/apps
     icon48.files += ../../data/icons/hicolor/48x48/$${TARGET}.png
