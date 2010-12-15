@@ -39,6 +39,7 @@ namespace iRail
         // Widget transitions
     private slots:
         void _launchLiveboard();
+        void _launchLiveboard(LiveboardRequestPointer);
 
     private:        
         // Singleton object
