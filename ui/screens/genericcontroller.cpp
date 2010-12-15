@@ -25,7 +25,10 @@ void GenericController::showView(GenericController* parent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     if (parent != 0)
+    {
         view()->setParent(parent->view());
+        view()->setWindowFlags(view()->windowFlags() | Qt::Window);
+    }
 
     view()->show();
 }

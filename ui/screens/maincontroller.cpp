@@ -44,8 +44,9 @@ void MainController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    GenericController::showView(parent);
+    // FIXME: switching order wreaks havok??
     dynamic_cast<MainView*>(view())->load();
+    GenericController::showView(parent);
 }
 
 

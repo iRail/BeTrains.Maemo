@@ -36,8 +36,8 @@ void LiveboardController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    GenericController::showView(parent);
     dynamic_cast<LiveboardView*>(view())->load();
+    GenericController::showView(parent);
 }
 
 void LiveboardController::showView(GenericController* parent, LiveboardRequestPointer iLiveboardRequest)
