@@ -31,7 +31,7 @@ namespace iRail
 
     Q_OBJECT
     public:
-        MainView(QWidget *iParent);
+        MainView();
 
         // Controller actions
     public slots:

@@ -21,12 +21,11 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainView::MainView(QWidget* iParent) : GenericView(iParent)
+MainView::MainView() : GenericView(0)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    hide();
     init_ui();
     init_menu();
 }

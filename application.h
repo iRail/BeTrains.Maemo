@@ -36,15 +36,25 @@ namespace iRail
         void run();
         void close();
 
+        // Widget transitions
+    private slots:
+        void _launchLiveboard();
+
     private:        
         // Singleton object
         static Application *mInstance;
 
         // Member objects
         CachedAPI mAPI;
-        MainController *mController;
         SerializedStorage mStorage;
         QSettings mSettings;
+
+        // Controllers
+        MainController *mMain;
+        LiveboardController *mLiveboard;
+        RequestController *mRequest;
+        ConnectionController *mConnection;
+        VehicleController *mVehicle;
 
         // Configuration data (TODO: move into some sort of configuration container)
         QString mDataLocation;

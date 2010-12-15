@@ -13,18 +13,19 @@
 #include "liveboardview.h"
 #include "vehiclecontroller.h"
 #include <QMap>
+#include "genericcontroller.h"
 
 
 namespace iRail
 {
-    class LiveboardController : public QObject
+    class LiveboardController : public GenericController
     {
     Q_OBJECT
     public:
         explicit LiveboardController(CachedAPI* iAPI, QWidget *parent = 0);
         ~LiveboardController();
-        void showView();
-        void showView(LiveboardRequestPointer iLiveboardRequest);
+        void showView(GenericController* parent);
+        void showView(GenericController* parent, LiveboardRequestPointer iLiveboardRequest);
 
         // View slots
     private slots:

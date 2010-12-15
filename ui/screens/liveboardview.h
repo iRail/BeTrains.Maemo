@@ -27,7 +27,7 @@ namespace iRail
 
     Q_OBJECT
     public:
-        LiveboardView(QWidget *iParent);
+        LiveboardView();
         void load();
         void load(const QMap<QString, StationPointer>& iStations);
         void load(LiveboardRequestPointer iLiveboardRequest);

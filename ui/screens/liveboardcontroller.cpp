@@ -13,14 +13,14 @@ using namespace iRail;
 // Construction and destruction
 //
 
-LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
+LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : GenericController(iAPI, iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView = new LiveboardView(iParent);
-    connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadLiveboard(LiveboardRequestPointer)), this, SLOT(_downloadLiveboard(LiveboardRequestPointer)));
-    connect(mView, SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicle(QString,Liveboard::Departure)));
+    setView(new LiveboardView());
+    connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(view(), SIGNAL(downloadLiveboard(LiveboardRequestPointer)), this, SLOT(_downloadLiveboard(LiveboardRequestPointer)));
+    connect(view(), SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicle(QString,Liveboard::Departure)));
 
     mScreenVehicle = 0;
 }
@@ -29,27 +29,28 @@ LiveboardController::~LiveboardController()
 {
     qDebug() << "~ " << Q_FUNC_INFO;
 
-    delete mView;
+    delete view();
 }
 
-void LiveboardController::showView()
+void LiveboardController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->show();
-    mView->load();
+    GenericController::showView(parent);
+    dynamic_cast<LiveboardView*>(view())->load();
 }
 
-void LiveboardController::showView(LiveboardRequestPointer iLiveboardRequest)
+void LiveboardController::showView(GenericController* parent, LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->show();
-    mView->load();  // This because the liveboard screen performs two tasks:
+    GenericController::showView(parent);
+    dynamic_cast<LiveboardView*>(view())->load();
+                    // This because the liveboard screen performs two tasks:
                     // forming the request and fetching its data. This means
                     // that using the secondary load bypasses the first
                     // stage, hence we call it manually here.
-    mView->load(iLiveboardRequest);
+    dynamic_cast<LiveboardView*>(view())->load(iLiveboardRequest);
 }
 
 
@@ -61,12 +62,12 @@ void LiveboardController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    connect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
 
     bool tCached;
-    mAPI->requestStations(tCached);
+    api()->requestStations(tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void LiveboardController::_downloadLiveboard(LiveboardRequestPointer iLiveboardRequest)
@@ -77,12 +78,12 @@ void LiveboardController::_downloadLiveboard(LiveboardRequestPointer iLiveboardR
     if (! iLiveboardRequest->timed())
         emit addHistory(QVariant::fromValue(iLiveboardRequest));
 
-    connect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
+    connect(api(), SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
 
     bool tCached;
-    mAPI->requestLiveboard(iLiveboardRequest, tCached);
+    api()->requestLiveboard(iLiveboardRequest, tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void LiveboardController::_launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture)
@@ -91,7 +92,7 @@ void LiveboardController::_launchVehicle(QString iStationId, Liveboard::Departur
 
     if (mScreenVehicle == 0)
     {
-        mScreenVehicle = new VehicleController(mAPI, mView);
+        mScreenVehicle = new VehicleController(api(), view());
     }
 
     Connection::Line tLine;
@@ -116,20 +117,20 @@ void LiveboardController::gotStations(QMap<QString, StationPointer>* iStations, 
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        mView->setStations(iStations);
+        dynamic_cast<LiveboardView*>(view())->setStations(iStations);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        dynamic_cast<LiveboardView*>(view())->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
 
 void LiveboardController::gotLiveboard(LiveboardPointer* iLiveboard, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
+    disconnect(api(), SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
     if (iLiveboard != 0)
-        mView->setLiveboard(iLiveboard);
+        dynamic_cast<LiveboardView*>(view())->setLiveboard(iLiveboard);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        dynamic_cast<LiveboardView*>(view())->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }

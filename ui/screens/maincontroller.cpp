@@ -14,20 +14,20 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
+MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : GenericController(iAPI, iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView = new MainView(iParent);
-    connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(getHistoryFavourites()), this, SLOT(_getHistoryFavourites()));
-    connect(mView, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
-    connect(mView, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
-    connect(mView, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
-    connect(mView, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
-    connect(mView, SIGNAL(addFavourite(QVariant)), this, SLOT(_addFavourite(QVariant)));
-    connect(mView, SIGNAL(removeFavourite(QVariant)), this, SLOT(_removeFavourite(QVariant)));
-    connect(mView, SIGNAL(clearHistory()), this, SLOT(_clearHistory()));
+    setView(new MainView());
+    connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(view(), SIGNAL(getHistoryFavourites()), this, SLOT(_getHistoryFavourites()));
+    connect(view(), SIGNAL(launchLiveboard()), this, SIGNAL(launchLiveboard()));
+    connect(view(), SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
+    connect(view(), SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
+    connect(view(), SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
+    connect(view(), SIGNAL(addFavourite(QVariant)), this, SLOT(_addFavourite(QVariant)));
+    connect(view(), SIGNAL(removeFavourite(QVariant)), this, SLOT(_removeFavourite(QVariant)));
+    connect(view(), SIGNAL(clearHistory()), this, SLOT(_clearHistory()));
 
     mScreenLiveboard = 0;
     mScreenRequest = 0;
@@ -37,15 +37,15 @@ MainController::~MainController()
 {
     qDebug() << "~ " << Q_FUNC_INFO;
 
-    delete mView;
+    delete view();
 }
 
-void MainController::showView()
+void MainController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->load();
-    mView->show();
+    GenericController::showView(parent);
+    dynamic_cast<MainView*>(view())->load();
 }
 
 
@@ -57,12 +57,12 @@ void MainController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    connect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
 
     bool tCached;
-    mAPI->requestStations(tCached);
+    api()->requestStations(tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void MainController::_getHistoryFavourites()
@@ -72,21 +72,8 @@ void MainController::_getHistoryFavourites()
     mHistory = Application::storage()->history();
     mFavourites = Application::storage()->favourites();
 
-    mView->load(mHistory, mFavourites);
+    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 
-}
-
-void MainController::_launchLiveboard()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    if (mScreenLiveboard == 0)
-    {
-        mScreenLiveboard = new LiveboardController(mAPI, mView);
-        connect(mScreenLiveboard, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
-    }
-
-    mScreenLiveboard->showView();
 }
 
 void MainController::_launchLiveboard(LiveboardRequestPointer iLiveboardRequest)
@@ -95,11 +82,11 @@ void MainController::_launchLiveboard(LiveboardRequestPointer iLiveboardRequest)
 
     if (mScreenLiveboard == 0)
     {
-        mScreenLiveboard = new LiveboardController(mAPI, mView);
+        mScreenLiveboard = new LiveboardController(api(), view());
         connect(mScreenLiveboard, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
-    mScreenLiveboard->showView(iLiveboardRequest);
+    //mScreenLiveboard->showView(iLiveboardRequest);
 }
 
 void MainController::_launchRequest()
@@ -108,7 +95,7 @@ void MainController::_launchRequest()
 
     if (mScreenRequest == 0)
     {
-        mScreenRequest = new RequestController(mAPI, mView);
+        mScreenRequest = new RequestController(api(), view());
         connect(mScreenRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
@@ -121,7 +108,7 @@ void MainController::_launchRequest(ConnectionRequestPointer iConnectionRequest)
 
     if (mScreenRequest == 0)
     {
-        mScreenRequest = new RequestController(mAPI, mView);
+        mScreenRequest = new RequestController(api(), view());
         connect(mScreenRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     }
 
@@ -138,7 +125,7 @@ void MainController::_addFavourite(QVariant iRequest)
     Application::storage()->setHistory(mHistory);
     Application::storage()->setFavourites(mFavourites);
 
-    mView->load(mHistory, mFavourites);
+    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 }
 
 void MainController::_removeFavourite(QVariant iRequest)
@@ -149,7 +136,7 @@ void MainController::_removeFavourite(QVariant iRequest)
 
     Application::storage()->setFavourites(mFavourites);
 
-    mView->load(mHistory, mFavourites);
+    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 }
 
 void MainController::_clearHistory()
@@ -160,7 +147,7 @@ void MainController::_clearHistory()
 
     Application::storage()->clearHistory();
 
-    mView->load(mHistory, mFavourites);
+    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 }
 
 
@@ -173,11 +160,11 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations, QDate
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        mView->setStations(iStations);
+        dynamic_cast<MainView*>(view())->setStations(iStations);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
 
 
@@ -193,5 +180,5 @@ void MainController::_addHistory(QVariant iRequest)
 
     Application::storage()->setHistory(mHistory);
 
-    mView->load(mHistory, mFavourites);
+    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 }

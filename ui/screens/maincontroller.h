@@ -16,23 +16,23 @@
 #include <QMap>
 #include "liveboardcontroller.h"
 #include "requestcontroller.h"
+#include "genericcontroller.h"
 
 
 namespace iRail
 {
-    class MainController : public QObject
+    class MainController : public GenericController
     {
     Q_OBJECT
     public:
         explicit MainController(CachedAPI* iAPI, QWidget *parent = 0);
         ~MainController();
-        void showView();
+        void showView(GenericController* parent = 0);
 
         // View slots
     private slots:
         void _downloadStations();
         void _getHistoryFavourites();
-        void _launchLiveboard();
         void _launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void _launchRequest();
         void _launchRequest(ConnectionRequestPointer iConnectionRequest);
@@ -48,10 +48,12 @@ namespace iRail
     private slots:
         void _addHistory(QVariant iRequest);
 
+        // Signals
+    signals:
+        void launchLiveboard();
+
     private:
         // Member data
-        CachedAPI* mAPI;
-        MainView* mView;
         QList<QVariant> mHistory, mFavourites;
 
         // Screens

@@ -38,8 +38,15 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     tTranslator.load(settings().value("application/language", QLocale::system().name()).toString(), ":/translations");
     installTranslator(&tTranslator);
 
-    // Setup the main widget
-    mController = new MainController(&mAPI);
+    // Construct the controllers
+    mMain = new MainController(&mAPI);
+    mLiveboard = new LiveboardController(&mAPI);
+    mRequest = new RequestController(&mAPI);
+    mConnection = new ConnectionController(&mAPI);
+    mVehicle = new VehicleController(&mAPI);
+
+    // Connect them
+    connect(mMain, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
     QTimer::singleShot(0, this, SLOT(run()));
     QObject::connect(this, SIGNAL(lastWindowClosed()), this, SLOT(close()));
 
@@ -70,7 +77,7 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
 
 Application::~Application()
 {
-    delete mController;
+    delete mMain;
     mInstance = NULL;
 }
 
@@ -101,7 +108,7 @@ Storage *Application::storage()
 
 void Application::run()
 {
-    mController->showView();
+    mMain->showView();
 }
 
 void Application::close()
@@ -121,4 +128,26 @@ void Application::close()
 
     // Synchronize the settings
     settings().sync();
+}
+
+
+//
+// Widget transitions
+//
+
+void Application::_launchLiveboard()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    /*
+    if (mScreenLiveboard == 0)
+    {
+        mScreenLiveboard = new LiveboardController(mAPI, mView);
+        connect(mScreenLiveboard, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
+    }
+
+    mScreenLiveboard->showView();
+    */
+
+    mLiveboard->showView(mMain);
 }

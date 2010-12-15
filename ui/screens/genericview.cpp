@@ -15,15 +15,12 @@ using namespace iRail;
 // Construction and destruction
 //
 
-GenericView::GenericView(QWidget* iParent) : QMainWindow(iParent)
+GenericView::GenericView(QWidget* iParent) : QMainWindow(iParent)   // TODO: remove parent references when all removed
 {
     qDebug() << "+ " << Q_FUNC_INFO;    
 
     // Center widget
     setCentralWidget(new QWidget());
-
-    // Window management
-    setWindowFlags(windowFlags() | Qt::Window);
     setAttribute(Qt::WA_Maemo5StackedWindow);
 
     // Initialize member
@@ -36,7 +33,6 @@ GenericView::GenericView(QWidget* iParent) : QMainWindow(iParent)
 GenericView::~GenericView()
 {
     qDebug() << "~ " << Q_FUNC_INFO;
-
 }
 
 

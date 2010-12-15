@@ -25,7 +25,6 @@ ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Initialisation
-    hide();
     init_ui();
 }
 

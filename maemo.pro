@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     ui/screens/genericview.cpp \
     application.cpp \
     ui/dialogs/about.cpp \
-    ui/auxiliary/delegates/requestdelegate.cpp
+    ui/auxiliary/delegates/requestdelegate.cpp \
+    ui/screens/genericcontroller.cpp
 HEADERS += \
     ui/global.h \
     ui/screens/maincontroller.h \
@@ -56,7 +57,8 @@ HEADERS += \
     ui/auxiliary/graphicsrectobject.h \
     application.h \
     ui/dialogs/about.h \
-    ui/auxiliary/delegates/requestdelegate.h
+    ui/auxiliary/delegates/requestdelegate.h \
+    ui/screens/genericcontroller.h
 TRANSLATIONS += \
     translations/nl_BE.ts \
     translations/en_US.ts
