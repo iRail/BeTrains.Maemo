@@ -42,7 +42,7 @@ void RequestController::showView(GenericController* parent)
     dynamic_cast<RequestView*>(view())->load();
 }
 
-void RequestController::loadView(GenericController* parent, ConnectionRequestPointer iInitialRequest)
+void RequestController::showView(GenericController* parent, ConnectionRequestPointer iInitialRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

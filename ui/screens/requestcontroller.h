@@ -29,7 +29,7 @@ namespace iRail
 
         // Application actions
         void showView(GenericController* parent);
-        void loadView(GenericController* parent, ConnectionRequestPointer iInitialRequest);
+        void showView(GenericController* parent, ConnectionRequestPointer iInitialRequest);
 
         // View slots
     private slots:

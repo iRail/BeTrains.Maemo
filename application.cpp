@@ -175,7 +175,7 @@ void Application::_launchConnectionFromMain(ConnectionRequestPointer iConnection
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mRequest->loadView(mMain, iConnectionRequest);  // FIXME
+    mRequest->showView(mMain, iConnectionRequest);  // FIXME
     mConnection->showView(mRequest, iConnectionRequest);
 }
 
