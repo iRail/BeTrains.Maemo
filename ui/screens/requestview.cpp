@@ -138,18 +138,6 @@ void RequestView::load()
     emit downloadStations();
 }
 
-void RequestView::load(const QMap<QString, StationPointer>& iStations)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
-
-    mStations = iStations;
-    mUIFromButton->setEnabled(true);
-    mUIToButton->setEnabled(true);
-
-    do_btnClear_clicked();
-}
-
 void RequestView::load(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -174,9 +162,13 @@ void RequestView::load(ConnectionRequestPointer iConnectionRequest)
 void RequestView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
 
-    load(*iStations);
+    mStations = *iStations;
     delete iStations;
+
+    mUIFromButton->setEnabled(true);
+    mUIToButton->setEnabled(true);
 }
 
 

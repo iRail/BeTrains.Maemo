@@ -311,6 +311,7 @@ void MainView::populateModel(const QList<QVariant>& iHistory, const QList<QVaria
         }
 
         mViewDummy->setVisible(false);
+        qDebug() << "Central widget size" << centralWidget()->height();
         mView->setFixedHeight(centralWidget()->height());   // HACK
     }
 }

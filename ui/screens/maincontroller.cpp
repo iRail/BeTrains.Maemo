@@ -46,9 +46,8 @@ void MainController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    // FIXME: switching order wreaks havok??
-    dynamic_cast<MainView*>(view())->load();
     GenericController::showView(parent);
+    dynamic_cast<MainView*>(view())->load();
 }
 
 void MainController::addHistory(QVariant iRequest)

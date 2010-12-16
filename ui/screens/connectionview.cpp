@@ -70,23 +70,15 @@ void ConnectionView::load(ConnectionRequestPointer iConnectionRequest)
     emit downloadConnections(iConnectionRequest);
 }
 
-void ConnectionView::load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
+void ConnectionView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
 
-    mStations = iStations;  // TODO: also in load?
-
-    // Show the results
-    populateModel(iConnections);
-}
-
-void ConnectionView::setStations(QMap<QString, StationPointer>* iStations)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load(*iStations, *tConnections);
+    mStations = *iStations;
     delete iStations;
+
+    populateModel(*tConnections);
     delete tConnections;
 }
 
@@ -95,6 +87,7 @@ void ConnectionView::setConnections(QList<ConnectionPointer>* iConnections)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     tConnections = iConnections;
+
     emit downloadStations();
 }
 

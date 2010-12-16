@@ -49,7 +49,6 @@ namespace iRail
     public slots:
         void reset();
         void load();
-        void load(const QMap<QString, StationPointer>& iStations);
         void load(ConnectionRequestPointer iConnectionRequest);
         void setStations(QMap<QString, StationPointer>* iStations);
 

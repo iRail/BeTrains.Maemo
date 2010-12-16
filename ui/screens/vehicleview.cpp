@@ -58,23 +58,15 @@ void VehicleView::load(Connection::Line iLine)
     emit downloadVehicle(iLine.vehicle);
 }
 
-void VehicleView::load(const QMap<QString, StationPointer>& iStations, Connection::Line iLine, VehiclePointer iVehicle)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    stopLoader();
-    mStations = iStations;
-
-    // Show the results
-    populateModel(iLine, iVehicle);
-}
-
 void VehicleView::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << Q_FUNC_INFO;
+    qDebug() << "+ " << Q_FUNC_INFO;    
+    stopLoader();
 
-    load(*iStations, tLine, tVehicle);
+    mStations = *iStations;
     delete iStations;
+
+    populateModel(tLine, tVehicle);
     tVehicle.clear();
 }
 

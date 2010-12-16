@@ -89,15 +89,6 @@ void LiveboardView::load()
     emit downloadStations();
 }
 
-void LiveboardView::load(const QMap<QString, StationPointer>& iStations)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
-
-    mStations = iStations;
-    mUIStationButton->setEnabled(true);
-}
-
 void LiveboardView::load(LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -106,9 +97,20 @@ void LiveboardView::load(LiveboardRequestPointer iLiveboardRequest)
     emit downloadLiveboard(iLiveboardRequest);
 }
 
-void LiveboardView::load(LiveboardPointer iLiveboard)
+void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
+
+    mStations = *iStations;
+    delete iStations;
+
+    mUIStationButton->setEnabled(true);
+}
+
+void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;    
     stopLoader();
 
     // Preserve the scroll position
@@ -116,10 +118,10 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
 
     // Append the results
     int tAppendedItems = 0;
-    for (int i = 0; i < iLiveboard->departures().size(); i++)
+    for (int i = 0; i < (*iLiveboard)->departures().size(); i++)
     {
         // Check if the item isn't present already
-        const Liveboard::Departure tDeparture = iLiveboard->departures().at(i);
+        const Liveboard::Departure tDeparture = (*iLiveboard)->departures().at(i);
         bool tPresent = false;
         for (int j = 0; j < mDepartures.size(); j++)
         {
@@ -133,9 +135,9 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
         // If not found, add this and all others
         if (!tPresent)
         {
-            for (int j = i; j < iLiveboard->departures().size(); j++)
+            for (int j = i; j < (*iLiveboard)->departures().size(); j++)
             {
-                mDepartures.append(iLiveboard->departures().at(j));
+                mDepartures.append((*iLiveboard)->departures().at(j));
                 tAppendedItems++;
             }
             break;
@@ -161,21 +163,7 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
         mView->scrollToTop();
     else
         mView->scrollTo(mModel->index(mModel->rowCount()-tAppendedItems-1, 0));
-}
 
-void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load(*iStations);
-    delete iStations;
-}
-
-void LiveboardView::setLiveboard(LiveboardPointer* iLiveboard)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    load(*iLiveboard);
     delete iLiveboard;
 }
 //

@@ -39,9 +39,7 @@ namespace iRail
     public slots:
         void reset();
         void load();
-        void load(const QMap<QString, StationPointer>& iStations);
         void load(LiveboardRequestPointer iLiveboardRequest);
-        void load(LiveboardPointer iLiveboard);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setLiveboard(LiveboardPointer* iLiveboard);
 
