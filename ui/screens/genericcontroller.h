@@ -19,6 +19,8 @@ namespace iRail
     Q_OBJECT
     public:
         explicit GenericController(CachedAPI* iAPI, QWidget *parent = 0);
+
+        // Application actions
         virtual void showView(GenericController* parent = 0);
 
         // Signals

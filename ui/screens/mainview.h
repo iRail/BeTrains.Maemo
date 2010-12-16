@@ -47,7 +47,7 @@ namespace iRail
         void launchLiveboard();
         void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void launchRequest();
-        void launchRequest(ConnectionRequestPointer iConnectionRequest);
+        void launchConnection(ConnectionRequestPointer iConnectionRequest);
         void addFavourite(QVariant iRequest);
         void removeFavourite(QVariant iRequest);
         void clearHistory();

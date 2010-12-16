@@ -32,6 +32,11 @@ LiveboardController::~LiveboardController()
     delete view();
 }
 
+
+//
+// Application actions
+//
+
 void LiveboardController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -76,7 +81,7 @@ void LiveboardController::_downloadLiveboard(LiveboardRequestPointer iLiveboardR
 
     // Manage history (but skip timed requests, from the "More" button)
     if (! iLiveboardRequest->timed())
-        emit addHistory(QVariant::fromValue(iLiveboardRequest));
+        emit launchLiveboard(iLiveboardRequest);
 
     connect(api(), SIGNAL(replyLiveboard(LiveboardPointer*, QDateTime)), this, SLOT(gotLiveboard(LiveboardPointer*, QDateTime)));
 

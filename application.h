@@ -40,11 +40,12 @@ namespace iRail
 
         // Widget transitions
     private slots:
-        void _launchLiveboard();
-        void _launchLiveboard(LiveboardRequestPointer);
-        void _launchRequest();
-        void _launchRequest(ConnectionRequestPointer);
-        void _launchConnection(ConnectionRequestPointer iConnectionRequest);
+        void _launchLiveboardFromMain();
+        void _launchLiveboardFromMain(LiveboardRequestPointer);
+        void _launchLiveboardFromLiveboard(LiveboardRequestPointer);
+        void _launchRequestFromMain();
+        void _launchConnectionFromMain(ConnectionRequestPointer);
+        void _launchConnectionFromRequest(ConnectionRequestPointer iConnectionRequest);
         void _launchVehicleFromConnection(Connection::Line iConnectionLine);
         void _launchVehicleFromLiveboard(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 

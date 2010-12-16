@@ -30,6 +30,11 @@ ConnectionController::~ConnectionController()
     delete view();
 }
 
+
+//
+// Application actions
+//
+
 void ConnectionController::showView(GenericController* parent, ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;

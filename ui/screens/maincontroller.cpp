@@ -24,7 +24,7 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : GenericContr
     connect(view(), SIGNAL(launchLiveboard()), this, SIGNAL(launchLiveboard()));
     connect(view(), SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SIGNAL(launchLiveboard(LiveboardRequestPointer)));
     connect(view(), SIGNAL(launchRequest()), this, SIGNAL(launchRequest()));
-    connect(view(), SIGNAL(launchRequest(ConnectionRequestPointer)), this, SIGNAL(launchRequest(ConnectionRequestPointer)));
+    connect(view(), SIGNAL(launchConnection(ConnectionRequestPointer)), this, SIGNAL(launchConnection(ConnectionRequestPointer)));
     connect(view(), SIGNAL(addFavourite(QVariant)), this, SLOT(_addFavourite(QVariant)));
     connect(view(), SIGNAL(removeFavourite(QVariant)), this, SLOT(_removeFavourite(QVariant)));
     connect(view(), SIGNAL(clearHistory()), this, SLOT(_clearHistory()));
@@ -37,6 +37,11 @@ MainController::~MainController()
     delete view();
 }
 
+
+//
+// Application actions
+//
+
 void MainController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -44,6 +49,17 @@ void MainController::showView(GenericController* parent)
     // FIXME: switching order wreaks havok??
     dynamic_cast<MainView*>(view())->load();
     GenericController::showView(parent);
+}
+
+void MainController::addHistory(QVariant iRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mHistory.push_front(iRequest);
+
+    Application::storage()->setHistory(mHistory);
+
+    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 }
 
 
@@ -124,20 +140,4 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations, QDate
         dynamic_cast<MainView*>(view())->setStations(iStations);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
-}
-
-
-//
-// External signal slots
-//
-
-void MainController::_addHistory(QVariant iRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    mHistory.push_front(iRequest);
-
-    Application::storage()->setHistory(mHistory);
-
-    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
 }

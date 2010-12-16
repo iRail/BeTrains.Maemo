@@ -29,6 +29,11 @@ RequestController::~RequestController()
     delete view();
 }
 
+
+//
+// Application actions
+//
+
 void RequestController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -37,18 +42,13 @@ void RequestController::showView(GenericController* parent)
     dynamic_cast<RequestView*>(view())->load();
 }
 
-// TODO: this method just forwards the data to the following
-//       widget. This won't be neccesary when we have access
-//       to all screens from the application controller
-//       (using a state machine).
-void RequestController::showView(GenericController* parent, ConnectionRequestPointer iInitialRequest)
+void RequestController::loadView(GenericController* parent, ConnectionRequestPointer iInitialRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     GenericController::showView(parent);
     dynamic_cast<RequestView*>(view())->load();
     dynamic_cast<RequestView*>(view())->configure(iInitialRequest);
-    // TODO emit _launchConnection(iInitialRequest);
 }
 
 

@@ -20,6 +20,11 @@ GenericController::GenericController(CachedAPI* iAPI, QWidget* iParent) : mAPI(i
     mView = 0;
 }
 
+
+//
+// Application actions
+//
+
 void GenericController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;

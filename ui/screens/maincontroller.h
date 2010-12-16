@@ -25,7 +25,10 @@ namespace iRail
     public:
         explicit MainController(CachedAPI* iAPI, QWidget *parent = 0);
         ~MainController();
+
+        // Application actions
         void showView(GenericController* parent = 0);
+        void addHistory(QVariant iRequest);
 
         // View slots
     private slots:
@@ -39,16 +42,12 @@ namespace iRail
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
 
-        // External signal slots
-    private slots:
-        void _addHistory(QVariant iRequest);
-
         // Signals
     signals:
         void launchLiveboard();
         void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
         void launchRequest();
-        void launchRequest(ConnectionRequestPointer iConnectionRequest);
+        void launchConnection(ConnectionRequestPointer iConnectionRequest);
 
     private:
         // Member data

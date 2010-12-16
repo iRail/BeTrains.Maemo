@@ -24,6 +24,8 @@ namespace iRail
     public:
         explicit LiveboardController(CachedAPI* iAPI, QWidget *parent = 0);
         ~LiveboardController();
+
+        // Application actions
         void showView(GenericController* parent);
         void showView(GenericController* parent, LiveboardRequestPointer iLiveboardRequest);
 
@@ -35,15 +37,12 @@ namespace iRail
         // Signals
     signals:
         void launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture);
+        void launchLiveboard(LiveboardRequestPointer);
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
         void gotLiveboard(LiveboardPointer* iLiveboard, QDateTime iTimestamp);
-
-        // External signals:
-    signals:
-        void addHistory(QVariant iRequest);
 
     private:
         // Member data

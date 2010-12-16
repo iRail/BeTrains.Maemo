@@ -25,6 +25,8 @@ namespace iRail
     public:
         explicit ConnectionController(CachedAPI* iAPI, QWidget *parent = 0);
         ~ConnectionController();
+
+        // Application actions
         void showView(GenericController* parent, ConnectionRequestPointer iConnectionRequest);
 
         // View slots

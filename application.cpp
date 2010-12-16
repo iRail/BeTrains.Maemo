@@ -46,14 +46,13 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     mVehicle = new VehicleController(&mAPI);
 
     // Connect them
-    connect(mMain, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
-    connect(mMain, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
-    connect(mLiveboard, SIGNAL(addHistory(QVariant)), mMain, SLOT(_addHistory(QVariant)));
+    connect(mMain, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboardFromMain()));
+    connect(mMain, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboardFromMain(LiveboardRequestPointer)));
     connect(mLiveboard, SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicleFromLiveboard(QString,Liveboard::Departure)));
-    connect(mMain, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
-    connect(mMain, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
-    connect(mRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
-    connect(mRequest, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
+    connect(mLiveboard, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboardFromLiveboard(LiveboardRequestPointer)));
+    connect(mMain, SIGNAL(launchRequest()), this, SLOT(_launchRequestFromMain()));
+    connect(mMain, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnectionFromMain(ConnectionRequestPointer)));
+    connect(mRequest, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnectionFromRequest(ConnectionRequestPointer)));
     connect(mConnection, SIGNAL(launchVehicle(Connection::Line)), this, SLOT(_launchVehicleFromConnection(Connection::Line)));
     QTimer::singleShot(0, this, SLOT(run()));
     QObject::connect(this, SIGNAL(lastWindowClosed()), this, SLOT(close()));
@@ -143,40 +142,48 @@ void Application::close()
 // Widget transitions
 //
 
-void Application::_launchLiveboard()
+void Application::_launchLiveboardFromMain()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mLiveboard->showView(mMain);
 }
 
-void Application::_launchLiveboard(LiveboardRequestPointer iLiveboardRequest)
+void Application::_launchLiveboardFromMain(LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mLiveboard->showView(mMain, iLiveboardRequest);
 }
 
+void Application::_launchLiveboardFromLiveboard(LiveboardRequestPointer iLiveboardRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
 
-void Application::_launchRequest()
+    mMain->addHistory(QVariant::fromValue(iLiveboardRequest));
+}
+
+
+void Application::_launchRequestFromMain()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mRequest->showView(mMain);
 }
 
-void Application::_launchRequest(ConnectionRequestPointer iConnectionRequest)
+void Application::_launchConnectionFromMain(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mRequest->showView(mMain, iConnectionRequest);
+    mRequest->loadView(mMain, iConnectionRequest);  // FIXME
+    mConnection->showView(mRequest, iConnectionRequest);
 }
 
-void Application::_launchConnection(ConnectionRequestPointer iConnectionRequest)
+void Application::_launchConnectionFromRequest(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    // TODO emit addHistory(QVariant::fromValue(iConnectionRequest));
 
+    mMain->addHistory(QVariant::fromValue(iConnectionRequest));
     mConnection->showView(mRequest, iConnectionRequest);
 }
 

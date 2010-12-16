@@ -29,6 +29,11 @@ VehicleController::~VehicleController()
     delete view();
 }
 
+
+//
+// Application actions
+//
+
 void VehicleController::showView(GenericController* parent, Connection::Line iConnectionLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;

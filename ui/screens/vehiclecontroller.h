@@ -25,6 +25,8 @@ namespace iRail
     public:
         explicit VehicleController(CachedAPI* iAPI, QWidget *parent = 0);
         ~VehicleController();
+
+        // Application actions
         void showView(GenericController* parent, Connection::Line iConnectionLine);
 
         // View slots

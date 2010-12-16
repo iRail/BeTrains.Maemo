@@ -157,7 +157,7 @@ void MainView::do_lstHistory_activated(QModelIndex iIndex)
     if (iIndex.data(ConnectionRequestRole).type() != QVariant::Invalid)
     {
         ConnectionRequestPointer tConnectionRequest = iIndex.data(ConnectionRequestRole).value<ConnectionRequestPointer>();
-        emit launchRequest(tConnectionRequest);
+        emit launchConnection(tConnectionRequest);
     }
     else if (iIndex.data(LiveboardRequestRole).type() != QVariant::Invalid)
     {
