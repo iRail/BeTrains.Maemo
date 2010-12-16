@@ -20,7 +20,7 @@ LiveboardController::LiveboardController(CachedAPI* iAPI, QWidget* iParent) : Ge
     setView(new LiveboardView());
     connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
     connect(view(), SIGNAL(downloadLiveboard(LiveboardRequestPointer)), this, SLOT(_downloadLiveboard(LiveboardRequestPointer)));
-    connect(view(), SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicle(QString,Liveboard::Departure)));
+    connect(view(), SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SIGNAL(launchVehicle(QString,Liveboard::Departure)));
 
     mScreenVehicle = 0;
 }
@@ -84,28 +84,6 @@ void LiveboardController::_downloadLiveboard(LiveboardRequestPointer iLiveboardR
     api()->requestLiveboard(iLiveboardRequest, tCached);
     if (!tCached)
         view()->showProgress();
-}
-
-void LiveboardController::_launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    if (mScreenVehicle == 0)
-    {
-        mScreenVehicle = new VehicleController(api(), view());
-    }
-
-    Connection::Line tLine;
-    tLine.departure.station = iStationId;
-    tLine.departure.platform = iLiveboardDeparture.platform;
-    tLine.departure.delay = iLiveboardDeparture.delay;
-    tLine.departure.datetime = iLiveboardDeparture.datetime;
-    tLine.arrival.station = iLiveboardDeparture.station;
-    tLine.arrival.platform = 0;
-    tLine.arrival.delay = 0;
-    tLine.vehicle = iLiveboardDeparture.vehicle;
-
-    mScreenVehicle->showView(tLine);
 }
 
 

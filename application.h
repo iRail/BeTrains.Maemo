@@ -45,6 +45,8 @@ namespace iRail
         void _launchRequest();
         void _launchRequest(ConnectionRequestPointer);
         void _launchConnection(ConnectionRequestPointer iConnectionRequest);
+        void _launchVehicleFromConnection(Connection::Line iConnectionLine);
+        void _launchVehicleFromLiveboard(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 
     private:        
         // Singleton object

@@ -14,7 +14,6 @@
 #include "connectionview.h"
 #include <QList>
 #include <QMap>
-#include "vehiclecontroller.h"
 #include "genericcontroller.h"
 
 
@@ -32,16 +31,15 @@ namespace iRail
     private slots:
         void _downloadStations();
         void _downloadConnections(ConnectionRequestPointer iConnectionRequest);
-        void _launchVehicle(Connection::Line iConnectionLine);
+
+        // Signals
+    signals:
+        void launchVehicle(Connection::Line iConnectionLine);
 
         // Internal slots
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
         void gotConnections(QList<ConnectionPointer>* iConnections, QDateTime iTimestamp);
-
-    private:
-        // Screens
-        VehicleController* mScreenVehicle;
     };
 }
 

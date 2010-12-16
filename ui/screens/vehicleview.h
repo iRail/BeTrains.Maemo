@@ -25,7 +25,7 @@ namespace iRail
 
     Q_OBJECT
     public:
-        VehicleView(QWidget *iParent);
+        VehicleView();
         ~VehicleView();
         void load(Connection::Line iConnectionLine);
         void load(const QMap<QString, StationPointer>& iStations, Connection::Line iLine, VehiclePointer iVehicle);

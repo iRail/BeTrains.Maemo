@@ -49,10 +49,12 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     connect(mMain, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
     connect(mMain, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
     connect(mLiveboard, SIGNAL(addHistory(QVariant)), mMain, SLOT(_addHistory(QVariant)));
+    connect(mLiveboard, SIGNAL(launchVehicle(QString,Liveboard::Departure)), this, SLOT(_launchVehicleFromLiveboard(QString,Liveboard::Departure)));
     connect(mMain, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
     connect(mMain, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
     connect(mRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     connect(mRequest, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
+    connect(mConnection, SIGNAL(launchVehicle(Connection::Line)), this, SLOT(_launchVehicleFromConnection(Connection::Line)));
     QTimer::singleShot(0, this, SLOT(run()));
     QObject::connect(this, SIGNAL(lastWindowClosed()), this, SLOT(close()));
 
@@ -176,4 +178,28 @@ void Application::_launchConnection(ConnectionRequestPointer iConnectionRequest)
     // TODO emit addHistory(QVariant::fromValue(iConnectionRequest));
 
     mConnection->showView(mRequest, iConnectionRequest);
+}
+
+void Application::_launchVehicleFromConnection(Connection::Line iConnectionLine)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mVehicle->showView(mConnection, iConnectionLine);
+}
+
+void Application::_launchVehicleFromLiveboard(QString iStationId, Liveboard::Departure iLiveboardDeparture)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    Connection::Line tLine;
+    tLine.departure.station = iStationId;
+    tLine.departure.platform = iLiveboardDeparture.platform;
+    tLine.departure.delay = iLiveboardDeparture.delay;
+    tLine.departure.datetime = iLiveboardDeparture.datetime;
+    tLine.arrival.station = iLiveboardDeparture.station;
+    tLine.arrival.platform = 0;
+    tLine.arrival.delay = 0;
+    tLine.vehicle = iLiveboardDeparture.vehicle;
+
+    mVehicle->showView(mLiveboard, tLine);
 }

@@ -13,28 +13,28 @@ using namespace iRail;
 // Construction and destruction
 //
 
-VehicleController::VehicleController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
+VehicleController::VehicleController(CachedAPI* iAPI, QWidget* iParent) : GenericController(iAPI, iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView = new VehicleView(iParent);
-    connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
+    setView(new VehicleView());
+    connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(view(), SIGNAL(downloadVehicle(QString)), this, SLOT(_downloadVehicle(QString)));
 }
 
 VehicleController::~VehicleController()
 {
     qDebug() << "~ " << Q_FUNC_INFO;
 
-    delete mView;
+    delete view();
 }
 
-void VehicleController::showView(Connection::Line iConnectionLine)
+void VehicleController::showView(GenericController* parent, Connection::Line iConnectionLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->show();
-    mView->load(iConnectionLine);
+    GenericController::showView(parent);
+    dynamic_cast<VehicleView*>(view())->load(iConnectionLine);
 }
 
 
@@ -46,24 +46,24 @@ void VehicleController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    connect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
 
     bool tCached;
-    mAPI->requestStations(tCached);
+    api()->requestStations(tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void VehicleController::_downloadVehicle(QString iVehicleId)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
+    connect(api(), SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
 
     bool tCached;
-    mAPI->requestVehicle(iVehicleId, tCached);
+    api()->requestVehicle(iVehicleId, tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 
@@ -75,20 +75,20 @@ void VehicleController::gotStations(QMap<QString, StationPointer>* iStations, QD
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        mView->setStations(iStations);
+        dynamic_cast<VehicleView*>(view())->setStations(iStations);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
 
 void VehicleController::gotVehicle(VehiclePointer* iVehicle, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
+    disconnect(api(), SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
     if (iVehicle != 0)
-        mView->setVehicle(iVehicle);
+        dynamic_cast<VehicleView*>(view())->setVehicle(iVehicle);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
