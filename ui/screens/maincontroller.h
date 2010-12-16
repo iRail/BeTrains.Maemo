@@ -14,8 +14,6 @@
 #include "mainview.h"
 #include <QList>
 #include <QMap>
-#include "liveboardcontroller.h"
-#include "requestcontroller.h"
 #include "genericcontroller.h"
 
 
@@ -55,9 +53,6 @@ namespace iRail
     private:
         // Member data
         QList<QVariant> mHistory, mFavourites;
-
-        // Screens
-        RequestController* mScreenRequest;
     };
 }
 

@@ -28,8 +28,6 @@ MainController::MainController(CachedAPI* iAPI, QWidget* iParent) : GenericContr
     connect(view(), SIGNAL(addFavourite(QVariant)), this, SLOT(_addFavourite(QVariant)));
     connect(view(), SIGNAL(removeFavourite(QVariant)), this, SLOT(_removeFavourite(QVariant)));
     connect(view(), SIGNAL(clearHistory()), this, SLOT(_clearHistory()));
-
-    mScreenRequest = 0;
 }
 
 MainController::~MainController()

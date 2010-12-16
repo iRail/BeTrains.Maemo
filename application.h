@@ -15,6 +15,8 @@
 #include "cachedapi.h"
 #include "api/storage/serializedstorage.h"
 #include "ui/screens/maincontroller.h"
+#include "ui/screens/liveboardcontroller.h"
+#include "ui/screens/requestcontroller.h"
 
 namespace iRail
 {
