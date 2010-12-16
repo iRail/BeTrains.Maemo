@@ -19,7 +19,7 @@ namespace iRail
     {
     Q_OBJECT
     public:
-        GenericView(QWidget *iParent);
+        GenericView();
         ~GenericView();
 
         // Controller actions

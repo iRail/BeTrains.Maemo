@@ -22,7 +22,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-VehicleView::VehicleView() : GenericView(0)
+VehicleView::VehicleView() : GenericView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

@@ -15,7 +15,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-GenericView::GenericView(QWidget* iParent) : QMainWindow(iParent)   // TODO: remove parent references when all removed
+GenericView::GenericView() : QMainWindow()
 {
     qDebug() << "+ " << Q_FUNC_INFO;    
 

@@ -18,7 +18,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-LiveboardView::LiveboardView() : GenericView(0)
+LiveboardView::LiveboardView() : GenericView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

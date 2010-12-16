@@ -21,7 +21,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MainView::MainView() : GenericView(0)
+MainView::MainView() : GenericView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

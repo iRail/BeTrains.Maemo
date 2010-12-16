@@ -20,7 +20,7 @@ using namespace iRail;
 // Confuction and destruction
 //
 
-ConnectionView::ConnectionView() : GenericView(0)
+ConnectionView::ConnectionView() : GenericView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
