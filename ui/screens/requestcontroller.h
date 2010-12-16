@@ -32,7 +32,10 @@ namespace iRail
         // View slots
     private slots:
         void _downloadStations();
-        void _launchConnection(ConnectionRequestPointer iConnectionRequest);
+
+        // Signals
+    signals:
+        void launchConnection(ConnectionRequestPointer iConnectionRequest);
 
         // Internal slots
     private slots:
@@ -41,10 +44,6 @@ namespace iRail
         // External signals:
     signals:
         void addHistory(QVariant iRequest);
-
-    private:
-        // Screens
-        ConnectionController* mScreenConnection;
     };
 }
 

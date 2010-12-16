@@ -13,14 +13,14 @@ using namespace iRail;
 // Construction and destruction
 //
 
-ConnectionController::ConnectionController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
+ConnectionController::ConnectionController(CachedAPI* iAPI, QWidget* iParent) : GenericController(iAPI, iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView = new ConnectionView(iParent);
-    connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
-    connect(mView, SIGNAL(launchVehicle(Connection::Line)), this, SLOT(_launchVehicle(Connection::Line)));
+    setView(new ConnectionView());
+    connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(view(), SIGNAL(downloadConnections(ConnectionRequestPointer)), this, SLOT(_downloadConnections(ConnectionRequestPointer)));
+    connect(view(), SIGNAL(launchVehicle(Connection::Line)), this, SLOT(_launchVehicle(Connection::Line)));
 
     mScreenVehicle = 0;
 }
@@ -29,15 +29,15 @@ ConnectionController::~ConnectionController()
 {
     qDebug() << "~ " << Q_FUNC_INFO;
 
-    delete mView;
+    delete view();
 }
 
-void ConnectionController::showView(ConnectionRequestPointer iConnectionRequest)
+void ConnectionController::showView(GenericController* parent, ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->show();
-    mView->load(iConnectionRequest);
+    GenericController::showView(parent);
+    dynamic_cast<ConnectionView*>(view())->load(iConnectionRequest);
 }
 
 
@@ -49,24 +49,24 @@ void ConnectionController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    connect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
 
     bool tCached;
-    mAPI->requestStations(tCached);
+    api()->requestStations(tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void ConnectionController::_downloadConnections(ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
+    connect(api(), SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
 
     bool tCached;
-    mAPI->requestConnections(iConnectionRequest, tCached);
+    api()->requestConnections(iConnectionRequest, tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void ConnectionController::_launchVehicle(Connection::Line iConnectionLine)
@@ -75,7 +75,7 @@ void ConnectionController::_launchVehicle(Connection::Line iConnectionLine)
 
     if (mScreenVehicle == 0)
     {
-        mScreenVehicle = new VehicleController(mAPI, mView);
+        mScreenVehicle = new VehicleController(api(), view());
     }
 
     mScreenVehicle->showView(iConnectionLine);
@@ -90,20 +90,20 @@ void ConnectionController::gotStations(QMap<QString, StationPointer>* iStations,
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        mView->setStations(iStations);
+        dynamic_cast<ConnectionView*>(view())->setStations(iStations);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
 
 void ConnectionController::gotConnections(QList<ConnectionPointer>* iConnections, QDateTime iTimestamp)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
+    disconnect(api(), SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
     if (iConnections != 0)
-        mView->setConnections(iConnections);
+        dynamic_cast<ConnectionView*>(view())->setConnections(iConnections);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }

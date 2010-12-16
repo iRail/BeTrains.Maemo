@@ -52,6 +52,7 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     connect(mMain, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
     connect(mMain, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
     connect(mRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
+    connect(mRequest, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
     QTimer::singleShot(0, this, SLOT(run()));
     QObject::connect(this, SIGNAL(lastWindowClosed()), this, SLOT(close()));
 
@@ -167,4 +168,12 @@ void Application::_launchRequest(ConnectionRequestPointer iConnectionRequest)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mRequest->showView(mMain, iConnectionRequest);
+}
+
+void Application::_launchConnection(ConnectionRequestPointer iConnectionRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+    // TODO emit addHistory(QVariant::fromValue(iConnectionRequest));
+
+    mConnection->showView(mRequest, iConnectionRequest);
 }

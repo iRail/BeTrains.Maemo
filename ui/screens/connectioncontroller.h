@@ -15,17 +15,18 @@
 #include <QList>
 #include <QMap>
 #include "vehiclecontroller.h"
+#include "genericcontroller.h"
 
 
 namespace iRail
 {
-    class ConnectionController : public QObject
+    class ConnectionController : public GenericController
     {
     Q_OBJECT
     public:
         explicit ConnectionController(CachedAPI* iAPI, QWidget *parent = 0);
         ~ConnectionController();
-        void showView(ConnectionRequestPointer iConnectionRequest);
+        void showView(GenericController* parent, ConnectionRequestPointer iConnectionRequest);
 
         // View slots
     private slots:
@@ -39,10 +40,6 @@ namespace iRail
         void gotConnections(QList<ConnectionPointer>* iConnections, QDateTime iTimestamp);
 
     private:
-        // Member data
-        CachedAPI* mAPI;
-        ConnectionView* mView;
-
         // Screens
         VehicleController* mScreenVehicle;
     };

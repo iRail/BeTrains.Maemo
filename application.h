@@ -44,6 +44,7 @@ namespace iRail
         void _launchLiveboard(LiveboardRequestPointer);
         void _launchRequest();
         void _launchRequest(ConnectionRequestPointer);
+        void _launchConnection(ConnectionRequestPointer iConnectionRequest);
 
     private:        
         // Singleton object

@@ -20,7 +20,7 @@ using namespace iRail;
 // Confuction and destruction
 //
 
-ConnectionView::ConnectionView(QWidget* iParent) : GenericView(iParent)
+ConnectionView::ConnectionView() : GenericView(0)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

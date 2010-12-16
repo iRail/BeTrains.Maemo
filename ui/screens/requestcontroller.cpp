@@ -19,9 +19,7 @@ RequestController::RequestController(CachedAPI* iAPI, QWidget* iParent) : Generi
 
     setView(new RequestView());
     connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(view(), SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
-
-    mScreenConnection = 0;
+    connect(view(), SIGNAL(launchConnection(ConnectionRequestPointer)), this, SIGNAL(launchConnection(ConnectionRequestPointer)));
 }
 
 RequestController::~RequestController()
@@ -50,7 +48,7 @@ void RequestController::showView(GenericController* parent, ConnectionRequestPoi
     GenericController::showView(parent);
     dynamic_cast<RequestView*>(view())->load();
     dynamic_cast<RequestView*>(view())->configure(iInitialRequest);
-    emit _launchConnection(iInitialRequest);
+    // TODO emit _launchConnection(iInitialRequest);
 }
 
 
@@ -68,19 +66,6 @@ void RequestController::_downloadStations()
     api()->requestStations(tCached);
     if (!tCached)
         view()->showProgress();
-}
-
-void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-    emit addHistory(QVariant::fromValue(iConnectionRequest));
-
-    if (mScreenConnection == 0)
-    {
-        mScreenConnection = new ConnectionController(api(), view());
-    }
-
-    mScreenConnection->showView(iConnectionRequest);
 }
 
 
