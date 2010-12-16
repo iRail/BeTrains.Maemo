@@ -40,6 +40,8 @@ namespace iRail
     private slots:
         void _launchLiveboard();
         void _launchLiveboard(LiveboardRequestPointer);
+        void _launchRequest();
+        void _launchRequest(ConnectionRequestPointer);
 
     private:        
         // Singleton object

@@ -33,7 +33,7 @@ namespace iRail
 
     Q_OBJECT
     public:
-        RequestView(QWidget *iParent);
+        RequestView();
         void configure(ConnectionRequestPointer iConnectionRequest);
         void load();
         void load(const QMap<QString, StationPointer>& iStations);

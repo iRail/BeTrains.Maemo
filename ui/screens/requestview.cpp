@@ -19,7 +19,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-RequestView::RequestView(QWidget* iParent) : GenericView(iParent)
+RequestView::RequestView() : GenericView(0)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 

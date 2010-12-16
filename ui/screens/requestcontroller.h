@@ -15,18 +15,19 @@
 #include "connectioncontroller.h"
 #include <QList>
 #include <QMap>
+#include "genericcontroller.h"
 
 
 namespace iRail
 {
-    class RequestController : public QObject
+    class RequestController : public GenericController
     {
     Q_OBJECT
     public:
         explicit RequestController(CachedAPI* iAPI, QWidget *parent = 0);
         ~RequestController();
-        void showView();
-        void showView(ConnectionRequestPointer iInitialRequest);
+        void showView(GenericController* parent);
+        void showView(GenericController* parent, ConnectionRequestPointer iInitialRequest);
 
         // View slots
     private slots:
@@ -42,10 +43,6 @@ namespace iRail
         void addHistory(QVariant iRequest);
 
     private:
-        // Member data
-        CachedAPI* mAPI;
-        RequestView* mView;
-
         // Screens
         ConnectionController* mScreenConnection;
     };

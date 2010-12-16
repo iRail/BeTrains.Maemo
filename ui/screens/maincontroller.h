@@ -33,8 +33,6 @@ namespace iRail
     private slots:
         void _downloadStations();
         void _getHistoryFavourites();
-        void _launchRequest();
-        void _launchRequest(ConnectionRequestPointer iConnectionRequest);
         void _addFavourite(QVariant iRequest);
         void _removeFavourite(QVariant iRequest);
         void _clearHistory();
@@ -51,6 +49,8 @@ namespace iRail
     signals:
         void launchLiveboard();
         void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
+        void launchRequest();
+        void launchRequest(ConnectionRequestPointer iConnectionRequest);
 
     private:
         // Member data

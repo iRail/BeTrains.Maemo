@@ -49,6 +49,9 @@ Application::Application(int & argc, char ** argv) : QApplication(argc, argv), m
     connect(mMain, SIGNAL(launchLiveboard()), this, SLOT(_launchLiveboard()));
     connect(mMain, SIGNAL(launchLiveboard(LiveboardRequestPointer)), this, SLOT(_launchLiveboard(LiveboardRequestPointer)));
     connect(mLiveboard, SIGNAL(addHistory(QVariant)), mMain, SLOT(_addHistory(QVariant)));
+    connect(mMain, SIGNAL(launchRequest()), this, SLOT(_launchRequest()));
+    connect(mMain, SIGNAL(launchRequest(ConnectionRequestPointer)), this, SLOT(_launchRequest(ConnectionRequestPointer)));
+    connect(mRequest, SIGNAL(addHistory(QVariant)), this, SLOT(_addHistory(QVariant)));
     QTimer::singleShot(0, this, SLOT(run()));
     QObject::connect(this, SIGNAL(lastWindowClosed()), this, SLOT(close()));
 
@@ -149,4 +152,19 @@ void Application::_launchLiveboard(LiveboardRequestPointer iLiveboardRequest)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     mLiveboard->showView(mMain, iLiveboardRequest);
+}
+
+
+void Application::_launchRequest()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mRequest->showView(mMain);
+}
+
+void Application::_launchRequest(ConnectionRequestPointer iConnectionRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mRequest->showView(mMain, iConnectionRequest);
 }

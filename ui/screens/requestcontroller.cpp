@@ -13,13 +13,13 @@ using namespace iRail;
 // Construction and destruction
 //
 
-RequestController::RequestController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
+RequestController::RequestController(CachedAPI* iAPI, QWidget* iParent) : GenericController(iAPI, iParent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView = new RequestView(iParent);
-    connect(mView, SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
-    connect(mView, SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
+    setView(new RequestView());
+    connect(view(), SIGNAL(downloadStations()), this, SLOT(_downloadStations()));
+    connect(view(), SIGNAL(launchConnection(ConnectionRequestPointer)), this, SLOT(_launchConnection(ConnectionRequestPointer)));
 
     mScreenConnection = 0;
 }
@@ -28,28 +28,28 @@ RequestController::~RequestController()
 {
     qDebug() << "~ " << Q_FUNC_INFO;
 
-    delete mView;
+    delete view();
 }
 
-void RequestController::showView()
+void RequestController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->show();
-    mView->load();
+    GenericController::showView(parent);
+    dynamic_cast<RequestView*>(view())->load();
 }
 
 // TODO: this method just forwards the data to the following
 //       widget. This won't be neccesary when we have access
 //       to all screens from the application controller
 //       (using a state machine).
-void RequestController::showView(ConnectionRequestPointer iInitialRequest)
+void RequestController::showView(GenericController* parent, ConnectionRequestPointer iInitialRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mView->show();
-    mView->load();
-    mView->configure(iInitialRequest);
+    GenericController::showView(parent);
+    dynamic_cast<RequestView*>(view())->load();
+    dynamic_cast<RequestView*>(view())->configure(iInitialRequest);
     emit _launchConnection(iInitialRequest);
 }
 
@@ -62,12 +62,12 @@ void RequestController::_downloadStations()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    connect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    connect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
 
     bool tCached;
-    mAPI->requestStations(tCached);
+    api()->requestStations(tCached);
     if (!tCached)
-        mView->showProgress();
+        view()->showProgress();
 }
 
 void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRequest)
@@ -77,7 +77,7 @@ void RequestController::_launchConnection(ConnectionRequestPointer iConnectionRe
 
     if (mScreenConnection == 0)
     {
-        mScreenConnection = new ConnectionController(mAPI, mView);
+        mScreenConnection = new ConnectionController(api(), view());
     }
 
     mScreenConnection->showView(iConnectionRequest);
@@ -92,9 +92,9 @@ void RequestController::gotStations(QMap<QString, StationPointer>* iStations, QD
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    disconnect(mAPI, SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
+    disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        mView->setStations(iStations);
+        dynamic_cast<RequestView*>(view())->setStations(iStations);
     else
-        mView->showError( mAPI->hasError() ? mAPI->errorString() : tr("unknown error") );
+        view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
