@@ -35,6 +35,7 @@ void GenericController::showView(GenericController* parent)
         view()->setWindowFlags(view()->windowFlags() | Qt::Window);
     }
 
+    view()->reset();
     view()->show();
 }
 

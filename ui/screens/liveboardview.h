@@ -28,20 +28,20 @@ namespace iRail
     Q_OBJECT
     public:
         LiveboardView();
-        void load();
-        void load(const QMap<QString, StationPointer>& iStations);
-        void load(LiveboardRequestPointer iLiveboardRequest);
-        void load(LiveboardPointer iLiveboard);
 
         // UI events
     private slots:
         void do_btnStations_clicked();
         void do_lstDepartures_activated(QModelIndex iIndex);
         void do_btnMore_clicked();
-        void clear();
 
         // Controller actions
     public slots:
+        void reset();
+        void load();
+        void load(const QMap<QString, StationPointer>& iStations);
+        void load(LiveboardRequestPointer iLiveboardRequest);
+        void load(LiveboardPointer iLiveboard);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setLiveboard(LiveboardPointer* iLiveboard);
 

@@ -27,11 +27,65 @@ LiveboardView::LiveboardView() : GenericView()
     init_ui();
 }
 
-void LiveboardView::load()
+
+//
+// UI events
+//
+
+void LiveboardView::do_btnStations_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    clear();
+    mDepartures.clear();
+
+    StationChooser tChooser(mStations, centralWidget());
+    int tReturn = tChooser.exec();
+    if (tReturn == QDialog::Accepted)
+    {
+        tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
+        mUIStationEdit->setText(stationName(mStations, tLiveboardRequest->station()));
+
+        emit downloadLiveboard(tLiveboardRequest);
+    }
+}
+
+void LiveboardView::do_lstDepartures_activated(QModelIndex iIndex)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    emit launchVehicle(tLiveboardRequest->station(), iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
+}
+
+void LiveboardView::do_btnMore_clicked()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // Lookup last departure
+    Q_ASSERT(mDepartures.size());
+    Liveboard::Departure tDeparture = mDepartures.last();
+
+    // Make a new request
+    tLiveboardRequest->setTime(tDeparture.datetime);
+    emit downloadLiveboard(tLiveboardRequest);
+
+}
+
+
+//
+// Controller actions
+//
+
+void LiveboardView::reset()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mUIStationEdit->clear();
+    mDepartures.clear();
+    populateModel();
+}
+
+void LiveboardView::load()
+{
     emit downloadStations();
 }
 
@@ -108,63 +162,6 @@ void LiveboardView::load(LiveboardPointer iLiveboard)
     else
         mView->scrollTo(mModel->index(mModel->rowCount()-tAppendedItems-1, 0));
 }
-
-
-//
-// UI events
-//
-
-void LiveboardView::clear()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    mUIStationEdit->clear();
-    mDepartures.clear();
-    populateModel();
-}
-
-void LiveboardView::do_btnStations_clicked()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    mDepartures.clear();
-
-    StationChooser tChooser(mStations, centralWidget());
-    int tReturn = tChooser.exec();
-    if (tReturn == QDialog::Accepted)
-    {
-        tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
-        mUIStationEdit->setText(stationName(mStations, tLiveboardRequest->station()));
-
-        emit downloadLiveboard(tLiveboardRequest);
-    }
-}
-
-void LiveboardView::do_lstDepartures_activated(QModelIndex iIndex)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    emit launchVehicle(tLiveboardRequest->station(), iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
-}
-
-void LiveboardView::do_btnMore_clicked()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    // Lookup last departure
-    Q_ASSERT(mDepartures.size());
-    Liveboard::Departure tDeparture = mDepartures.last();
-
-    // Make a new request
-    tLiveboardRequest->setTime(tDeparture.datetime);
-    emit downloadLiveboard(tLiveboardRequest);
-
-}
-
-
-//
-// Controller actions
-//
 
 void LiveboardView::setStations(QMap<QString, StationPointer>* iStations)
 {

@@ -35,10 +35,11 @@ namespace iRail
 
         // Controller actions
     public slots:
-        void setStations(QMap<QString, StationPointer>* iStations);
+        void reset();
         void load();
         void load(const QMap<QString, StationPointer>& iStations);
         void load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
+        void setStations(QMap<QString, StationPointer>* iStations);
 
         // Controller signals
     signals:

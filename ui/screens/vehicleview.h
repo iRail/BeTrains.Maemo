@@ -27,8 +27,6 @@ namespace iRail
     public:
         VehicleView();
         ~VehicleView();
-        void load(Connection::Line iConnectionLine);
-        void load(const QMap<QString, StationPointer>& iStations, Connection::Line iLine, VehiclePointer iVehicle);
 
         // Temporary data
         Connection::Line tLine;
@@ -39,6 +37,9 @@ namespace iRail
 
         // Controller actions
     public slots:
+        void reset();
+        void load(Connection::Line iConnectionLine);
+        void load(const QMap<QString, StationPointer>& iStations, Connection::Line iLine, VehiclePointer iVehicle);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setVehicle(VehiclePointer* iVehicles);
 

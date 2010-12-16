@@ -48,7 +48,7 @@ void RequestController::showView(GenericController* parent, ConnectionRequestPoi
 
     GenericController::showView(parent);
     dynamic_cast<RequestView*>(view())->load();
-    dynamic_cast<RequestView*>(view())->configure(iInitialRequest);
+    dynamic_cast<RequestView*>(view())->load(iInitialRequest);
 }
 
 

@@ -28,24 +28,6 @@ ConnectionView::ConnectionView() : GenericView()
     init_ui();
 }
 
-void ConnectionView::load(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    emit downloadConnections(iConnectionRequest);
-}
-
-void ConnectionView::load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
-
-    mStations = iStations;  // TODO: also in load?
-
-    // Show the results
-    populateModel(iConnections);
-}
-
 
 //
 // UI events
@@ -73,6 +55,31 @@ void ConnectionView::do_lstConnections_activated(QModelIndex iIndex)
 //
 // Controller actions
 //
+
+void ConnectionView::reset()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    populateModel(QList<ConnectionPointer>());
+}
+
+void ConnectionView::load(ConnectionRequestPointer iConnectionRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    emit downloadConnections(iConnectionRequest);
+}
+
+void ConnectionView::load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
+
+    mStations = iStations;  // TODO: also in load?
+
+    // Show the results
+    populateModel(iConnections);
+}
 
 void ConnectionView::setStations(QMap<QString, StationPointer>* iStations)
 {

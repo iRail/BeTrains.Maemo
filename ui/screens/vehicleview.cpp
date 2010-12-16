@@ -37,6 +37,19 @@ VehicleView::~VehicleView()
 
 }
 
+
+//
+// Controller actions
+//
+
+void VehicleView::reset()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    // TODO
+}
+
+
 void VehicleView::load(Connection::Line iLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
@@ -55,11 +68,6 @@ void VehicleView::load(const QMap<QString, StationPointer>& iStations, Connectio
     // Show the results
     populateModel(iLine, iVehicle);
 }
-
-
-//
-// Controller actions
-//
 
 void VehicleView::setStations(QMap<QString, StationPointer>* iStations)
 {

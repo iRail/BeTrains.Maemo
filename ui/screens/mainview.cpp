@@ -30,32 +30,6 @@ MainView::MainView() : GenericView()
     init_menu();
 }
 
-void MainView::load()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    emit downloadStations();
-}
-
-void MainView::load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    populateModel(iHistory, iFavourites);
-}
-
-void MainView::load(const QMap<QString, StationPointer>& iStations)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
-
-    // Set the stations
-    mStations = iStations;
-    mView->setItemDelegate(new RequestDelegate(mStations));
-
-    // Request the history and favourites
-    emit getHistoryFavourites();
-}
 
 //
 // Initialization
@@ -236,6 +210,40 @@ void MainView::do_actClearHistory_triggered()
 //
 // Controller actions
 //
+
+void MainView::reset()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    populateModel(QList<QVariant>(), QList<QVariant>());
+}
+
+void MainView::load()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    emit downloadStations();
+}
+
+void MainView::load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    populateModel(iHistory, iFavourites);
+}
+
+void MainView::load(const QMap<QString, StationPointer>& iStations)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
+
+    // Set the stations
+    mStations = iStations;
+    mView->setItemDelegate(new RequestDelegate(mStations));
+
+    // Request the history and favourites
+    emit getHistoryFavourites();
+}
 
 void MainView::setStations(QMap<QString, StationPointer>* iStations)
 {

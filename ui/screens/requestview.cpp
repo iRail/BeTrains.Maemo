@@ -27,46 +27,6 @@ RequestView::RequestView() : GenericView()
     init_ui();
 }
 
-void RequestView::configure(ConnectionRequestPointer iConnectionRequest)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    mUIToLine->setText(iConnectionRequest->destination());
-    mUIFromLine->setText(iConnectionRequest->origin());
-    if (iConnectionRequest->timed())
-    {
-        mUIUseTime->setChecked(true);
-        const ConnectionRequest::Time *tTime = iConnectionRequest->time();
-        if (tTime->type == ConnectionRequest::Departure)
-            mUITypeDeparture->setChecked(true);
-        else
-            mUITypeArrival->setChecked(true);
-        mUITimePicker->setCurrentTime(tTime->datetime.time());
-        mUIDatePicker->setCurrentDate(tTime->datetime.date());
-    }
-    else
-        mUIUseTime->setChecked(false);
-}
-
-void RequestView::load()
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-
-    emit downloadStations();
-}
-
-void RequestView::load(const QMap<QString, StationPointer>& iStations)
-{
-    qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
-
-    mStations = iStations;
-    mUIFromButton->setEnabled(true);
-    mUIToButton->setEnabled(true);
-
-    do_btnClear_clicked();
-}
-
 
 //
 // UI events
@@ -120,10 +80,7 @@ void RequestView::do_btnClear_clicked()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    mUIFromLine->clear();
-    mUIToLine->clear();
-    do_btnNow_clicked();
-    mUITypeDeparture->setChecked(true);
+    reset();
 }
 
 void RequestView::do_btnFrom_clicked()
@@ -163,6 +120,56 @@ void RequestView::do_btnSwap_clicked()
 //
 // Controller actions
 //
+
+void RequestView::reset()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mUIFromLine->clear();
+    mUIToLine->clear();
+    do_btnNow_clicked();
+    mUITypeDeparture->setChecked(true);
+}
+
+void RequestView::load()
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    emit downloadStations();
+}
+
+void RequestView::load(const QMap<QString, StationPointer>& iStations)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
+
+    mStations = iStations;
+    mUIFromButton->setEnabled(true);
+    mUIToButton->setEnabled(true);
+
+    do_btnClear_clicked();
+}
+
+void RequestView::load(ConnectionRequestPointer iConnectionRequest)
+{
+    qDebug() << "+ " << Q_FUNC_INFO;
+
+    mUIToLine->setText(iConnectionRequest->destination());
+    mUIFromLine->setText(iConnectionRequest->origin());
+    if (iConnectionRequest->timed())
+    {
+        mUIUseTime->setChecked(true);
+        const ConnectionRequest::Time *tTime = iConnectionRequest->time();
+        if (tTime->type == ConnectionRequest::Departure)
+            mUITypeDeparture->setChecked(true);
+        else
+            mUITypeArrival->setChecked(true);
+        mUITimePicker->setCurrentTime(tTime->datetime.time());
+        mUIDatePicker->setCurrentDate(tTime->datetime.date());
+    }
+    else
+        mUIUseTime->setChecked(false);
+}
 
 void RequestView::setStations(QMap<QString, StationPointer>* iStations)
 {

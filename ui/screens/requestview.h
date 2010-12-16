@@ -34,9 +34,6 @@ namespace iRail
     Q_OBJECT
     public:
         RequestView();
-        void configure(ConnectionRequestPointer iConnectionRequest);
-        void load();
-        void load(const QMap<QString, StationPointer>& iStations);
 
         // UI events
     private slots:
@@ -50,6 +47,10 @@ namespace iRail
 
         // Controller actions
     public slots:
+        void reset();
+        void load();
+        void load(const QMap<QString, StationPointer>& iStations);
+        void load(ConnectionRequestPointer iConnectionRequest);
         void setStations(QMap<QString, StationPointer>* iStations);
 
         // Controller signals

@@ -24,8 +24,6 @@ namespace iRail
     Q_OBJECT
     public:
         ConnectionView();
-        void load(ConnectionRequestPointer iConnectionRequest);
-        void load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
 
         // Temporary data
         QList<ConnectionPointer>* tConnections;
@@ -36,6 +34,9 @@ namespace iRail
 
         // Controller actions
     public slots:
+        void reset();
+        void load(ConnectionRequestPointer iConnectionRequest);
+        void load(const QMap<QString, StationPointer>& iStations, const QList<ConnectionPointer>& iConnections);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setConnections(QList<ConnectionPointer>* iConnections);
 
