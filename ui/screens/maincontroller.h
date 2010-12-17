@@ -26,7 +26,9 @@ namespace iRail
         explicit MainController(CachedAPI* iAPI, QWidget *parent = 0);
         ~MainController();
 
-        // Application actions
+        // Generic interface
+        MainView* view() const;
+        void setView(GenericView*);
         void showView(GenericController* parent = 0);
         void addHistory(QVariant iRequest);
 
@@ -51,6 +53,7 @@ namespace iRail
 
     private:
         // Member data
+        MainView* mView;
         QList<QVariant> mHistory, mFavourites;
     };
 }

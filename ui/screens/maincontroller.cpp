@@ -39,15 +39,25 @@ MainController::~MainController()
 
 
 //
-// Application actions
+// Generic interface
 //
+
+MainView* MainController::view() const
+{
+    return mView;
+}
+
+void MainController::setView(GenericView* iView)
+{
+    mView = dynamic_cast<MainView*>(iView);
+}
 
 void MainController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     GenericController::showView(parent);
-    dynamic_cast<MainView*>(view())->load();
+    view()->load();
 }
 
 void MainController::addHistory(QVariant iRequest)
@@ -58,7 +68,7 @@ void MainController::addHistory(QVariant iRequest)
 
     Application::storage()->setHistory(mHistory);
 
-    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
+    view()->load(mHistory, mFavourites);
 }
 
 
@@ -85,7 +95,7 @@ void MainController::_getHistoryFavourites()
     mHistory = Application::storage()->history();
     mFavourites = Application::storage()->favourites();
 
-    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
+    view()->load(mHistory, mFavourites);
 
 }
 
@@ -99,7 +109,7 @@ void MainController::_addFavourite(QVariant iRequest)
     Application::storage()->setHistory(mHistory);
     Application::storage()->setFavourites(mFavourites);
 
-    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
+    view()->load(mHistory, mFavourites);
 }
 
 void MainController::_removeFavourite(QVariant iRequest)
@@ -110,7 +120,7 @@ void MainController::_removeFavourite(QVariant iRequest)
 
     Application::storage()->setFavourites(mFavourites);
 
-    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
+    view()->load(mHistory, mFavourites);
 }
 
 void MainController::_clearHistory()
@@ -121,7 +131,7 @@ void MainController::_clearHistory()
 
     Application::storage()->clearHistory();
 
-    dynamic_cast<MainView*>(view())->load(mHistory, mFavourites);
+    view()->load(mHistory, mFavourites);
 }
 
 
@@ -136,7 +146,7 @@ void MainController::gotStations(QMap<QString, StationPointer>* iStations, QDate
 
     disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        dynamic_cast<MainView*>(view())->setStations(iStations);
+        view()->setStations(iStations);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }

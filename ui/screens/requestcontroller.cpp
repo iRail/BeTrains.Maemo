@@ -31,15 +31,25 @@ RequestController::~RequestController()
 
 
 //
-// Application actions
+// Generic interface
 //
+
+RequestView* RequestController::view() const
+{
+    return mView;
+}
+
+void RequestController::setView(GenericView* iView)
+{
+    mView = dynamic_cast<RequestView*>(iView);
+}
 
 void RequestController::showView(GenericController* parent)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     GenericController::showView(parent);
-    dynamic_cast<RequestView*>(view())->load();
+    view()->load();
 }
 
 void RequestController::showView(GenericController* parent, ConnectionRequestPointer iInitialRequest)
@@ -47,8 +57,8 @@ void RequestController::showView(GenericController* parent, ConnectionRequestPoi
     qDebug() << "+ " << Q_FUNC_INFO;
 
     GenericController::showView(parent);
-    dynamic_cast<RequestView*>(view())->load();
-    dynamic_cast<RequestView*>(view())->load(iInitialRequest);
+    view()->load();
+    view()->load(iInitialRequest);
 }
 
 
@@ -79,7 +89,7 @@ void RequestController::gotStations(QMap<QString, StationPointer>* iStations, QD
 
     disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        dynamic_cast<RequestView*>(view())->setStations(iStations);
+        view()->setStations(iStations);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }

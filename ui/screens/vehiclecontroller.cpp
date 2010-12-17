@@ -31,15 +31,25 @@ VehicleController::~VehicleController()
 
 
 //
-// Application actions
+// Generic interface
 //
+
+VehicleView* VehicleController::view() const
+{
+    return mView;
+}
+
+void VehicleController::setView(GenericView* iView)
+{
+    mView = dynamic_cast<VehicleView*>(iView);
+}
 
 void VehicleController::showView(GenericController* parent, Connection::Line iConnectionLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     GenericController::showView(parent);
-    dynamic_cast<VehicleView*>(view())->load(iConnectionLine);
+    view()->load(iConnectionLine);
 }
 
 
@@ -82,7 +92,7 @@ void VehicleController::gotStations(QMap<QString, StationPointer>* iStations, QD
 
     disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        dynamic_cast<VehicleView*>(view())->setStations(iStations);
+        view()->setStations(iStations);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
@@ -93,7 +103,7 @@ void VehicleController::gotVehicle(VehiclePointer* iVehicle, QDateTime iTimestam
 
     disconnect(api(), SIGNAL(replyVehicle(VehiclePointer*, QDateTime)), this, SLOT(gotVehicle(VehiclePointer*, QDateTime)));
     if (iVehicle != 0)
-        dynamic_cast<VehicleView*>(view())->setVehicle(iVehicle);
+        view()->setVehicle(iVehicle);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }

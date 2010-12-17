@@ -32,15 +32,25 @@ ConnectionController::~ConnectionController()
 
 
 //
-// Application actions
+// Generic interface
 //
+
+ConnectionView* ConnectionController::view() const
+{
+    return mView;
+}
+
+void ConnectionController::setView(GenericView* iView)
+{
+    mView = dynamic_cast<ConnectionView*>(iView);
+}
 
 void ConnectionController::showView(GenericController* parent, ConnectionRequestPointer iConnectionRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
     GenericController::showView(parent);
-    dynamic_cast<ConnectionView*>(view())->load(iConnectionRequest);
+    view()->load(iConnectionRequest);
 }
 
 
@@ -83,7 +93,7 @@ void ConnectionController::gotStations(QMap<QString, StationPointer>* iStations,
 
     disconnect(api(), SIGNAL(replyStations(QMap<QString, StationPointer>*, QDateTime)), this, SLOT(gotStations(QMap<QString, StationPointer>*, QDateTime)));
     if (iStations != 0)
-        dynamic_cast<ConnectionView*>(view())->setStations(iStations);
+        view()->setStations(iStations);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }
@@ -94,7 +104,7 @@ void ConnectionController::gotConnections(QList<ConnectionPointer>* iConnections
 
     disconnect(api(), SIGNAL(replyConnections(QList<ConnectionPointer>*, QDateTime)), this, SLOT(gotConnections(QList<ConnectionPointer>*, QDateTime)));
     if (iConnections != 0)
-        dynamic_cast<ConnectionView*>(view())->setConnections(iConnections);
+        view()->setConnections(iConnections);
     else
         view()->showError( api()->hasError() ? api()->errorString() : tr("unknown error") );
 }

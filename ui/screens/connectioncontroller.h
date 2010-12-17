@@ -26,7 +26,9 @@ namespace iRail
         explicit ConnectionController(CachedAPI* iAPI, QWidget *parent = 0);
         ~ConnectionController();
 
-        // Application actions
+        // Generic interface
+        ConnectionView* view() const;
+        void setView(GenericView*);
         void showView(GenericController* parent, ConnectionRequestPointer iConnectionRequest);
 
         // View slots
@@ -42,6 +44,10 @@ namespace iRail
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
         void gotConnections(QList<ConnectionPointer>* iConnections, QDateTime iTimestamp);
+
+        // Member data
+    private:
+        ConnectionView* mView;
     };
 }
 

@@ -26,7 +26,9 @@ namespace iRail
         explicit VehicleController(CachedAPI* iAPI, QWidget *parent = 0);
         ~VehicleController();
 
-        // Application actions
+        // Generic interface
+        VehicleView* view() const;
+        void setView(GenericView*);
         void showView(GenericController* parent, Connection::Line iConnectionLine);
 
         // View slots
@@ -38,6 +40,10 @@ namespace iRail
     private slots:
         void gotStations(QMap<QString, StationPointer>* iStations, QDateTime iTimestamp);
         void gotVehicle(VehiclePointer* iVehicle, QDateTime iTimestamp);
+
+        // Member data
+    private:
+        VehicleView* mView;
     };
 }
 

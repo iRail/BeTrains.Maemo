@@ -16,8 +16,6 @@ using namespace iRail;
 GenericController::GenericController(CachedAPI* iAPI, QWidget* iParent) : mAPI(iAPI)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-
-    mView = 0;
 }
 
 
@@ -43,17 +41,6 @@ void GenericController::showView(GenericController* parent)
 //
 // Auxiliary
 //
-
-
-void GenericController::setView(GenericView* view)
-{
-    mView = view;
-}
-
-GenericView* GenericController::view() const
-{
-    return mView;
-}
 
 CachedAPI* GenericController::api() const
 {

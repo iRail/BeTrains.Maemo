@@ -21,6 +21,7 @@ namespace iRail
         explicit GenericController(CachedAPI* iAPI, QWidget *parent = 0);
 
         // Application actions
+        virtual void setView(GenericView* view) = 0;
         virtual void showView(GenericController* parent = 0);
 
         // Signals
@@ -29,14 +30,12 @@ namespace iRail
 
         // Auxiliary
     protected:
-        void setView(GenericView* view);
-        GenericView* view() const;
+        virtual GenericView* view() const = 0;
         CachedAPI* api() const;
 
     private:
         // Member data
         CachedAPI *mAPI;
-        GenericView *mView;
     };
 }
 

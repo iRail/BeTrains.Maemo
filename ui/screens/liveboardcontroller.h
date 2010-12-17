@@ -25,7 +25,9 @@ namespace iRail
         explicit LiveboardController(CachedAPI* iAPI, QWidget *parent = 0);
         ~LiveboardController();
 
-        // Application actions
+        // Generic interface
+        LiveboardView* view() const;
+        void setView(GenericView*);
         void showView(GenericController* parent);
         void showView(GenericController* parent, LiveboardRequestPointer iLiveboardRequest);
 
@@ -46,11 +48,7 @@ namespace iRail
 
     private:
         // Member data
-        CachedAPI* mAPI;
         LiveboardView* mView;
-
-        // Screens
-        VehicleController* mScreenVehicle;
     };
 }
 
