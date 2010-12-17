@@ -11,12 +11,12 @@ include(../alpha/alpha.pri)
 QT       += gui maemo5
 
 RESOURCES += ui.qrc \
-    maemo_i18n.qrc
+    i18n_maemo.qrc
+TRANSLATIONS += \
+    i18n_maemo/nl_BE.ts \
+    i18n_maemo/en_US.ts
 SOURCES += main.cpp 
 HEADERS += 
-TRANSLATIONS += \
-    maemo_i18n/nl_BE.ts \
-    maemo_i18n/en_US.ts
 
 # This conditional needed to trick Qt Creator
 unix:!symbian {
