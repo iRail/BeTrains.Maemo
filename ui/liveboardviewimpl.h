@@ -23,7 +23,7 @@
 
 namespace iRail
 {
-    class LiveboardViewImpl : virtual public GenericViewImpl, public LiveboardView
+    class LiveboardViewImpl : public GenericViewImpl, public LiveboardView
     {
     Q_OBJECT
     public:
@@ -42,12 +42,6 @@ namespace iRail
         void load(LiveboardRequestPointer iLiveboardRequest);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setLiveboard(LiveboardPointer* iLiveboard);
-
-        // Controller signals
-    signals:
-        void downloadStations();
-        void downloadLiveboard(LiveboardRequestPointer iLiveboardRequest);
-        void launchVehicle(QString iStationId, Liveboard::Departure iLiveboardDeparture);
 
     private:
         // Member data

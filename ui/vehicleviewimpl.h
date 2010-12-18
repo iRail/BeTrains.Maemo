@@ -21,7 +21,7 @@
 
 namespace iRail
 {
-    class VehicleViewImpl : virtual public GenericViewImpl, public VehicleView
+    class VehicleViewImpl : public GenericViewImpl, public VehicleView
     {
 
     Q_OBJECT
@@ -42,11 +42,6 @@ namespace iRail
         void load(Connection::Line iConnectionLine);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setVehicle(VehiclePointer* iVehicles);
-
-        // Controller signals
-    signals:
-        void downloadStations();
-        void downloadVehicle(QString iVehicleId);
 
     private:
         // Member data

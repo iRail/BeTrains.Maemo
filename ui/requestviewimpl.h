@@ -29,7 +29,7 @@
 
 namespace iRail
 {
-    class RequestViewImpl : virtual public GenericViewImpl, public RequestView
+    class RequestViewImpl : public GenericViewImpl, public RequestView
     {
 
     Q_OBJECT
@@ -52,11 +52,6 @@ namespace iRail
         void load();
         void load(ConnectionRequestPointer iConnectionRequest);
         void setStations(QMap<QString, StationPointer>* iStations);
-
-        // Controller signals
-    signals:
-        void downloadStations();
-        void launchConnection(ConnectionRequestPointer iConnectionRequest);
 
         // Member data
     private:

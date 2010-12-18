@@ -27,7 +27,7 @@
 
 namespace iRail
 {
-    class MainViewImpl : virtual public GenericViewImpl, public MainView
+    class MainViewImpl : public GenericViewImpl, public MainView
     {
 
     Q_OBJECT
@@ -41,18 +41,6 @@ namespace iRail
         void load(const QMap<QString, StationPointer>& iStations);
         void load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
         void setStations(QMap<QString, StationPointer>* iStations);
-
-        // Controller signals
-    signals:
-        void downloadStations();
-        void getHistoryFavourites();
-        void launchLiveboard();
-        void launchLiveboard(LiveboardRequestPointer iLiveboardRequest);
-        void launchRequest();
-        void launchConnection(ConnectionRequestPointer iConnectionRequest);
-        void addFavourite(QVariant iRequest);
-        void removeFavourite(QVariant iRequest);
-        void clearHistory();
 
         // UI events
     private slots:

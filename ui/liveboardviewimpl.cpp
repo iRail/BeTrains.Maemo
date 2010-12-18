@@ -86,6 +86,8 @@ void LiveboardViewImpl::reset()
 
 void LiveboardViewImpl::load()
 {
+    qDebug() << "+ " << Q_FUNC_INFO;
+
     emit downloadStations();
 }
 
