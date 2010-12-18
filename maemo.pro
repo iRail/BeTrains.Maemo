@@ -23,7 +23,13 @@ SOURCES += main.cpp \
     ui/auxiliary/delegates/vehiclestopdelegate.cpp \
     ui/auxiliary/delegates/liveboarddeparturedelegate.cpp \
     ui/auxiliary/delegates/requestdelegate.cpp \
-    ui/auxiliary/loaderwidget.cpp
+    ui/auxiliary/loaderwidget.cpp \
+    ui/connectionviewimpl.cpp \
+    ui/genericviewimpl.cpp \
+    ui/liveboardviewimpl.cpp \
+    ui/mainviewimpl.cpp \
+    ui/requestviewimpl.cpp \
+    ui/vehicleviewimpl.cpp
 HEADERS += \
     ui/dialogs/about.h \
     ui/dialogs/stationchooser.h \
@@ -35,7 +41,13 @@ HEADERS += \
     ui/auxiliary/loaderwidget.h \
     ui/auxiliary/animationwidget.h \
     ui/auxiliary/animationrectitem.h \
-    ui/auxiliary/graphicsrectobject.h
+    ui/auxiliary/graphicsrectobject.h \
+    ui/connectionviewimpl.h \
+    ui/genericviewimpl.h \
+    ui/liveboardviewimpl.h \
+    ui/mainviewimpl.h \
+    ui/requestviewimpl.h \
+    ui/vehicleviewimpl.h
 
 # This conditional needed to trick Qt Creator
 unix:!symbian {
