@@ -313,5 +313,35 @@ void MainViewImpl::populateModel(const QList<QVariant>& iHistory, const QList<QV
 
         mViewDummy->setVisible(false);
         mView->setFixedHeight(centralWidget()->maximumHeight());   // HACK
+
+        /*
+         What we try to accomplish: 2 buttons always visible, with some items
+         under that, or when there are no items available, a message indicating
+         that. The buttons should be scrollable together with the items (if any).
+
+         Solution 1: 2 buttons in a scroll area, together with a stacked layout
+         displaying the listview or a label.
+         Issue: the listview doesn't expand within the scroll area, and using
+         a fixed height to solve this messes up the layout management of items
+         within the listview.
+
+         Solution 2: buttons in the listview, and depending on the availability
+         of more items, a label indicating there being none.
+         Issue: the listview doesn't expand properly with the label as an item,
+         as size policies only apply to layouts and not to item views. This could
+         be fixed with using a fixed size for the label, but that wasn't always
+         as easy to compute.
+
+         Solution 3: buttons and items in the listview, and a label outside it,
+         only visible when there are no items.
+         Issue: the listview doesn't minimize properly (always uses 50% of the
+         window space when one extra widget -- the label -- is present), even when
+         internally there is unused space left (due to the lack of items).
+
+         Eventually I've hacked the last solution, by making the listview force to
+         take a size. Although this needs me to manually compute the layout for the
+         widget, it doesn't mess up item management within the listview (which is hard),
+         nor does it reqiure managing nested scroll area's (which sucks).
+         */
     }
 }
