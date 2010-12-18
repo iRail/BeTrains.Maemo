@@ -90,7 +90,7 @@
     </message>
 </context>
 <context>
-    <name>iRail::ConnectionView</name>
+    <name>iRail::ConnectionViewImpl</name>
     <message>
         <source>Connections</source>
         <translation type="unfinished"></translation>
@@ -101,7 +101,7 @@
     </message>
 </context>
 <context>
-    <name>iRail::GenericView</name>
+    <name>iRail::GenericViewImpl</name>
     <message>
         <source>Error: </source>
         <translation type="unfinished"></translation>
@@ -133,7 +133,7 @@
     </message>
 </context>
 <context>
-    <name>iRail::LiveboardView</name>
+    <name>iRail::LiveboardViewImpl</name>
     <message>
         <source>The liveboard seems to be empty.</source>
         <translation type="unfinished"></translation>
@@ -167,7 +167,7 @@
     </message>
 </context>
 <context>
-    <name>iRail::MainView</name>
+    <name>iRail::MainViewImpl</name>
     <message>
         <source>No history or favorites</source>
         <translation type="unfinished"></translation>
@@ -244,7 +244,7 @@
     </message>
 </context>
 <context>
-    <name>iRail::RequestView</name>
+    <name>iRail::RequestViewImpl</name>
     <message>
         <source>Please fill in both locations.</source>
         <translation type="unfinished"></translation>
@@ -323,7 +323,7 @@
     </message>
 </context>
 <context>
-    <name>iRail::VehicleView</name>
+    <name>iRail::VehicleViewImpl</name>
     <message>
         <source>Connection detail</source>
         <translation type="unfinished"></translation>

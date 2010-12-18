@@ -5,7 +5,6 @@
 
 TARGET=BeTrains
 
-include(../libirail/libirail.pri)
 include(../alpha/alpha.pri)
 
 QT       += gui maemo5
