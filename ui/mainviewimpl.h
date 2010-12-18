@@ -27,7 +27,7 @@
 
 namespace iRail
 {
-    class MainViewImpl : public GenericViewImpl, public MainView
+    class MainViewImpl : public MainView
     {
 
     Q_OBJECT
@@ -51,6 +51,16 @@ namespace iRail
         void do_actAddFavourite();
         void do_actClearHistory_triggered();
 
+        // GenericView proxy
+        void showError(const QString& iError)
+        { proxy->showError(iError); }
+        void startLoader()
+        { proxy->startLoader(); }
+        void stopLoader()
+        { proxy->stopLoader(); }
+        void showProgress()
+        { proxy->showProgress(); }
+
     private:
         // Member data
         QMap<QString, StationPointer> mStations;
@@ -67,6 +77,9 @@ namespace iRail
 
         // Auxiliary
         void populateModel(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
+
+        // Proxy object
+        GenericViewImpl* proxy;
     };
 }
 

@@ -22,6 +22,7 @@ using namespace iRail;
 RequestViewImpl::RequestViewImpl() : RequestView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    proxy = new GenericViewImpl(this);
 
     // Initialisation
     init_ui();

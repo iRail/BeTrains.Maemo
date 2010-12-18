@@ -29,7 +29,7 @@
 
 namespace iRail
 {
-    class RequestViewImpl : public GenericViewImpl, public RequestView
+    class RequestViewImpl : public RequestView
     {
 
     Q_OBJECT
@@ -53,6 +53,16 @@ namespace iRail
         void load(ConnectionRequestPointer iConnectionRequest);
         void setStations(QMap<QString, StationPointer>* iStations);
 
+        // GenericView proxy
+        void showError(const QString& iError)
+        { proxy->showError(iError); }
+        void startLoader()
+        { proxy->startLoader(); }
+        void stopLoader()
+        { proxy->stopLoader(); }
+        void showProgress()
+        { proxy->showProgress(); }
+
         // Member data
     private:
         QMap<QString, StationPointer> mStations;
@@ -70,6 +80,9 @@ namespace iRail
         QMaemo5DatePickSelector *mUIDatePicker;
         QMaemo5TimePickSelector *mUITimePicker;
         QRadioButton *mUIUseTime, *mUITypeDeparture, *mUITypeArrival;
+
+        // Proxy object
+        GenericViewImpl* proxy;
     };
 }
 

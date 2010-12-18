@@ -19,7 +19,7 @@
 
 namespace iRail
 {
-    class ConnectionViewImpl : public GenericViewImpl, public ConnectionView
+    class ConnectionViewImpl : public ConnectionView
     {
 
     Q_OBJECT
@@ -40,6 +40,16 @@ namespace iRail
         void setStations(QMap<QString, StationPointer>* iStations);
         void setConnections(QList<ConnectionPointer>* iConnections);
 
+        // GenericView proxy
+        void showError(const QString& iError)
+        { proxy->showError(iError); }
+        void startLoader()
+        { proxy->startLoader(); }
+        void stopLoader()
+        { proxy->stopLoader(); }
+        void showProgress()
+        { proxy->showProgress(); }
+
     private:
         // Member data
         QMap<QString, StationPointer> mStations;
@@ -53,6 +63,9 @@ namespace iRail
 
         // Auxiliary
         void populateModel(const QList<ConnectionPointer>& iConnections);
+
+        // Proxy object
+        GenericViewImpl* proxy;
     };
 }
 

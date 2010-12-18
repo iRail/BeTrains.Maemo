@@ -21,6 +21,7 @@ using namespace iRail;
 LiveboardViewImpl::LiveboardViewImpl() : LiveboardView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    proxy = new GenericViewImpl(this);
 
     // Initialisation
     hide();

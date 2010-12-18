@@ -23,7 +23,7 @@
 
 namespace iRail
 {
-    class LiveboardViewImpl : public GenericViewImpl, public LiveboardView
+    class LiveboardViewImpl : public LiveboardView
     {
     Q_OBJECT
     public:
@@ -42,6 +42,16 @@ namespace iRail
         void load(LiveboardRequestPointer iLiveboardRequest);
         void setStations(QMap<QString, StationPointer>* iStations);
         void setLiveboard(LiveboardPointer* iLiveboard);
+
+        // GenericView proxy
+        void showError(const QString& iError)
+        { proxy->showError(iError); }
+        void startLoader()
+        { proxy->startLoader(); }
+        void stopLoader()
+        { proxy->stopLoader(); }
+        void showProgress()
+        { proxy->showProgress(); }
 
     private:
         // Member data
@@ -62,6 +72,9 @@ namespace iRail
 
         // Auxiliary
         void populateModel();
+
+        // Proxy object
+        GenericViewImpl* proxy;
     };
 }
 

@@ -24,6 +24,7 @@ using namespace iRail;
 MainViewImpl::MainViewImpl() : MainView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    proxy = new GenericViewImpl(this);
 
     // Initialisation
     init_ui();

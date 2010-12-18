@@ -25,6 +25,7 @@ using namespace iRail;
 VehicleViewImpl::VehicleViewImpl() : VehicleView()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    proxy = new GenericViewImpl(this);
 
     // Initialisation
     hide();

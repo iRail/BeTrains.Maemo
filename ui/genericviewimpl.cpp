@@ -15,19 +15,19 @@ using namespace iRail;
 // Construction and destruction
 //
 
-GenericViewImpl::GenericViewImpl() : GenericView()
+GenericViewImpl::GenericViewImpl(GenericView* iBase) : base(iBase)
 {
     qDebug() << "+ " << Q_FUNC_INFO;    
 
     // Center widget
-    setCentralWidget(new QWidget());
-    setAttribute(Qt::WA_Maemo5StackedWindow);
+    base->setCentralWidget(new QWidget());
+    base->setAttribute(Qt::WA_Maemo5StackedWindow);
 
     // Initialize member
     mLoader = 0;
     mView = 0;
 
-    hide();
+    base->hide();
 }
 
 GenericViewImpl::~GenericViewImpl()
@@ -51,7 +51,7 @@ void GenericViewImpl::_deleteLoader()
     delete mView;
     mView = 0;
 
-    setEnabled(true);
+    base->setEnabled(true);
 }
 
 
@@ -64,7 +64,7 @@ void GenericViewImpl::showError(const QString &iError)
     qDebug() << "+ " << Q_FUNC_INFO;
 
     stopLoader();
-    QMaemo5InformationBox::information(this, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
+    QMaemo5InformationBox::information(base, tr("Error: ") % iError, QMaemo5InformationBox::DefaultTimeout);
 }
 
 void GenericViewImpl::startLoader()
@@ -78,7 +78,7 @@ void GenericViewImpl::startLoader()
     mLoader->setZValue(1.0);
 
     QGraphicsScene* tScene = new QGraphicsScene();
-    mView = new QGraphicsView(tScene, centralWidget());
+    mView = new QGraphicsView(tScene, base->centralWidget());
     mView->setFixedSize(800, 420);
     mView->setStyleSheet("background: transparent; border: none");
     tScene->addItem(mLoader);

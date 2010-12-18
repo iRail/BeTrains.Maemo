@@ -21,7 +21,7 @@
 
 namespace iRail
 {
-    class VehicleViewImpl : public GenericViewImpl, public VehicleView
+    class VehicleViewImpl : public VehicleView
     {
 
     Q_OBJECT
@@ -43,6 +43,16 @@ namespace iRail
         void setStations(QMap<QString, StationPointer>* iStations);
         void setVehicle(VehiclePointer* iVehicles);
 
+        // GenericView proxy
+        void showError(const QString& iError)
+        { proxy->showError(iError); }
+        void startLoader()
+        { proxy->startLoader(); }
+        void stopLoader()
+        { proxy->stopLoader(); }
+        void showProgress()
+        { proxy->showProgress(); }
+
     private:
         // Member data
         QMap<QString, StationPointer> mStations;
@@ -56,6 +66,9 @@ namespace iRail
     private:
         QListView* mView;
         QStandardItemModel* mModel;
+
+        // Proxy object
+        GenericViewImpl* proxy;
     };
 }
 
