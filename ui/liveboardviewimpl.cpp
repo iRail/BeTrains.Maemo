@@ -282,6 +282,6 @@ void LiveboardViewImpl::populateModel()
         mModel->item(mModel->rowCount()-1, 0)->setSelectable(false);
 
         mViewDummy->setVisible(false);
-        mView->setFixedHeight(centralWidget()->height());   // HACK
+        mView->setFixedHeight(centralWidget()->maximumHeight());   // HACK
     }
 }
