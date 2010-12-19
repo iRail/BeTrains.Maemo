@@ -9,7 +9,6 @@
 #include <QPushButton>
 #include <QFont>
 #include <QStringBuilder>
-#include <QtMaemo5/QMaemo5InformationBox>
 #include <QLabel>
 #include "ui/auxiliary/delegates/vehiclestopdelegate.h"
 #include "ui/global.h"

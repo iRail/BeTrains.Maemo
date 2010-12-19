@@ -5,7 +5,6 @@
 // Includes
 #include "stationchooser.h"
 #include <QVBoxLayout>
-#include <QtMaemo5/QMaemo5InformationBox>
 #include <QStringBuilder>
 
 // Namespaces
