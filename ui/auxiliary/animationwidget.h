@@ -40,7 +40,7 @@ class AnimationWidget : public QGraphicsWidget
 
     Q_PROPERTY(QPointF pos READ pos WRITE setPos);
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity);
-    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
+    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation)
 
 public:
     AnimationWidget(QGraphicsWidget *parent = 0) : QGraphicsWidget(parent)
