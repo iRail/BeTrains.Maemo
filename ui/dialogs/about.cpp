@@ -50,5 +50,6 @@ About::About(QWidget* iParent) : QDialog(iParent)
     // HTML rendering label
     QLabel *tLabel = new QLabel(tAboutHTML);
     tLabel->setWordWrap(true);
+    tLabel->setOpenExternalLinks(true);
     mUILayout->addWidget(tLabel);
 }
