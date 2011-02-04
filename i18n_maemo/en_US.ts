@@ -250,10 +250,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New query</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Origin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -283,6 +279,10 @@
     </message>
     <message>
         <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New journey</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
