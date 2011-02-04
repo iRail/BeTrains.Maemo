@@ -46,7 +46,9 @@ void VehicleViewImpl::reset()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    // TODO
+    // TODO: resuse the populateModel(empty, 0) code
+    mViewDummy->setVisible(true);
+    mView->setVisible(false);
 }
 
 
@@ -102,33 +104,35 @@ void VehicleViewImpl::init_ui()
     // Create the stops model
     mModel = new QStandardItemModel(0, 1);
 
-    // Create the stops listview
+    // Create the stops list view
     mView = new QListView();
     mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mView->setModel(mModel);
     mView->setItemDelegate(new VehicleStopDelegate(mStations));
     mView->setSelectionMode(QAbstractItemView::NoSelection);
     tUILayout->addWidget(mView);
+
+    // Create the departure list view dummy
+    mViewDummy = new QLabel(tr("No stops to be shown."));
+    mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+    mViewDummy->setEnabled(false);
+    QFont font;
+    font.setPointSize(24);
+    mViewDummy->setFont(font);
+    tUILayout->addWidget(mViewDummy);
 }
 
 void VehicleViewImpl::populateModel(Connection::Line iLine, VehiclePointer iVehicle)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    // Title label
-    /*
-    QFont tFont;
-    tFont.setPointSize(18);
-    tFont.setBold(true);
-    QLabel* tPOILabel = new QLabel(mStations[iLine.departure.station]->name() % tr(" to ") % mStations[iLine.arrival.station]->name());
-    tPOILabel->setFont(tFont);
-    tPOILabel->setAlignment(Qt::AlignCenter);
-    mUIScrollLayout->addWidget(tPOILabel);
-    */
+    // TODO: display some header based on iVehicle
 
     // Add the stops
     mModel->clear();
     bool tWithinEndpoints = false;
+    int tCount = 0;
     foreach (Vehicle::Stop tStop, iVehicle->stops())
     {
         if (!tWithinEndpoints && tStop.station == iLine.departure.station)
@@ -148,7 +152,18 @@ void VehicleViewImpl::populateModel(Connection::Line iLine, VehiclePointer iVehi
             QStandardItem *tItem = new QStandardItem();
             tItem->setData(QVariant::fromValue(tStop), VehicleStopRole);
             mModel->appendRow(tItem);
+            tCount++;
         }
+    }
+    if (tCount)
+    {
+        mViewDummy->setVisible(false);
+        mView->setVisible(true);
+    }
+    else
+    {
+        mViewDummy->setVisible(true);
+        mView->setVisible(false);
     }
 
     // Fix the scroll location

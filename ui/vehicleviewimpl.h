@@ -18,6 +18,7 @@
 #include <QScrollArea>
 #include <QListView>
 #include <QStandardItemModel>
+#include <QLabel>
 
 namespace iRail
 {
@@ -66,6 +67,7 @@ namespace iRail
     private:
         QListView* mView;
         QStandardItemModel* mModel;
+        QLabel *mViewDummy;
 
         // Proxy object
         GenericViewImpl* proxy;
