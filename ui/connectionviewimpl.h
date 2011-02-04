@@ -16,6 +16,7 @@
 #include <QModelIndex>
 #include <QTreeView>
 #include <QStandardItemModel>
+#include <QLabel>
 
 namespace iRail
 {
@@ -60,6 +61,7 @@ namespace iRail
         // UI members
         QTreeView *mView;
         QStandardItemModel *mModel;
+        QLabel *mViewDummy;
 
         // Auxiliary
         void populateModel(const QList<ConnectionPointer>& iConnections);

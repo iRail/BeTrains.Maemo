@@ -192,7 +192,7 @@ void LiveboardViewImpl::init_ui()
     // Create the departure list model
     mModel = new QStandardItemModel(0, 1);
 
-    // Create the departure listview
+    // Create the departure list view
     mView = new QListView();
     mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mView->setModel(mModel);
@@ -202,7 +202,7 @@ void LiveboardViewImpl::init_ui()
     connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstDepartures_activated(QModelIndex)));
     tUILayout->addWidget(mView);
 
-    // Create the departure listview dummy
+    // Create the departure list view dummy
     mViewDummy = new QLabel(tr("No departures to be shown."));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);

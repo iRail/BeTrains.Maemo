@@ -109,10 +109,10 @@ void ConnectionViewImpl::init_ui()
     QVBoxLayout *mUILayout = new QVBoxLayout(centralWidget());
     mUILayout->setAlignment(Qt::AlignTop);
 
-    // Populate the history list model
+    // Create the connection list model
     mModel = new QStandardItemModel(0, 1);
 
-    // Create the history listview
+    // Create the connection list view
     mView = new QTreeView();
     mView->header()->hide();
     mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -122,6 +122,16 @@ void ConnectionViewImpl::init_ui()
     mView->setItemDelegate(new ConnectionDelegate(mStations, mView));
     connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstConnections_activated(QModelIndex)));
     mUILayout->addWidget(mView);
+
+    // Create the departure list view dummy
+    mViewDummy = new QLabel(tr("No connections to be shown."));
+    mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+    mViewDummy->setEnabled(false);
+    QFont font;
+    font.setPointSize(24);
+    mViewDummy->setFont(font);
+    mUILayout->addWidget(mViewDummy);
 }
 
 
@@ -151,12 +161,13 @@ void ConnectionViewImpl::populateModel(const QList<ConnectionPointer>& iConnecti
 
             mModel->appendRow(tConnectionItem);
         }
+
+        mViewDummy->setVisible(false);
+        mView->setVisible(true);
     }
     else
     {
-        QStandardItem *tDummy = new QStandardItem(tr("No connections found."));
-        tDummy->setEditable(false);
-        tDummy->setSelectable(false);
-        mModel->appendRow(tDummy);
+        mViewDummy->setVisible(true);
+        mView->setVisible(false);
     }
 }
