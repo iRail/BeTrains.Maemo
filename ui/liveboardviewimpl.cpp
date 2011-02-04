@@ -52,6 +52,8 @@ void LiveboardViewImpl::do_btnStations_clicked()
 void LiveboardViewImpl::do_lstDepartures_activated(QModelIndex iIndex)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    if (iIndex.row() == 0)    //  The header (containing a button & search field) cannot be clicked
+        return;             //  TODO: do this nicely, using the hypothetical item(0, 0)->setActivatable(false)
 
     emit launchVehicle(tLiveboardRequest->station(), iIndex.data(LiveboardDepartureRole).value<Liveboard::Departure>());
 }
@@ -187,10 +189,10 @@ void LiveboardViewImpl::init_ui()
 
     // VIEW //
 
-    // Populate the history list model
+    // Create the departure list model
     mModel = new QStandardItemModel(0, 1);
 
-    // Create the history listview
+    // Create the departure listview
     mView = new QListView();
     mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mView->setModel(mModel);
@@ -200,7 +202,7 @@ void LiveboardViewImpl::init_ui()
     connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstDepartures_activated(QModelIndex)));
     tUILayout->addWidget(mView);
 
-    // Create the history listview dummy
+    // Create the departure listview dummy
     mViewDummy = new QLabel(tr("No departures to be shown."));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
@@ -232,7 +234,6 @@ void LiveboardViewImpl::init_ui()
     mModel->appendRow(new QStandardItem());
     mView->setIndexWidget(mModel->index(0, 0), mViewHeader);
     mModel->item(0, 0)->setSelectable(false);
-
 
     // OTHER //
 
