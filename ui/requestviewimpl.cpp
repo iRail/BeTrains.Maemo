@@ -182,7 +182,7 @@ void RequestViewImpl::init_ui()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     // Window settings
-    setWindowTitle(tr("New query"));
+    setWindowTitle(tr("New journey"));
 
     // Main layout
     QVBoxLayout *mUILayout = new QVBoxLayout(centralWidget());
