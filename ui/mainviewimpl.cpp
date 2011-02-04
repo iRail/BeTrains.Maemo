@@ -111,7 +111,6 @@ void MainViewImpl::init_menu()
     qDebug() << "+ " << Q_FUNC_INFO;
 
     QMenu *tMenuTools = menuBar()->addMenu(tr("&Tools"));
-    QAction *tActionPreferences = tMenuTools->addAction(tr("&Preferences"));
     QAction *tActionClearHistory = tMenuTools->addAction(tr("&Clear history"));
     connect(tActionClearHistory, SIGNAL(triggered()), this, SLOT(do_actClearHistory_triggered()));
 

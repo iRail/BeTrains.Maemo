@@ -185,10 +185,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Clear history</source>
         <translation type="unfinished"></translation>
     </message>

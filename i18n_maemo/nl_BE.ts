@@ -223,31 +223,26 @@
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="114"/>
-        <source>&amp;Preferences</source>
-        <translation>&amp;Voorkeuren</translation>
-    </message>
-    <message>
-        <location filename="../ui/mainviewimpl.cpp" line="115"/>
         <source>&amp;Clear history</source>
         <translation>&amp;Geschiedenis wissen</translation>
     </message>
     <message>
-        <location filename="../ui/mainviewimpl.cpp" line="118"/>
+        <location filename="../ui/mainviewimpl.cpp" line="117"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../ui/mainviewimpl.cpp" line="119"/>
+        <location filename="../ui/mainviewimpl.cpp" line="118"/>
         <source>&amp;About</source>
         <translation>&amp;Over</translation>
     </message>
     <message>
-        <location filename="../ui/mainviewimpl.cpp" line="176"/>
+        <location filename="../ui/mainviewimpl.cpp" line="175"/>
         <source>Remove from favourites</source>
         <translation>Verwijderen uit favorieten</translation>
     </message>
     <message>
-        <location filename="../ui/mainviewimpl.cpp" line="181"/>
+        <location filename="../ui/mainviewimpl.cpp" line="180"/>
         <source>Add to favourites</source>
         <translation>Toevoegen aan favorieten</translation>
     </message>
