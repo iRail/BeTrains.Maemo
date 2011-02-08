@@ -15,6 +15,7 @@ TRANSLATIONS += \
     i18n_maemo/nl_BE.ts \
     i18n_maemo/en_US.ts
 SOURCES += main.cpp \
+    maemoapplication.cpp \
     ui/dialogs/about.cpp \
     ui/dialogs/stationchooser.cpp \
     ui/auxiliary/delegates/connectiondelegate.cpp \
@@ -30,6 +31,7 @@ SOURCES += main.cpp \
     ui/requestviewimpl.cpp \
     ui/vehicleviewimpl.cpp
 HEADERS += \
+    maemoapplication.h \
     ui/dialogs/about.h \
     ui/dialogs/stationchooser.h \
     ui/auxiliary/delegates/connectiondelegate.h \

@@ -4,7 +4,7 @@
 
 // Includes
 #include "api/exception.h"
-#include "application.h"
+#include "maemoapplication.h"
 #include "ui/mainviewimpl.h"
 #include "ui/liveboardviewimpl.h"
 #include "ui/requestviewimpl.h"
@@ -17,7 +17,7 @@ using namespace iRail;
 int main(int argc, char *argv[])
 {
     // Initialize the application
-    Application tApplication(argc, argv);
+    MaemoApplication tApplication(argc, argv);
 
     // Configure the views
     tApplication.setMainView(new MainViewImpl());
