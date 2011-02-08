@@ -170,6 +170,8 @@ void LiveboardViewImpl::setLiveboard(LiveboardPointer* iLiveboard)
 
     delete iLiveboard;
 }
+
+
 //
 // Initialization
 //

@@ -235,7 +235,6 @@ void MainViewImpl::load(const QList<QVariant>& iHistory, const QList<QVariant>& 
 void MainViewImpl::load(const QMap<QString, StationPointer>& iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
 
     // Set the stations
     mStations = iStations;
@@ -248,6 +247,7 @@ void MainViewImpl::load(const QMap<QString, StationPointer>& iStations)
 void MainViewImpl::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
+    stopLoader();
 
     load(*iStations);
     delete iStations;
