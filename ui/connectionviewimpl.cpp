@@ -40,9 +40,14 @@ void ConnectionViewImpl::do_lstConnections_activated(QModelIndex iIndex)
 
     if (qVariantCanConvert<ConnectionPointer>(iIndex.data(ConnectionRole)))
     {
-        ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
-
+        // ConnectionPointer tConnection = qVariantValue<ConnectionPointer>(iIndex.data(ConnectionRole));
         /* Maybe show a vehicle view of _all_ the lines? But only when expanded! */
+
+        // Currently: just expand/collapse the item
+        if (mView->isExpanded(iIndex))
+            mView->collapse(iIndex);
+        else
+            mView->expand(iIndex);
     }
     else if (qVariantCanConvert<Connection::Line>(iIndex.data(ConnectionLineRole)))
     {
@@ -120,10 +125,12 @@ void ConnectionViewImpl::init_ui()
     mView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mView->setSelectionMode(QAbstractItemView::SingleSelection);
     mView->setItemDelegate(new ConnectionDelegate(mStations, mView));
+    mView->setExpandsOnDoubleClick(false); // We'll do this manually on activation, a single click on Maemo.
+                                           // Don't use setItemsExpandable, as that disables the icon click as well
     connect(mView, SIGNAL(activated(QModelIndex)), this, SLOT(do_lstConnections_activated(QModelIndex)));
     mUILayout->addWidget(mView);
 
-    // Create the departure list view dummy
+    // Create the connection list view dummy
     mViewDummy = new QLabel(tr("No connections to be shown."));
     mViewDummy->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mViewDummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
