@@ -38,8 +38,7 @@ namespace iRail
     public slots:
         void reset();
         void load();
-        void load(const QMap<QString, StationPointer>& iStations);
-        void load(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
+        void setHistoryFavourites(const QList<QVariant>& iHistory, const QList<QVariant>& iFavourites);
         void setStations(QMap<QString, StationPointer>* iStations);
 
         // UI events
