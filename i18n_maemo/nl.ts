@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="nl_BE">
+<TS version="2.0" language="nl" sourcelanguage="en">
 <context>
     <name>iRail::About</name>
     <message>
@@ -110,14 +110,14 @@
 <context>
     <name>iRail::ConnectionViewImpl</name>
     <message>
-        <location filename="../ui/connectionviewimpl.cpp" line="106"/>
+        <location filename="../ui/connectionviewimpl.cpp" line="111"/>
         <source>Connections</source>
         <translation>Verbindingen</translation>
     </message>
     <message>
-        <location filename="../ui/connectionviewimpl.cpp" line="157"/>
-        <source>No connections found.</source>
-        <translation>Geen verbindingen gevonden.</translation>
+        <location filename="../ui/connectionviewimpl.cpp" line="134"/>
+        <source>No connections to be shown.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -161,32 +161,32 @@
 <context>
     <name>iRail::LiveboardViewImpl</name>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="156"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="157"/>
         <source>The liveboard seems to be empty.</source>
         <translation>Geen gegevens gevonden.</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="160"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="161"/>
         <source>No new items received.</source>
         <translation>Geen nieuwe gegevens ontvangen.</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="182"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="185"/>
         <source>Departures</source>
         <translation>Vertrekken</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="206"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="209"/>
         <source>No departures to be shown.</source>
         <translation>Niks te tonen.</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="223"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="226"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="278"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="281"/>
         <source>More</source>
         <translation>Meer</translation>
     </message>
@@ -387,9 +387,14 @@
 <context>
     <name>iRail::VehicleViewImpl</name>
     <message>
-        <location filename="../ui/vehicleviewimpl.cpp" line="92"/>
+        <location filename="../ui/vehicleviewimpl.cpp" line="94"/>
         <source>Connection detail</source>
         <translation>Verbindingsdetail</translation>
+    </message>
+    <message>
+        <location filename="../ui/vehicleviewimpl.cpp" line="116"/>
+        <source>No stops to be shown.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

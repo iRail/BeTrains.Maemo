@@ -12,8 +12,10 @@ QT       += gui maemo5
 RESOURCES += ui.qrc \
     i18n_maemo.qrc
 TRANSLATIONS += \
-    i18n_maemo/nl_BE.ts \
-    i18n_maemo/en_US.ts
+    i18n_maemo/nl.ts \
+    i18n_maemo/fr.ts \
+    i18n_maemo/de.ts \
+    i18n_maemo/en.ts
 SOURCES += main.cpp \
     maemoapplication.cpp \
     ui/dialogs/about.cpp \
