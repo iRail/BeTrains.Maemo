@@ -17,7 +17,7 @@ using namespace iRail;
 
 GenericViewImpl::GenericViewImpl(GenericView* iBase) : base(iBase)
 {
-    qDebug() << "+ " << Q_FUNC_INFO;    
+    qDebug() << "+ " << Q_FUNC_INFO;
 
     // Center widget
     base->setCentralWidget(new QWidget());

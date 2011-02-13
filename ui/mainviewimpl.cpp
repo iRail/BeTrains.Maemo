@@ -238,13 +238,12 @@ void MainViewImpl::setStations(QMap<QString, StationPointer>* iStations)
     stopLoader();    
 
     // Set the stations
-    mStations = iStations;
+    mStations = *iStations;
     mView->setItemDelegate(new RequestDelegate(mStations));
+    delete iStations;
 
     // Request the history and favourites
     emit getHistoryFavourites();
-
-    delete iStations;
 }
 
 
