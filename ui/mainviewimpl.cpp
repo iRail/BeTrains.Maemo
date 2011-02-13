@@ -136,7 +136,7 @@ void MainViewImpl::do_lstHistory_activated(QModelIndex iIndex)
     else if (iIndex.data(LiveboardRequestRole).type() != QVariant::Invalid)
     {
         LiveboardRequestPointer tLiveboardRequest = iIndex.data(LiveboardRequestRole).value<LiveboardRequestPointer>();
-        emit launchLiveboard(tLiveboardRequest);
+        emit launchLiveboardWithRequest(tLiveboardRequest);
     }
 }
 
@@ -235,7 +235,7 @@ void MainViewImpl::setHistoryFavourites(const QList<QVariant>& iHistory, const Q
 void MainViewImpl::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();    
+    stopLoader();
 
     // Set the stations
     mStations = *iStations;
