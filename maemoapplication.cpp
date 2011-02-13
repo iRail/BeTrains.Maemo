@@ -13,6 +13,6 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MaemoApplication::MaemoApplication(int & argc, char ** argv) : Application(argc, argv, "Maemo", "0.99")
+MaemoApplication::MaemoApplication(int & argc, char ** argv) : Application(argc, argv, "Maemo", "1.0-beta-1")
 {
 }

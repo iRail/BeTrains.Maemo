@@ -1,6 +1,12 @@
+betrains (1.0-beta-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Tim Besard <tim.besard@gmail.com>  wed, 13 Feb 2010 17:14:42 +0200
+
 betrains (0.99) unstable; urgency=low
 
   * Initial release.
 
- -- Tim Besard <tim.besard@gmail.com>  wed, 20 oct 2010 13:37:36 +0200
+ -- Tim Besard <tim.besard@gmail.com>  wed, 20 Oct 2010 13:37:36 +0200
 
