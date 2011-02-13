@@ -90,6 +90,7 @@ void LiveboardViewImpl::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    this->startLoader();        // HACK (fix corruption through forced redraw)
     emit downloadStations();
 }
 
