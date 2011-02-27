@@ -18,7 +18,6 @@ MaemoApplication::MaemoApplication(int & argc, char ** argv) : Application(argc,
     // Translate the user interface
     Q_INIT_RESOURCE(i18n_maemo);
     QTranslator *tInterfaceTranslator = new QTranslator();
-    qDebug() << settings().value("application/language", QLocale::system().name()).toString();
     if (! tInterfaceTranslator->load(settings().value("application/language", QLocale::system().name()).toString(), ":/i18n_maemo"))
         qWarning() << "! " << "Interface translation failed";
     else

@@ -11,27 +11,27 @@
     <message>
         <location filename="../ui/dialogs/about.cpp" line="30"/>
         <source>&lt;strong&gt;BeTrains for Qt&lt;/strong&gt; is part of the %1 project, and made possible by:</source>
-        <translation>&lt;strong&gt;BeTrains pour Qt&lt;/strong&gt; fait partie du projet %1, et r&#233;alis&#233; par: </translation>
+        <translation>&lt;strong&gt;BeTrains pour Qt&lt;/strong&gt; fait partie du projet %1, et réalisé par: </translation>
     </message>
     <message>
         <location filename="../ui/dialogs/about.cpp" line="35"/>
         <source>... and many others.</source>
-        <translation>... et tant d'autres.</translation>
+        <translation>... et tant d&apos;autres.</translation>
     </message>
     <message>
         <location filename="../ui/dialogs/about.cpp" line="40"/>
         <source>The BeTrains project is based upon and related with the %1 project.</source>
-        <translation>Le projet BeTrains est bas&#233; sur, et en rapport avec le projet %1</translation>
+        <translation>Le projet BeTrains est basé sur, et en rapport avec le projet %1.</translation>
     </message>
     <message>
         <location filename="../ui/dialogs/about.cpp" line="42"/>
         <source>It is however NOT affiliated with the Belgian train company!</source>
-        <translation>Il n'est cependant pas affili&#233;e avec la SNCB!</translation>
+        <translation>Il n&apos;est toutefois pas affiliée avec la SNCB!</translation>
     </message>
     <message>
         <location filename="../ui/dialogs/about.cpp" line="47"/>
         <source>Be sure to check out or site, BeTrains exists for other platforms as well!</source>
-        <translation>N'oublier pas de visiter notre site web; BeTrains existe pour d'autres plateformes aussi!</translation>
+        <translation>N&apos;oublier pas de visiter notre site web; BeTrains existe pour d&apos;autres plateformes aussi!</translation>
     </message>
 </context>
 <context>
@@ -60,26 +60,29 @@
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="77"/>
         <source>via %n other(s)</source>
         <translation>
-            <numerusform>via %n autre(s)</numerusform>
+            <numerusform>via %n autre</numerusform>
+            <numerusform>via %n autres</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="96"/>
         <source>Departure at</source>
-        <translation>D&#233;part &#224;</translation>
+        <translation>Départ à</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="107"/>
         <source>%n hour(s)</source>
         <translation>
-            <numerusform>%n heure(s)</numerusform>
+            <numerusform>%n heure</numerusform>
+            <numerusform>%n heures</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="114"/>
         <source>%n minute(s)</source>
         <translation>
-            <numerusform>%n minute(s)</numerusform>
+            <numerusform>%n minute</numerusform>
+            <numerusform>%n minutes</numerusform>
         </translation>
     </message>
     <message>
@@ -91,6 +94,7 @@
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="177"/>
         <source>%n minute(s) delay</source>
         <translation>
+            <numerusform>%n minute de retard</numerusform>
             <numerusform>%n minute(s) de retard</numerusform>
         </translation>
     </message>
@@ -113,7 +117,7 @@
     <message>
         <location filename="../ui/connectionviewimpl.cpp" line="134"/>
         <source>No connections to be shown.</source>
-        <translation>Pas de connections</translation>
+        <translation>Pas de connections.</translation>
     </message>
 </context>
 <context>
@@ -158,22 +162,22 @@
     <message>
         <location filename="../ui/liveboardviewimpl.cpp" line="157"/>
         <source>The liveboard seems to be empty.</source>
-        <translation>Aucune donn&#233;e trouv&#233;e</translation>
+        <translation>Aucune donnée trouvée.</translation>
     </message>
     <message>
         <location filename="../ui/liveboardviewimpl.cpp" line="161"/>
         <source>No new items received.</source>
-        <translation>Aucune nouvelle donn&#233;e re&#231;ue</translation>
+        <translation>Aucune nouvelle donnée reçue.</translation>
     </message>
     <message>
         <location filename="../ui/liveboardviewimpl.cpp" line="185"/>
         <source>Departures</source>
-        <translation>D&#233;parts</translation>
+        <translation>Départs</translation>
     </message>
     <message>
         <location filename="../ui/liveboardviewimpl.cpp" line="209"/>
         <source>No departures to be shown.</source>
-        <translation>Pas de d&#233;parts trouv&#233;e</translation>
+        <translation>Pas de départs trouvée.</translation>
     </message>
     <message>
         <location filename="../ui/liveboardviewimpl.cpp" line="226"/>
@@ -199,17 +203,17 @@
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="69"/>
         <source>No history or favorites</source>
-        <translation>Pas d'historique ou de favoris</translation>
+        <translation>Pas d&apos;historique ou de favoris</translation>
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="86"/>
         <source>Plan a journey</source>
-        <translation>Planification d'un voyage</translation>
+        <translation>Planification d&apos;un voyage</translation>
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="92"/>
         <source>View departures</source>
-        <translation>Voir d&#233;parts</translation>
+        <translation>Voir départs</translation>
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="113"/>
@@ -219,7 +223,7 @@
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="114"/>
         <source>&amp;Clear history</source>
-        <translation>&amp;Supprimer l'historique</translation>
+        <translation>&amp;Effacer l&apos;historique</translation>
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="117"/>
@@ -229,12 +233,12 @@
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="118"/>
         <source>&amp;About</source>
-        <translation>&amp;&#192; propos de</translation>
+        <translation>&amp;À propos de</translation>
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="175"/>
         <source>Remove from favourites</source>
-        <translation>Supprimer des favoris</translation>
+        <translation>Effacer des favoris</translation>
     </message>
     <message>
         <location filename="../ui/mainviewimpl.cpp" line="180"/>
@@ -265,22 +269,22 @@
     <message>
         <location filename="../ui/auxiliary/delegates/requestdelegate.cpp" line="68"/>
         <source>Arrival</source>
-        <translation>Arriv&#233;e</translation>
+        <translation>Arrivée</translation>
     </message>
     <message>
         <location filename="../ui/auxiliary/delegates/requestdelegate.cpp" line="68"/>
         <source>Departure</source>
-        <translation>D&#233;part</translation>
+        <translation>Départ</translation>
     </message>
     <message>
         <location filename="../ui/auxiliary/delegates/requestdelegate.cpp" line="69"/>
         <source>at</source>
-        <translation>&#224;</translation>
+        <translation>à</translation>
     </message>
     <message>
         <location filename="../ui/auxiliary/delegates/requestdelegate.cpp" line="103"/>
         <source>Departures at</source>
-        <translation>D&#233;part de</translation>
+        <translation>Départ de</translation>
     </message>
 </context>
 <context>
@@ -288,7 +292,7 @@
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="52"/>
         <source>Please fill in both locations.</source>
-        <translation>Pri&#232;re de remplir les 2 locations</translation>
+        <translation>Priez de remplir les 2 locations.</translation>
     </message>
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="185"/>
@@ -298,7 +302,7 @@
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="199"/>
         <source>Origin</source>
-        <translation>Lieu de d&#233;&#233;part</translation>
+        <translation>Lieu de départ</translation>
     </message>
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="209"/>
@@ -308,17 +312,17 @@
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="234"/>
         <source>Departure</source>
-        <translation>D&#233;part</translation>
+        <translation>Départ</translation>
     </message>
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="235"/>
         <source>Arrival</source>
-        <translation>Arriv&#233;e</translation>
+        <translation>Arrivée</translation>
     </message>
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="246"/>
         <source>Specify time and date</source>
-        <translation>Pr&#233;ciser date et heure</translation>
+        <translation>Préciser date et heure</translation>
     </message>
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="284"/>
@@ -328,7 +332,7 @@
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="285"/>
         <source>Set to now</source>
-        <translation>Utiliser l'heure actuelle</translation>
+        <translation>Utiliser l&apos;heure actuelle</translation>
     </message>
     <message>
         <location filename="../ui/requestviewimpl.cpp" line="286"/>
@@ -346,7 +350,7 @@
     <message>
         <location filename="../ui/dialogs/stationchooser.cpp" line="92"/>
         <source>No stations found</source>
-        <translation>Aucune gare trouv&#233;e</translation>
+        <translation>Aucune gare trouvée</translation>
     </message>
 </context>
 <context>
@@ -363,7 +367,7 @@
     <message>
         <location filename="../ui/auxiliary/delegates/vehiclestopdelegate.cpp" line="63"/>
         <source>at</source>
-        <translation>&#224;</translation>
+        <translation>à</translation>
     </message>
     <message>
         <location filename="../ui/auxiliary/delegates/vehiclestopdelegate.cpp" line="73"/>
@@ -388,7 +392,7 @@
     <message>
         <location filename="../ui/vehicleviewimpl.cpp" line="116"/>
         <source>No stops to be shown.</source>
-        <translation>Aucun arr&#234;t trouv&#233;</translation>
+        <translation>Aucun arrêt trouvé.</translation>
     </message>
 </context>
 </TS>
