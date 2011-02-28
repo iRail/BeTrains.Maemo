@@ -10,24 +10,27 @@
 #export DH_VERBOSE=1
 
 APPNAME := betrains
-
-
+PROJECT := maemo
 
 configure: configure-stamp
-configure-stamp:
+configure-stamp: builddir
 	dh_testdir
 	# Add here commands to configure the package.
+	lrelease $(PROJECT).pro
+	cd builddir && qmake PREFIX=/usr ../$(PROJECT).pro
 
 	touch configure-stamp
 
+builddir: 
+	mkdir -p builddir
 
 build: build-stamp
 
-build-stamp: configure-stamp  
+build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	$(MAKE)
+	cd builddir && $(MAKE)
 	#docbook-to-man debian/maemo.sgml > maemo.1
 
 	touch $@
@@ -38,7 +41,7 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	$(MAKE) clean
+	rm -rf builddir
 
 	dh_clean 
 
@@ -49,7 +52,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/$(APPNAME).
-	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/$(APPNAME) install
+	cd builddir && $(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/$(APPNAME) install
 
 
 # Build architecture-independent files here.

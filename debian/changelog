@@ -1,4 +1,10 @@
-betrains (1.0-beta-1) unstable; urgency=low
+betrains (1.0~beta1-1) unstable; urgency=low
+
+  * Fixing missing icons.
+
+ -- Tim Besard <tim.besard@gmail.com>  wed, 28 Feb 2010 13:25:00 +0200
+
+betrains (1.0~beta1) unstable; urgency=low
 
   * Initial public release.
 
