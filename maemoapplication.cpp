@@ -13,7 +13,7 @@ using namespace iRail;
 // Construction and destruction
 //
 
-MaemoApplication::MaemoApplication(int & argc, char ** argv) : Application(argc, argv, "Maemo", "1.0~beta1")
+MaemoApplication::MaemoApplication(int & argc, char ** argv) : Application(argc, argv, "Maemo", "1.0-beta2")
 {
     // Translate the user interface
     Q_INIT_RESOURCE(i18n_maemo);
