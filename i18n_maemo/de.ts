@@ -47,7 +47,7 @@
     <name>iRail::ConnectionDelegate</name>
     <message>
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="65"/>
-        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="166"/>
+        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="167"/>
         <source>to</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,6 +61,7 @@
         <source>via %n other(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -73,12 +74,14 @@
         <source>%n hour(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="114"/>
         <source>%n minute(s)</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -87,10 +90,16 @@
         <source>en route</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="174"/>
+        <source>towards</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="177"/>
+        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="185"/>
         <source>%n minute(s) delay</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -150,38 +159,39 @@
         <source>%n minute(s) delay</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
 <context>
     <name>iRail::LiveboardViewImpl</name>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="157"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="156"/>
         <source>The liveboard seems to be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="161"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="160"/>
         <source>No new items received.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="185"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="184"/>
         <source>Departures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="209"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="208"/>
         <source>No departures to be shown.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="226"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="225"/>
         <source>Station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="281"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="280"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
@@ -374,6 +384,7 @@
         <location filename="../ui/auxiliary/delegates/vehiclestopdelegate.cpp" line="84"/>
         <source>%n minute(s) delay</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>

@@ -47,7 +47,7 @@
     <name>iRail::ConnectionDelegate</name>
     <message>
         <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="65"/>
-        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="166"/>
+        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="167"/>
         <source>to</source>
         <translation>vers</translation>
     </message>
@@ -90,8 +90,13 @@
         <source>en route</source>
         <translation>en route</translation>
     </message>
+    <message>
+        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="174"/>
+        <source>towards</source>
+        <translation>direction</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="177"/>
+        <location filename="../ui/auxiliary/delegates/connectiondelegate.cpp" line="185"/>
         <source>%n minute(s) delay</source>
         <translation>
             <numerusform>%n minute de retard</numerusform>
@@ -153,39 +158,40 @@
         <location filename="../ui/auxiliary/delegates/liveboarddeparturedelegate.cpp" line="84"/>
         <source>%n minute(s) delay</source>
         <translation>
-            <numerusform>%n minute(s) de retard</numerusform>
+            <numerusform>%n minute de retard</numerusform>
+            <numerusform>%n minutes de retard</numerusform>
         </translation>
     </message>
 </context>
 <context>
     <name>iRail::LiveboardViewImpl</name>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="157"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="156"/>
         <source>The liveboard seems to be empty.</source>
         <translation>Aucune donnée trouvée.</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="161"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="160"/>
         <source>No new items received.</source>
         <translation>Aucune nouvelle donnée reçue.</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="185"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="184"/>
         <source>Departures</source>
         <translation>Départs</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="209"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="208"/>
         <source>No departures to be shown.</source>
         <translation>Pas de départs trouvée.</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="226"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="225"/>
         <source>Station</source>
         <translation>Gare</translation>
     </message>
     <message>
-        <location filename="../ui/liveboardviewimpl.cpp" line="281"/>
+        <location filename="../ui/liveboardviewimpl.cpp" line="280"/>
         <source>More</source>
         <translation>Plus</translation>
     </message>
@@ -378,7 +384,8 @@
         <location filename="../ui/auxiliary/delegates/vehiclestopdelegate.cpp" line="84"/>
         <source>%n minute(s) delay</source>
         <translation>
-            <numerusform>%n minute(s) de retard</numerusform>
+            <numerusform>%n minute de retard</numerusform>
+            <numerusform>%n minutes de retard</numerusform>
         </translation>
     </message>
 </context>

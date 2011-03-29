@@ -81,6 +81,10 @@
             <numerusform>%n minutes delay</numerusform>
         </translation>
     </message>
+    <message>
+        <source>towards</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>iRail::ConnectionPOIDelegate</name>
