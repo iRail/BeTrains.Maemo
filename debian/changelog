@@ -1,20 +1,28 @@
+betrains (1.0-beta3-1) unstable; urgency=low
+
+  * Adding the line terminus to the connection view.
+  * Fixing a loader bug in the liveboard.
+  * Displaying the version number in the about dialog.
+
+ -- Tim Besard <tim.besard@gmail.com>  wed, 29 Mar 2010 17:39:00 +0200
+
 betrains (1.0-beta2-1) unstable; urgency=low
 
   * Correcting the debian package version number.
 
- -- Tim Besard <tim.besard@gmail.com>  wed, 28 Feb 2010 13:36:00 +0200
+ -- Tim Besard <tim.besard@gmail.com>  wed, 28 Feb 2010 13:36:00 +0100
 
 betrains (1.0-beta1-1) unstable; urgency=low
 
   * Fixing missing icons.
 
- -- Tim Besard <tim.besard@gmail.com>  wed, 28 Feb 2010 13:25:00 +0200
+ -- Tim Besard <tim.besard@gmail.com>  wed, 28 Feb 2010 13:25:00 +0100
 
 betrains (1.0-beta1) unstable; urgency=low
 
   * Initial public release.
 
- -- Tim Besard <tim.besard@gmail.com>  wed, 27 Feb 2010 11:02:00 +0200
+ -- Tim Besard <tim.besard@gmail.com>  wed, 27 Feb 2010 11:02:00 +0100
 
 betrains (0.99) unstable; urgency=low
 
