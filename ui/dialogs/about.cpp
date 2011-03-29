@@ -4,6 +4,7 @@
 
 // Includes
 #include "about.h"
+#include "application.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QStringBuilder>
@@ -19,7 +20,7 @@ using namespace iRail;
 About::About(QWidget* iParent) : QDialog(iParent)
 {
     // Dialog configuration
-    setWindowTitle(QString(tr("About")));
+    setWindowTitle(QString(tr("About") % " v" % Application::instance()->applicationVersion()));
 
     // Create the layout
     QVBoxLayout *mUILayout = new QVBoxLayout(this);
