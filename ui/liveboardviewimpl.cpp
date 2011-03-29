@@ -105,7 +105,6 @@ void LiveboardViewImpl::load(LiveboardRequestPointer iLiveboardRequest)
 void LiveboardViewImpl::setStations(QMap<QString, StationPointer>* iStations)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    stopLoader();
 
     mStations = *iStations;
     delete iStations;
