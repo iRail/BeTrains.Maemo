@@ -58,7 +58,7 @@ void VehicleStopDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &
     QString tHours = tStop.datetime.toLocalTime().time().toString(Qt::DefaultLocaleShortDate);
     iPainter->drawText(rect_c1, Qt::AlignTop | Qt::AlignHCenter, tHours);
 
-    // "to" text
+    // "at" text
     iPainter->setPen(iOption.palette.mid().color());
     iPainter->drawText(rect_c2, Qt::AlignTop | Qt::AlignHCenter, tr("at"));
 

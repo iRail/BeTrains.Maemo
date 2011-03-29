@@ -118,6 +118,7 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
 
     iPainter->restore();
 }
+
 void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &iOption, const QModelIndex &iIndex, Connection::Line iLine) const
 {
     //
@@ -166,6 +167,13 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     QString tConnectionString = stationName(mStations, iLine.departure.station) % " " % tr("to") % " " % stationName(mStations, iLine.arrival.station);
     iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, stationName(mStations, iLine.departure.station));
     iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, stationName(mStations, iLine.arrival.station));
+
+    // Direction
+    if (iLine.arrival.station != iLine.terminus)
+    {
+        QString tDirectionString = tr("towards") % " " % stationName(mStations, iLine.terminus);
+        iPainter->drawText(rect, Qt::AlignTop | Qt::AlignRight, tDirectionString);
+    }
 
     // Delay
     if (iLine.departure.delay != 0 || iLine.arrival.delay != 0)
