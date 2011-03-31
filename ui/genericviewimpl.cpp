@@ -70,15 +70,15 @@ void GenericViewImpl::showError(const QString &iError)
 
 void GenericViewImpl::startLoader()
 {
-    qDebug() << "+ " << Q_FUNC_INFO;
+    qDebug() << "+ " << Q_FUNC_INFO << "refcount=" % QString::number(mLoaderRefcount+1);
 
-    qDebug() << "Increasing loader refcount to " << mLoaderRefcount + 1;
     mLoaderRefcount++;
 }
 
 void GenericViewImpl::stopLoader()
 {
-    qDebug() << "Decreasing loader refcount to " << mLoaderRefcount - 1;
+    qDebug() << "+ " << Q_FUNC_INFO << "refcount=" % QString::number(mLoaderRefcount-1);
+
     if (--mLoaderRefcount == 0)
     {
         if (mLoader != 0 && mView != 0)
