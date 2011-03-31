@@ -222,6 +222,7 @@ void MainViewImpl::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    startLoader();
     emit downloadStations();
 }
 

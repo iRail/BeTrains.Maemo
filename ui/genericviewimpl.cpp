@@ -24,6 +24,7 @@ GenericViewImpl::GenericViewImpl(GenericView* iBase) : base(iBase)
     base->setAttribute(Qt::WA_Maemo5StackedWindow);
 
     // Initialize member
+    mLoaderRefcount = 0;
     mLoader = 0;
     mView = 0;
 
@@ -70,7 +71,25 @@ void GenericViewImpl::showError(const QString &iError)
 void GenericViewImpl::startLoader()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
-    Q_ASSERT(!mLoader);
+
+    qDebug() << "Increasing loader refcount to " << mLoaderRefcount + 1;
+    mLoaderRefcount++;
+}
+
+void GenericViewImpl::stopLoader()
+{
+    qDebug() << "Decreasing loader refcount to " << mLoaderRefcount - 1;
+    if (--mLoaderRefcount == 0)
+    {
+        if (mLoader != 0 && mView != 0)
+            mLoader->startExitAnimation();
+    }
+}
+
+void GenericViewImpl::showProgress()
+{
+    // TODO: what if two loaders get scheduled really quickly after one other?
+    Q_ASSERT(mLoader == 0);
 
     mLoader = new LoaderWidget();
     connect(mLoader, SIGNAL(finished()), this, SLOT(_deleteLoader()));
@@ -85,16 +104,4 @@ void GenericViewImpl::startLoader()
     mView->show();
 
     mLoader->startEntryAnimation();
-}
-
-void GenericViewImpl::stopLoader()
-{
-    if (mLoader != 0)
-        mLoader->startExitAnimation();
-}
-
-void GenericViewImpl::showProgress()
-{
-    if (mLoader == 0)
-        startLoader();
 }

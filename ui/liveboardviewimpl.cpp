@@ -45,6 +45,7 @@ void LiveboardViewImpl::do_btnStations_clicked()
         tLiveboardRequest = LiveboardRequestPointer(new LiveboardRequest(tChooser.getSelection()));
         mUIStationEdit->setText(stationName(mStations, tLiveboardRequest->station()));
 
+        startLoader();
         emit downloadLiveboard(tLiveboardRequest);
     }
 }
@@ -67,6 +68,7 @@ void LiveboardViewImpl::do_btnMore_clicked()
     Liveboard::Departure tDeparture = mDepartures.last();
 
     // Make a new request
+    startLoader();
     tLiveboardRequest->setTime(tDeparture.datetime);
     emit downloadLiveboard(tLiveboardRequest);
 
@@ -90,7 +92,8 @@ void LiveboardViewImpl::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    this->startLoader();        // HACK (fix corruption through forced redraw)
+    startLoader();        // HACK (fix corruption through forced redraw)
+    tLiveboardRequest = LiveboardRequestPointer();
     emit downloadStations();
 }
 
@@ -98,8 +101,9 @@ void LiveboardViewImpl::load(LiveboardRequestPointer iLiveboardRequest)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    startLoader();
     tLiveboardRequest = iLiveboardRequest;
-    emit downloadLiveboard(iLiveboardRequest);
+    emit downloadStations();
 }
 
 void LiveboardViewImpl::setStations(QMap<QString, StationPointer>* iStations)
@@ -110,6 +114,11 @@ void LiveboardViewImpl::setStations(QMap<QString, StationPointer>* iStations)
     delete iStations;
 
     mUIStationButton->setEnabled(true);
+
+    if (tLiveboardRequest.isNull())
+        stopLoader();
+    else
+        emit downloadLiveboard(tLiveboardRequest);
 }
 
 void LiveboardViewImpl::setLiveboard(LiveboardPointer* iLiveboard)

@@ -56,13 +56,14 @@ void VehicleViewImpl::load(Connection::Line iLine)
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
+    startLoader();
     tLine = iLine;
     emit downloadVehicle(iLine.vehicle);
 }
 
 void VehicleViewImpl::setStations(QMap<QString, StationPointer>* iStations)
 {
-    qDebug() << "+ " << Q_FUNC_INFO;    
+    qDebug() << "+ " << Q_FUNC_INFO;
     stopLoader();
 
     mStations = *iStations;

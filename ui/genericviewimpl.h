@@ -40,6 +40,7 @@ namespace iRail
 
     private:
         // UI members
+        unsigned int mLoaderRefcount;
         LoaderWidget* mLoader;
         QGraphicsView* mView;
 
