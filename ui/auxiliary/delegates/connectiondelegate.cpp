@@ -168,6 +168,15 @@ void ConnectionDelegate::paint(QPainter *iPainter, const QStyleOptionViewItem &i
     iPainter->drawText(rect_c4, Qt::AlignTop | Qt::AlignLeft, stationName(mStations, iLine.departure.station));
     iPainter->drawText(rect_c4, Qt::AlignBottom | Qt::AlignLeft, stationName(mStations, iLine.arrival.station));
 
+    // Platform
+    if (iLine.departure.platform != 0)
+    {
+        iPainter->setFont(font_small);
+        QString tPlatformString = tr("Platform") % " " % QString::number(iLine.departure.platform);
+        iPainter->drawText(rect, Qt::AlignBottom | Qt::AlignRight, tPlatformString);
+        iPainter->setFont(font);
+    }
+
     // Direction
     if (iLine.arrival.station != iLine.terminus)
     {
