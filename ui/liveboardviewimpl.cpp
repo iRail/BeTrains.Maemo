@@ -92,7 +92,8 @@ void LiveboardViewImpl::load()
 {
     qDebug() << "+ " << Q_FUNC_INFO;
 
-    startLoader();        // HACK (fix corruption through forced redraw)
+    startLoader();
+    showProgress();        // HACK (fix corruption through forced redraw)
     tLiveboardRequest = LiveboardRequestPointer();
     emit downloadStations();
 }
