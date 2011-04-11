@@ -1,3 +1,10 @@
+betrains (1.0.2-1) stable; urgency=low
+
+  * Fixing the liveboard refresh issue through a workaround.
+  * Adding delay visualization to the vehicle view.
+
+ -- Tim Besard <tim.besard@gmail.com>  wed, 11 Apr 2010 15:57:00 +0200
+
 betrains (1.0.1-1) stable; urgency=low
 
   * Bumping the version to make the autobuilder happy.
