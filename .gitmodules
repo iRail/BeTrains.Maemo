@@ -1,0 +1,3 @@
+[submodule "BeTrains.Qt"]
+	path = BeTrains.Qt
+	url = git@github.com:maleadt/BeTrains.Qt.git
