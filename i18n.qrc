@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>i18n/nl.qm</file>
+    <file>i18n/fr.qm</file>
+    <file>i18n/de.qm</file>
+    <file>i18n/en.qm</file>
+</qresource>
+</RCC>

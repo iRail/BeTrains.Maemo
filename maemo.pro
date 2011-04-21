@@ -5,17 +5,19 @@
 
 TARGET=BeTrains
 
-include(../alpha/alpha.pri)
-
 QT       += gui maemo5
 
+DEPENDPATH += $$PWD/BeTrains.Qt
+INCLUDEPATH += $$PWD/BeTrains.Qt
+include(BeTrains.Qt/BeTrains.Qt.pri)
+
 RESOURCES += ui.qrc \
-    i18n_maemo.qrc
+    i18n.qrc
 TRANSLATIONS += \
-    i18n_maemo/nl.ts \
-    i18n_maemo/fr.ts \
-    i18n_maemo/de.ts \
-    i18n_maemo/en.ts
+    i18n/nl.ts \
+    i18n/fr.ts \
+    i18n/de.ts \
+    i18n/en.ts
 SOURCES += main.cpp \
     maemoapplication.cpp \
     ui/dialogs/about.cpp \
