@@ -73,8 +73,8 @@ unix:!symbian {
     desktop.files += $${TARGET}.desktop
 
     icon48.path = $$DATADIR/icons/hicolor/48x48/apps
-    icon48.files += ../../data/icons/hicolor/48x48/$${TARGET}.png
+    icon48.files += icons/hicolor/48x48/$${TARGET}.png
 
     icon64.path = $$DATADIR/icons/hicolor/64x64/apps
-    icon64.files += ../../data/icons/hicolor/64x64/$${TARGET}.png
+    icon64.files += icons/hicolor/64x64/$${TARGET}.png
 }
