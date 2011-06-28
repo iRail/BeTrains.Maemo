@@ -9,8 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-APPNAME := betrains
-PROJECT := maemo
+APPNAME := BeTrains
+PROJECT := BeTrains.Maemo
 
 configure: configure-stamp
 configure-stamp: builddir
