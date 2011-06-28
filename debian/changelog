@@ -1,3 +1,9 @@
+betrains (1.0.2-2) stable; urgency=low
+
+  * Fixing Debian build rules to suite the Ovi store.
+
+ -- Tim Besard <tim.besard@gmail.com>  wed, 28 Jun 2010 15:44:00 +0200
+
 betrains (1.0.2-1) stable; urgency=low
 
   * Fixing the liveboard refresh issue through a workaround.
