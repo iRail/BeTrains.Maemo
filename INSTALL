@@ -1,0 +1,21 @@
+# Compilation
+
+Nothing out of the ordinary, just your regular Qt-based configuration process:
+* qmake BeTrains.Maemo.pro
+* make
+
+This gives you a nice BeTrains executable, which contains all the necessary resources as well.
+
+# Packaging
+
+This part is trickier, as the actual process varies depending on what type of package you want.
+
+To build a binary package, ready to install:
+* dpkg-buildpackage -rfakeroot
+This needs a proper build environment, which you can get by configuring a local Scratchbox installation (and switching to the armel target), or by installing Nokia's QtSDK and using MADDE (by prefixing all commands with the "mad" binary).
+
+To build a binary package you want to upload to the Ovi store, you need to change the Debian control file before building: the section needs to be "user/hidden".
+
+To create a package ready for the autobuilder, you need to generate a source package:
+* dpkg-buildpackage -rfakeroot -sa -S
+
