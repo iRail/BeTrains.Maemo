@@ -176,3 +176,9 @@ XB-Maemo-Icon-26:
  QAM4Bfj8srX/ASu8ShUKURVvAAAAAElFTkSuQmCC
  ====
 
+Package: betrains-dbg
+Section: devel
+Architecture: any
+Depends: betrains (= ${Source-Version})
+Description: Debug symbols for the BeTrains application.
+

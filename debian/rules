@@ -6,15 +6,20 @@
 
 APPNAME := betrains
 PROJECT := BeTrains.Maemo
-builddir:
-	mkdir -p builddir
 
-builddir/Makefile: builddir
-	cd builddir && qmake-qt4 PREFIX=/usr ../$(PROJECT).pro
+builddir:
+	mkdir builddir
+
+configure: configure-stamp
+configure-stamp: builddir
+	dh_testdir
+	
+	cd builddir && qmake-qt4 ../$(PROJECT).pro CONFIG+=package
+	
+	touch configure-stamp
 
 build: build-stamp
-
-build-stamp: builddir/Makefile
+build-stamp: configure-stamp
 	dh_testdir
 	# Add here commands to compile the package.
 	cd builddir && $(MAKE)
@@ -23,7 +28,7 @@ build-stamp: builddir/Makefile
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp
+	rm -f build-stamp configure-stamp
 	# Add here commands to clean up after the build process.
 	rm -rf builddir
 	dh_clean
@@ -47,7 +52,7 @@ binary-arch: build install
 	dh_installexamples
 	dh_installman
 	dh_link
-	dh_strip --dbg-package=my-application-dbg
+	dh_strip -p $(APPNAME) --dbg-package=$(APPNAME)-dbg
 	dh_compress
 	dh_fixperms
 	dh_installdeb

@@ -91,3 +91,10 @@ unix:!symbian {
     QMAKE_EXTRA_COMPILERS += TSQM
     PRE_TARGETDEPS += compiler_TSQM_make_all
 }
+
+# Packaging rules
+package {
+	# Add debug symbols which we can strip later using dh_strip
+	QMAKE_CXXFLAGS += -g
+	QMAKE_CFLAGS += -g
+}
