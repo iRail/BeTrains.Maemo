@@ -1,3 +1,9 @@
+betrains (1.0.2-3) stable; urgency=low
+
+  * Optifying the application to make the Ovi QA robots happy.
+
+ -- Tim Besard <tim.besard@gmail.com>  wed, 30 Jun 2010 23:42:00 +0200
+
 betrains (1.0.2-2) stable; urgency=low
 
   * Fixing Debian build rules to suite the Ovi store.

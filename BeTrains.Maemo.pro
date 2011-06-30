@@ -57,13 +57,9 @@ HEADERS += \
 
 # This conditional needed to trick Qt Creator
 unix:!symbian {
-    isEmpty(PREFIX) {
-        PREFIX = /usr
-    }
-
     # VARIABLES
-    BINDIR = $$PREFIX/bin
-    DATADIR =$$PREFIX/share
+    BINDIR = /opt/$$TARGET
+    DATADIR =/usr/share
     DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
 
     INSTALLS += target desktop icon48 icon64

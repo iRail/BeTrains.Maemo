@@ -2,4 +2,4 @@
 Type=Application
 Name=BeTrains
 Icon=BeTrains
-Exec=/usr/bin/BeTrains
+Exec=/opt/BeTrains/BeTrains
