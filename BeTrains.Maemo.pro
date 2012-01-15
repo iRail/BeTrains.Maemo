@@ -11,14 +11,6 @@ DEPENDPATH += $$PWD/BeTrains.Qt
 INCLUDEPATH += $$PWD/BeTrains.Qt
 include(BeTrains.Qt/BeTrains.Qt.pri)
 
-RESOURCES += ui.qrc \
-    i18n.qrc
-TS_DIR = i18n
-TRANSLATIONS += \
-    $$TS_DIR/nl.ts \
-    $$TS_DIR/fr.ts \
-    $$TS_DIR/de.ts \
-    $$TS_DIR/en.ts
 SOURCES += main.cpp \
     maemoapplication.cpp \
     ui/dialogs/about.cpp \
@@ -55,6 +47,25 @@ HEADERS += \
     ui/requestviewimpl.h \
     ui/vehicleviewimpl.h
 
+# Translations
+TRANSLATIONS = $$files(i18n/*.ts)
+isEmpty(QMAKE_LRELEASE) {
+    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
+    else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+}
+isEmpty(TS_DIR):TS_DIR = i18n
+TSQM.name = lrelease ${QMAKE_FILE_IN}
+TSQM.input = TRANSLATIONS
+TSQM.output = $$TS_DIR/${QMAKE_FILE_BASE}.qm
+TSQM.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN}
+TSQM.CONFIG = no_link
+QMAKE_EXTRA_COMPILERS += TSQM
+PRE_TARGETDEPS += compiler_TSQM_make_all
+
+# Resources
+RESOURCES += ui.qrc \
+    i18n.qrc
+
 # This conditional needed to trick Qt Creator
 unix:!symbian {
     # VARIABLES
@@ -74,22 +85,6 @@ unix:!symbian {
 
     icon64.path = $$DATADIR/icons/hicolor/64x64/apps
     icon64.files += icons/hicolor/64x64/$${TARGET}.png
-}
-
-# Translation file handling
-!isEmpty(TRANSLATIONS) {
-    isEmpty(QMAKE_LRELEASE) {
-        win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
-        else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
-    }
-
-    TSQM.name = lrelease ${QMAKE_FILE_IN}
-    TSQM.input = TRANSLATIONS
-    TSQM.output = $$TS_DIR/${QMAKE_FILE_BASE}.qm
-    TSQM.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN}
-    TSQM.CONFIG = no_link
-    QMAKE_EXTRA_COMPILERS += TSQM
-    PRE_TARGETDEPS += compiler_TSQM_make_all
 }
 
 # Packaging rules
